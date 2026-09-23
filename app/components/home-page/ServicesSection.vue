@@ -43,6 +43,8 @@ function openDetails(category: ServiceCategory): void {
       </li>
     </ul>
 
+    <PrimaryBtn link="/services" class="services__more">Ver todos los servicios</PrimaryBtn>
+
     <ModalDialog
       :open="detailsOpen"
       labelledby="service-details-title"
@@ -95,6 +97,10 @@ function openDetails(category: ServiceCategory): void {
   .categories-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+}
+
+.services__more {
+  align-self: center;
 }
 
 .category-card {

@@ -11,7 +11,6 @@ interface SectionLink {
 }
 
 const sectionLinks: SectionLink[] = [
-  { label: "Servicios", target: "#services" },
   { label: "Contacto", target: "#contact" },
 ];
 
@@ -62,6 +61,7 @@ async function confirmSignOut(): Promise<void> {
 
       <nav class="site-header__nav" aria-label="Navegación principal">
         <ul class="site-header__nav-list" role="list">
+          <li><NuxtLink to="/services" class="site-header__nav-link">Servicios</NuxtLink></li>
           <li v-for="link in sectionLinks" :key="link.target">
             <button type="button" class="site-header__nav-link" @click="onSectionClick(link)">
               {{ link.label }}
@@ -134,6 +134,7 @@ async function confirmSignOut(): Promise<void> {
       <li><NuxtLink to="/perfil" class="mobile-nav__link" @click="closeMenu">Mi perfil</NuxtLink></li>
       <li><NuxtLink to="/agendar" class="mobile-nav__link" @click="closeMenu">Agendar</NuxtLink></li>
       <li><NuxtLink to="/about-us" class="mobile-nav__link" @click="closeMenu">Nosotros</NuxtLink></li>
+      <li><NuxtLink to="/services" class="mobile-nav__link" @click="closeMenu">Servicios</NuxtLink></li>
       <li v-for="link in sectionLinks" :key="link.target">
         <button type="button" class="mobile-nav__link" @click="onSectionClick(link)">{{ link.label }}</button>
       </li>
