@@ -33,6 +33,8 @@ const PATHS: Record<IconName, string[]> = {
   leaf: ["M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.5 19 2c1 2 2 4.2 2 8 0 5.5-4.8 10-10 10Z", "M2 21c0-3 1.9-5.4 5.1-6C9.5 14.5 12 13 13 12"],
   info: ["M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z", "M12 16v-4", "M12 8h.01"],
   "arrow-up": ["m18 15-6-6-6 6"],
+  // iOS Safari's Share control (arrow out of a box).
+  share: ["M12 3v12", "m8 7 4-4 4 4", "M8 11H6a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2h-2"],
 };
 </script>
 

@@ -41,7 +41,7 @@ function toCustomer(user: UserRecord): Customer {
 }
 
 function totalPrice(services: string[]): number {
-  return services.reduce((sum, name) => sum + servicePrice(name), 0);
+  return services.reduce((sum, id) => sum + servicePrice(id), 0);
 }
 
 interface BookingDraft {
@@ -85,30 +85,30 @@ function sessionUserBookings(user: UserRecord, today: Date): BookingDraft[] {
     {
       id: "b-me-rescheduled",
       customer,
-      services: ["Masaje de aromaterapia"],
+      services: ["aromatherapy-massage"],
       appointmentAt: on(3, 11),
       previousAppointmentAt: on(2, 17),
       rescheduled: true,
       status: "pending",
     },
-    { id: "b-me-pending", customer, services: ["Facial antiedad"], appointmentAt: on(9, 16, 30), status: "pending" },
-    { id: "b-me-confirmed", customer, services: ["Masaje con piedras calientes"], appointmentAt: on(5, 10), status: "confirmed" },
+    { id: "b-me-pending", customer, services: ["anti-aging-facial"], appointmentAt: on(9, 16, 30), status: "pending" },
+    { id: "b-me-confirmed", customer, services: ["hot-stone-massage"], appointmentAt: on(5, 10), status: "confirmed" },
     {
       id: "b-me-prepaid",
       customer,
-      services: ["Circuito de spa", "Temazcal"],
+      services: ["spa-circuit", "temazcal"],
       appointmentAt: on(12, 12),
       status: "closed",
-      finalCost: totalPrice(["Circuito de spa", "Temazcal"]),
+      finalCost: totalPrice(["spa-circuit", "temazcal"]),
       paid: true,
     },
-    { id: "b-me-cancelled", customer, services: ["Baño de flotación"], appointmentAt: on(-6, 18), status: "cancelled" },
+    { id: "b-me-cancelled", customer, services: ["flotation-bath"], appointmentAt: on(-6, 18), status: "cancelled" },
     ...(
       [
-        [-14, ["Masaje relajante"]],
-        [-33, ["Facial hidratante", "Exfoliación de sal marina"]],
-        [-61, ["Envoltura de chocolate"]],
-        [-95, ["Masaje de aromaterapia", "Reflexología podal"]],
+        [-14, ["relaxing-massage"]],
+        [-33, ["hydrating-facial", "sea-salt-scrub"]],
+        [-61, ["chocolate-wrap"]],
+        [-95, ["aromatherapy-massage", "foot-reflexology"]],
       ] as [number, string[]][]
     ).map(([offset, services], index): BookingDraft => ({
       id: `b-me-past-${index}`,
@@ -143,7 +143,7 @@ export function createMockBookings(users: UserRecord[], now: Date = new Date()):
     ...users.filter((user) => !user.role).map(toCustomer),
     ...GUESTS.map((guest) => ({ name: guest.name, phone: guest.phone, email: null, uid: null })),
   ];
-  const serviceNames = allServices.map((service) => service.name);
+  const serviceIds = allServices.map((service) => service.id);
 
   const drafts: BookingDraft[] = sessionUserBookings(sessionUser, today);
 
@@ -164,8 +164,8 @@ export function createMockBookings(users: UserRecord[], now: Date = new Date()):
       const [hours, minutes] = SLOTS[slotIndex]!;
       const appointmentAt = atTime(day, hours, minutes);
       const services = random() < 0.3
-        ? [...new Set([pick(serviceNames, random), pick(serviceNames, random)])]
-        : [pick(serviceNames, random)];
+        ? [...new Set([pick(serviceIds, random), pick(serviceIds, random)])]
+        : [pick(serviceIds, random)];
       const outcome = statusFor(offset, appointmentAt, now, random());
 
       drafts.push({

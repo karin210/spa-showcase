@@ -1,10 +1,15 @@
 <script setup lang="ts">
 import type { UserRecord } from "~/types/user";
-import { formatPhone, formatShortDate, initials } from "~/utils/format";
+import { useI18n } from "vue-i18n";
+import { useLocaleFormat } from "~/composables/useLocaleFormat";
+import { formatPhone, initials } from "~/utils/format";
 
 // One person row shared by the Users and Team tabs; the `actions` slot lets each
 // tab append its own controls (role badge, role picker, remove…).
 defineProps<{ user: UserRecord }>();
+
+const { t: trans } = useI18n();
+const { formatShortDate } = useLocaleFormat();
 </script>
 
 <template>
@@ -23,7 +28,9 @@ defineProps<{ user: UserRecord }>();
       <span class="person-card__name">{{ user.firstName }} {{ user.lastName }}</span>
       <span v-if="user.email" class="person-card__meta">{{ user.email }}</span>
       <span v-if="user.phone" class="person-card__meta">{{ formatPhone(user.phone) }}</span>
-      <span class="person-card__meta person-card__meta--soft">Miembro desde {{ formatShortDate(user.createdAt) }}</span>
+      <span class="person-card__meta person-card__meta--soft">
+        {{ trans("dashboard.person.memberSince", { date: formatShortDate(user.createdAt) }) }}
+      </span>
     </div>
     <div class="person-card__actions">
       <slot name="actions" />

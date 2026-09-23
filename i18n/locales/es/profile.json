@@ -1,0 +1,86 @@
+{
+  "profile": {
+    "meta": {
+      "title": "Perfil"
+    },
+    "card": {
+      "photoAlt": "Foto de perfil de {name}"
+    },
+    "treatments": {
+      "title": "Sobre tus tratamientos"
+    },
+    "upcoming": {
+      "title": "Próximas citas",
+      "empty": "No tienes citas agendadas. ¡Regálate tu próximo momento de calma!"
+    },
+    "cancelled": {
+      "title": "Citas canceladas"
+    },
+    "status": {
+      "label": "Estado:",
+      "paid": "Pagada",
+      "confirmed": "Confirmada",
+      "cancelled": "Cancelada"
+    },
+    "lastService": {
+      "title": "Último tratamiento"
+    },
+    "history": {
+      "title": "Historial de tratamientos",
+      "enlarge": "Ampliar imagen del tratamiento: {name}",
+      "fallbackAlt": "Productos de spa"
+    },
+    "session": {
+      "title": "Ajustes de sesión",
+      "heading": "Sesión"
+    },
+    "cancelModal": {
+      "title": "Cancelar cita",
+      "cancelling": "Cancelando…",
+      "confirm": "¿Seguro que quieres cancelar tu cita de {booking}?"
+    },
+    "edit": {
+      "title": "Editar información",
+      "photoPreview": "Vista previa de tu foto de perfil",
+      "changePhoto": "Cambiar foto",
+      "photoError": "Selecciona un archivo de imagen.",
+      "save": "Guardar cambios",
+      "saved": "Tus datos se actualizaron.",
+      "fields": {
+        "firstName": {
+          "label": "Nombre",
+          "helper": "Introduce tu nombre"
+        },
+        "lastName": {
+          "label": "Apellidos",
+          "helper": "Introduce tus apellidos"
+        },
+        "phone": {
+          "label": "Teléfono",
+          "helper": "Introduce un teléfono válido (10 dígitos)"
+        }
+      }
+    },
+    "notifications": {
+      "title": "Notificaciones",
+      "enabled": "Activadas",
+      "enabledHint": "Te avisaremos cuando confirmemos o movamos tus citas. Para desactivarlas, cambia los permisos del sitio en tu navegador.",
+      "hint": "Recibe recordatorios de tus citas y avisos cuando el spa confirme tu reserva.",
+      "enable": "Activar notificaciones",
+      "enabling": "Activando…"
+    },
+    "passkeys": {
+      "title": "Tus llaves de acceso",
+      "note": "Inicia sesión sin contraseña, con la huella, el rostro o el PIN de tus dispositivos.",
+      "added": "Añadida el {date}",
+      "removeLabel": "Eliminar la llave de acceso {name}",
+      "empty": "Aún no tienes llaves de acceso.",
+      "nameLabel": "Nombre de la llave de acceso",
+      "namePlaceholder": "Ej. llave de mi iPhone",
+      "defaultName": "Nueva llave de acceso",
+      "create": "Crear llave de acceso",
+      "creating": "Creando…",
+      "add": "Añadir llave de acceso"
+    }
+  }
+}

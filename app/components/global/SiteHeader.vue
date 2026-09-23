@@ -1,25 +1,48 @@
 <script setup lang="ts">
-import { nextTick, ref } from "vue";
+import { computed, nextTick, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
+import { useI18n } from "vue-i18n";
 import { useSession } from "~/composables/useSession";
 import { useToast } from "~/composables/useToast";
 import { simulateRequest } from "~/utils/mock";
 
 interface SectionLink {
-  label: string;
+  // i18n key for the link text.
+  labelKey: string;
   target: string;
 }
 
-const sectionLinks: SectionLink[] = [
-  { label: "Contacto", target: "#contact" },
-];
+const sectionLinks: SectionLink[] = [{ labelKey: "nav.contact", target: "#contact" }];
 
 const route = useRoute();
+const { t: trans, locale } = useI18n();
+const localePath = useLocalePath();
+const switchLocalePath = useSwitchLocalePath();
 const { user, isStaff } = useSession();
 const toast = useToast();
 
 const mobileMenuOpen = ref(false);
-const demoBannerVisible = useState<boolean>("demo-banner-visible", () => true);
+
+// Offers both languages up front, below the header. It starts hidden and slides in
+// on mount; dismissing it (or picking a language) is kept in shared state so it
+// stays hidden on the other routes' headers too. Not persisted: a full page load
+// shows it again.
+const languageBannerDismissed = useState<boolean>("language-banner-dismissed", () => false);
+const languageBannerVisible = ref(false);
+
+onMounted(() => {
+  if (!languageBannerDismissed.value) languageBannerVisible.value = true;
+});
+
+function dismissLanguageBanner(): void {
+  languageBannerVisible.value = false;
+  languageBannerDismissed.value = true;
+}
+
+// switchLocalePath returns "" for a route with no counterpart in that locale; fall
+// back to that locale's home page (see LanguageToggle.vue for the same fallback).
+const esPath = computed<string>(() => switchLocalePath("es") || localePath("index", "es"));
+const enPath = computed<string>(() => switchLocalePath("en") || localePath("index", "en"));
 
 const signOutOpen = ref(false);
 const isSigningOut = ref(false);
@@ -35,8 +58,9 @@ function scrollToSection(selector: string): void {
 
 async function onSectionClick(link: SectionLink): Promise<void> {
   closeMenu();
-  if (route.path !== "/") {
-    await navigateTo("/");
+  const home = localePath("index");
+  if (route.path !== home) {
+    await navigateTo(home);
     await nextTick();
   }
   scrollToSection(link.target);
@@ -48,39 +72,49 @@ async function confirmSignOut(): Promise<void> {
   isSigningOut.value = false;
   signOutOpen.value = false;
   closeMenu();
-  toast.show("Modo demostración: la sesión permanece activa.");
+  toast.show(trans("signOutModal.demoNotice"));
 }
 </script>
 
 <template>
   <header class="site-header">
     <div class="site-header__inner">
-      <NuxtLink to="/" class="site-header__logo" aria-label="Alma Serena — página de inicio">
+      <NuxtLink :to="localePath('index')" class="site-header__logo" :aria-label="trans('nav.homeLink')">
         <BrandMark />
       </NuxtLink>
 
-      <nav class="site-header__nav" aria-label="Navegación principal">
+      <nav class="site-header__nav" :aria-label="trans('nav.primary')">
         <ul class="site-header__nav-list" role="list">
-          <li><NuxtLink to="/services" class="site-header__nav-link">Servicios</NuxtLink></li>
+          <li>
+            <NuxtLink :to="localePath('services')" class="site-header__nav-link">{{ trans("nav.services") }}</NuxtLink>
+          </li>
           <li v-for="link in sectionLinks" :key="link.target">
             <button type="button" class="site-header__nav-link" @click="onSectionClick(link)">
-              {{ link.label }}
+              {{ trans(link.labelKey) }}
             </button>
           </li>
-          <li><NuxtLink to="/about-us" class="site-header__nav-link">Nosotros</NuxtLink></li>
-          <li><NuxtLink to="/work-with-us" class="site-header__nav-link">Vacantes</NuxtLink></li>
+          <li>
+            <NuxtLink :to="localePath('about-us')" class="site-header__nav-link">{{ trans("nav.about") }}</NuxtLink>
+          </li>
+          <li>
+            <NuxtLink :to="localePath('work-with-us')" class="site-header__nav-link">{{ trans("nav.careers") }}</NuxtLink>
+          </li>
           <li v-if="isStaff">
-            <NuxtLink to="/panel-administrativo" class="site-header__nav-link">Panel administrativo</NuxtLink>
+            <NuxtLink :to="localePath('dashboard')" class="site-header__nav-link">{{ trans("nav.dashboard") }}</NuxtLink>
           </li>
         </ul>
       </nav>
 
       <div class="site-header__actions">
-        <NuxtLink to="/agendar" class="site-header__icon-btn" aria-label="Agendar cita">
+        <NuxtLink :to="localePath('booking')" class="site-header__icon-btn" :aria-label="trans('actions.book')">
           <AppIcon name="calendar" />
         </NuxtLink>
 
-        <NuxtLink to="/perfil" class="site-header__icon-btn site-header__profile" aria-label="Ver perfil de usuario">
+        <NuxtLink
+          :to="localePath('profile')"
+          class="site-header__icon-btn site-header__profile"
+          :aria-label="trans('actions.viewProfile')"
+        >
           <img v-if="user.photoURL" :src="user.photoURL" alt="" class="site-header__profile-photo" />
           <AppIcon v-else name="user" />
         </NuxtLink>
@@ -90,7 +124,7 @@ async function confirmSignOut(): Promise<void> {
           class="site-header__hamburger"
           :aria-expanded="mobileMenuOpen"
           aria-controls="mobile-nav"
-          :aria-label="mobileMenuOpen ? 'Cerrar menú' : 'Abrir menú'"
+          :aria-label="mobileMenuOpen ? trans('nav.closeMenu') : trans('nav.openMenu')"
           @click="mobileMenuOpen = !mobileMenuOpen"
         >
           <span class="site-header__hamburger-bar" />
@@ -101,15 +135,42 @@ async function confirmSignOut(): Promise<void> {
     </div>
   </header>
 
-  <Transition name="demo-banner-slide">
-    <aside v-if="demoBannerVisible" class="demo-banner" aria-label="Aviso de demostración">
-      <p class="demo-banner__text">
-        Sitio de demostración para spas. Todos los datos, nombres y citas son ficticios.
-      </p>
-      <button type="button" class="demo-banner__close" aria-label="Cerrar aviso de demostración" @click="demoBannerVisible = false">
+  <Transition name="language-banner-slide">
+    <section v-if="languageBannerVisible" class="language-banner" :aria-label="trans('languageBanner.prompt')">
+      <p class="language-banner__text">{{ trans("languageBanner.prompt") }}</p>
+
+      <div class="language-banner__options">
+        <NuxtLink
+          :to="esPath"
+          lang="es"
+          hreflang="es"
+          class="language-banner__option"
+          :aria-current="locale === 'es' ? 'true' : undefined"
+          @click="dismissLanguageBanner"
+        >
+          {{ trans("language.es.name") }}
+        </NuxtLink>
+        <NuxtLink
+          :to="enPath"
+          lang="en"
+          hreflang="en"
+          class="language-banner__option"
+          :aria-current="locale === 'en' ? 'true' : undefined"
+          @click="dismissLanguageBanner"
+        >
+          {{ trans("language.en.name") }}
+        </NuxtLink>
+      </div>
+
+      <button
+        type="button"
+        class="language-banner__close"
+        :aria-label="trans('languageBanner.close')"
+        @click="dismissLanguageBanner"
+      >
         <AppIcon name="close" />
       </button>
-    </aside>
+    </section>
   </Transition>
 
   <div
@@ -124,42 +185,68 @@ async function confirmSignOut(): Promise<void> {
     class="mobile-nav"
     :class="{ 'mobile-nav--open': mobileMenuOpen }"
     :inert="!mobileMenuOpen"
-    aria-label="Menú móvil"
+    :aria-label="trans('nav.mobile')"
   >
-    <button type="button" class="mobile-nav__close" aria-label="Cerrar menú" @click="closeMenu">
+    <button type="button" class="mobile-nav__close" :aria-label="trans('nav.closeMenu')" @click="closeMenu">
       <AppIcon name="close" />
     </button>
 
     <ul class="mobile-nav__list" role="list">
-      <li><NuxtLink to="/" class="mobile-nav__link" @click="closeMenu">Inicio</NuxtLink></li>
-      <li><NuxtLink to="/perfil" class="mobile-nav__link" @click="closeMenu">Mi perfil</NuxtLink></li>
-      <li><NuxtLink to="/agendar" class="mobile-nav__link" @click="closeMenu">Agendar</NuxtLink></li>
-      <li><NuxtLink to="/about-us" class="mobile-nav__link" @click="closeMenu">Nosotros</NuxtLink></li>
-      <li><NuxtLink to="/services" class="mobile-nav__link" @click="closeMenu">Servicios</NuxtLink></li>
-      <li><NuxtLink to="/work-with-us" class="mobile-nav__link" @click="closeMenu">Vacantes</NuxtLink></li>
+      <li>
+        <NuxtLink :to="localePath('index')" class="mobile-nav__link" @click="closeMenu">{{ trans("nav.home") }}</NuxtLink>
+      </li>
+      <li>
+        <NuxtLink :to="localePath('profile')" class="mobile-nav__link" @click="closeMenu">
+          {{ trans("nav.profile") }}
+        </NuxtLink>
+      </li>
+      <li>
+        <NuxtLink :to="localePath('booking')" class="mobile-nav__link" @click="closeMenu">{{ trans("nav.book") }}</NuxtLink>
+      </li>
+      <li>
+        <NuxtLink :to="localePath('about-us')" class="mobile-nav__link" @click="closeMenu">
+          {{ trans("nav.about") }}
+        </NuxtLink>
+      </li>
+      <li>
+        <NuxtLink :to="localePath('services')" class="mobile-nav__link" @click="closeMenu">
+          {{ trans("nav.services") }}
+        </NuxtLink>
+      </li>
+      <li>
+        <NuxtLink :to="localePath('work-with-us')" class="mobile-nav__link" @click="closeMenu">
+          {{ trans("nav.careers") }}
+        </NuxtLink>
+      </li>
       <li v-for="link in sectionLinks" :key="link.target">
-        <button type="button" class="mobile-nav__link" @click="onSectionClick(link)">{{ link.label }}</button>
+        <button type="button" class="mobile-nav__link" @click="onSectionClick(link)">{{ trans(link.labelKey) }}</button>
       </li>
       <li v-if="isStaff">
-        <NuxtLink to="/panel-administrativo" class="mobile-nav__link" @click="closeMenu">Panel administrativo</NuxtLink>
+        <NuxtLink :to="localePath('dashboard')" class="mobile-nav__link" @click="closeMenu">
+          {{ trans("nav.dashboard") }}
+        </NuxtLink>
+      </li>
+      <li class="mobile-nav__language">
+        <span id="mobile-language-label" class="mobile-nav__language-label">{{ trans("language.label") }}</span>
+        <LanguageToggle aria-describedby="mobile-language-label" @navigate="closeMenu" />
       </li>
     </ul>
 
     <button type="button" class="mobile-nav__link mobile-nav__link--signout" @click="signOutOpen = true">
-      Cerrar sesión
+      {{ trans("actions.signOut") }}
     </button>
   </nav>
 
   <ConfirmModal
     :open="signOutOpen"
-    title="Cerrar sesión"
-    confirm-label="Cerrar sesión"
-    busy-label="Cerrando sesión…"
+    :title="trans('signOutModal.title')"
+    :confirm-label="trans('signOutModal.action')"
+    :busy-label="trans('signOutModal.signingOut')"
     :busy="isSigningOut"
     @close="signOutOpen = false"
     @confirm="confirmSignOut"
   >
-    ¿Seguro que quieres cerrar sesión?
+    {{ trans("signOutModal.confirm") }}
   </ConfirmModal>
 </template>
 
@@ -312,26 +399,64 @@ async function confirmSignOut(): Promise<void> {
   border-radius: 2px;
 }
 
-/* ── Demo banner ── */
-.demo-banner {
+/* ── Language banner ──
+   Sits right below the header in normal flow (not fixed/absolute) so it pushes page
+   content down rather than overlaying it. */
+.language-banner {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: var(--space-sm);
-  padding: 0.4rem var(--space-md);
-  background-color: var(--color-secondary);
+  gap: 0.4rem var(--space-sm);
+  padding: clamp(0.25rem, 0.8vw, 0.4rem) var(--space-md);
+  background-color: var(--color-primary-soft);
   border-bottom: 1px solid var(--color-border);
 }
 
-.demo-banner__text {
-  flex: 1;
+.language-banner__text {
+  flex: 1 1 auto;
   margin: 0;
-  font-size: clamp(0.8rem, 1.8vw, 0.92rem);
-  line-height: 1.35;
+  font-size: clamp(0.85rem, 2vw, 0.98rem);
+  font-weight: 500;
+  line-height: 1.3;
   color: var(--color-ink);
 }
 
-.demo-banner__close {
+.language-banner__options {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.language-banner__option {
+  padding: 0.2rem 0.75rem;
+  line-height: 1.5;
+  border: 1px solid var(--color-primary);
+  border-radius: 999px;
+  background-color: transparent;
+  color: var(--color-primary);
+  font-size: clamp(0.78rem, 1.8vw, 0.9rem);
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.language-banner__option:hover,
+.language-banner__option[aria-current="true"] {
+  background-color: var(--color-primary);
+  color: var(--color-on-dark);
+}
+
+.language-banner__option:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.language-banner__close {
   display: inline-flex;
+  flex-shrink: 0;
   padding: 0.3rem;
   border: none;
   border-radius: 50%;
@@ -340,23 +465,23 @@ async function confirmSignOut(): Promise<void> {
   cursor: pointer;
 }
 
-.demo-banner__close:hover {
+.language-banner__close:hover {
   background-color: var(--color-hover);
 }
 
-.demo-banner__close:focus-visible {
+.language-banner__close:focus-visible {
   outline: 2px solid var(--color-focus);
 }
 
-.demo-banner-slide-enter-active,
-.demo-banner-slide-leave-active {
+.language-banner-slide-enter-active,
+.language-banner-slide-leave-active {
   transition:
-    opacity 0.25s ease,
-    transform 0.25s ease;
+    opacity 0.3s ease,
+    transform 0.3s ease;
 }
 
-.demo-banner-slide-enter-from,
-.demo-banner-slide-leave-to {
+.language-banner-slide-enter-from,
+.language-banner-slide-leave-to {
   opacity: 0;
   transform: translateY(-100%);
 }
@@ -447,6 +572,21 @@ async function confirmSignOut(): Promise<void> {
   outline-offset: -2px;
 }
 
+.mobile-nav__language {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding-inline: var(--space-md);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.mobile-nav__language-label {
+  font-size: clamp(1rem, 3vw, 1.1rem);
+  font-weight: 500;
+  color: var(--color-ink);
+}
+
 .mobile-nav__link--signout {
   justify-content: center;
   border-bottom: none;
@@ -473,10 +613,19 @@ async function confirmSignOut(): Promise<void> {
 
 @media (prefers-reduced-motion: reduce) {
   .mobile-nav,
-  .mobile-nav-backdrop,
-  .demo-banner-slide-enter-active,
-  .demo-banner-slide-leave-active {
+  .mobile-nav-backdrop {
     transition: none;
+  }
+
+  /* Keep only the fade for the language banner. */
+  .language-banner-slide-enter-active,
+  .language-banner-slide-leave-active {
+    transition: opacity 0.3s ease;
+  }
+
+  .language-banner-slide-enter-from,
+  .language-banner-slide-leave-to {
+    transform: none;
   }
 }
 </style>

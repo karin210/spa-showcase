@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useId } from "vue";
+import { useI18n } from "vue-i18n";
 
 // Non-dismissible yes/no decision (sign out, cancel a booking, remove a member…).
 // The message goes in the default slot so callers can emphasise parts of it.
@@ -8,15 +9,16 @@ withDefaults(
     open: boolean;
     title: string;
     confirmLabel: string;
-    busyLabel?: string;
+    busyLabel?: string | null;
     busy?: boolean;
     errorMessage?: string | null;
   }>(),
-  { busyLabel: "Procesando…", busy: false, errorMessage: null },
+  { busyLabel: null, busy: false, errorMessage: null },
 );
 
 const emit = defineEmits<{ close: []; confirm: [] }>();
 
+const { t: trans } = useI18n();
 const titleId = useId();
 </script>
 
@@ -27,10 +29,10 @@ const titleId = useId();
     <p v-if="errorMessage" class="modal-error" role="alert">{{ errorMessage }}</p>
     <div class="modal-actions">
       <button type="button" class="modal-btn modal-btn-cancel" :disabled="busy" @click="emit('close')">
-        Cancelar
+        {{ trans("actions.cancel") }}
       </button>
       <button type="button" class="modal-btn modal-btn-primary" :disabled="busy" @click="emit('confirm')">
-        {{ busy ? busyLabel : confirmLabel }}
+        {{ busy ? (busyLabel ?? trans("states.processing")) : confirmLabel }}
       </button>
     </div>
   </ModalDialog>

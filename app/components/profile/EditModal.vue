@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, reactive, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import type { ProfileUpdateInput } from "~/types/user";
 import { simulateRequest } from "~/utils/mock";
 
@@ -16,12 +17,15 @@ const emit = defineEmits<{
   save: [input: ProfileUpdateInput & { photoURL: string | null }];
 }>();
 
+const { t: trans } = useI18n();
+
 type Field = keyof ProfileUpdateInput;
 
 const form = reactive<ProfileUpdateInput>({ firstName: "", lastName: "", phone: "" });
 const edited = reactive<Record<Field, boolean>>({ firstName: false, lastName: false, phone: false });
 const touched = reactive<Record<Field, boolean>>({ firstName: false, lastName: false, phone: false });
 const photoPreview = ref<string | null>(null);
+// i18n key of the photo error, if any.
 const photoError = ref<string | null>(null);
 const saving = ref(false);
 
@@ -39,18 +43,17 @@ watch(
   },
 );
 
+// Each field is also its i18n key (profile.edit.fields.<field>.label / .helper).
 interface FieldConfig {
   field: Field;
-  label: string;
   type: "text" | "tel";
   autocomplete: string;
-  helper: string;
 }
 
 const FIELDS: FieldConfig[] = [
-  { field: "firstName", label: "Nombre", type: "text", autocomplete: "given-name", helper: "Introduce tu nombre" },
-  { field: "lastName", label: "Apellidos", type: "text", autocomplete: "family-name", helper: "Introduce tus apellidos" },
-  { field: "phone", label: "Teléfono", type: "tel", autocomplete: "tel", helper: "Introduce un teléfono válido (10 dígitos)" },
+  { field: "firstName", type: "text", autocomplete: "given-name" },
+  { field: "lastName", type: "text", autocomplete: "family-name" },
+  { field: "phone", type: "tel", autocomplete: "tel" },
 ];
 
 function isValid(field: Field): boolean {
@@ -62,7 +65,7 @@ function isValid(field: Field): boolean {
 // Errors appear only for fields the user has typed into and then left.
 function errorFor(config: FieldConfig): string | null {
   const { field } = config;
-  return edited[field] && touched[field] && !isValid(field) ? config.helper : null;
+  return edited[field] && touched[field] && !isValid(field) ? trans(`profile.edit.fields.${field}.helper`) : null;
 }
 
 const formValid = computed<boolean>(() => FIELDS.every((config) => isValid(config.field)));
@@ -71,7 +74,7 @@ function onPhotoChange(event: Event): void {
   const file = (event.target as HTMLInputElement).files?.[0];
   if (!file) return;
   if (!file.type.startsWith("image/")) {
-    photoError.value = "Selecciona un archivo de imagen.";
+    photoError.value = "profile.edit.photoError";
     return;
   }
   photoError.value = null;
@@ -95,20 +98,20 @@ async function submit(): Promise<void> {
 <template>
   <ModalDialog :open="open" labelledby="edit-profile-title" @close="emit('close')">
     <form class="edit-form" novalidate @submit.prevent="submit">
-      <h2 id="edit-profile-title" class="modal-title">Editar información</h2>
+      <h2 id="edit-profile-title" class="modal-title">{{ trans("profile.edit.title") }}</h2>
 
       <div class="edit-form__photo">
-        <img v-if="photoPreview" :src="photoPreview" alt="Vista previa de tu foto de perfil" class="edit-form__avatar" />
+        <img v-if="photoPreview" :src="photoPreview" :alt="trans('profile.edit.photoPreview')" class="edit-form__avatar" />
         <span v-else class="edit-form__avatar edit-form__avatar--empty"><AppIcon name="user" /></span>
         <label class="edit-form__photo-btn">
-          Cambiar foto
+          {{ trans("profile.edit.changePhoto") }}
           <input type="file" accept="image/*" class="visually-hidden" @change="onPhotoChange" />
         </label>
       </div>
-      <p v-if="photoError" class="modal-error" role="alert">{{ photoError }}</p>
+      <p v-if="photoError" class="modal-error" role="alert">{{ trans(photoError) }}</p>
 
       <label v-for="config in FIELDS" :key="config.field" class="modal-field">
-        {{ config.label }}
+        {{ trans(`profile.edit.fields.${config.field}.label`) }}
         <input
           v-model="form[config.field]"
           class="modal-input"
@@ -126,9 +129,11 @@ async function submit(): Promise<void> {
       </label>
 
       <div class="modal-actions">
-        <button type="button" class="modal-btn modal-btn-cancel" :disabled="saving" @click="emit('close')">Cancelar</button>
+        <button type="button" class="modal-btn modal-btn-cancel" :disabled="saving" @click="emit('close')">
+          {{ trans("actions.cancel") }}
+        </button>
         <button type="submit" class="modal-btn modal-btn-primary" :disabled="saving || !formValid">
-          {{ saving ? "Guardando…" : "Guardar cambios" }}
+          {{ saving ? trans("states.saving") : trans("profile.edit.save") }}
         </button>
       </div>
     </form>

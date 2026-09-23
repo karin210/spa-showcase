@@ -1,28 +1,40 @@
 <script setup lang="ts">
+import { useI18n } from "vue-i18n";
 import { serviceCategories, stockImage } from "~/data/services";
-import { AMENITIES, CATEGORY_DETAILS, SERVICE_DESCRIPTIONS, SERVICES_BANNER, SERVICES_INTRO } from "~/data/serviceDetails";
-import { formatCurrency } from "~/utils/format";
+import { AMENITIES, SERVICES_BANNER_PHOTO_ID } from "~/data/serviceDetails";
+import { useLocaleFormat } from "~/composables/useLocaleFormat";
 
-useHead({ title: "Servicios" });
+const { t: trans, tm, rt } = useI18n();
+const { formatCurrency } = useLocaleFormat();
+const localePath = useLocalePath();
+
+useHead(() => ({ title: trans("services.page.meta.title") }));
+
+// "Ideal para" is a list in the catalogue, so it is read as raw messages and resolved one by one.
+function idealFor(categoryId: string): string[] {
+  return (tm(`services.categories.${categoryId}.idealFor`) as unknown[]).map((item) => rt(item as string));
+}
 </script>
 
 <template>
   <SiteHeader />
   <main class="services-page">
     <PageBanner
-      :photo-id="SERVICES_BANNER.photoId"
-      :image-alt="SERVICES_BANNER.imageAlt"
-      eyebrow="Tratamientos y amenidades"
-      title="Todo lo que te espera en Alma Serena"
+      :photo-id="SERVICES_BANNER_PHOTO_ID"
+      :image-alt="trans('services.page.banner.imageAlt')"
+      :eyebrow="trans('services.page.banner.eyebrow')"
+      :title="trans('services.page.banner.title')"
       title-id="services-page-title"
     />
 
-    <section class="services-intro" aria-label="Introducción">
-      <p class="services-intro__text">{{ SERVICES_INTRO }}</p>
-      <nav class="services-intro__nav" aria-label="Categorías de servicios">
+    <section class="services-intro" :aria-label="trans('services.page.introLabel')">
+      <p class="services-intro__text">{{ trans("services.page.intro") }}</p>
+      <nav class="services-intro__nav" :aria-label="trans('services.page.categoriesNav')">
         <ul class="services-intro__nav-list" role="list">
           <li v-for="category in serviceCategories" :key="category.id">
-            <a :href="`#${category.id}`" class="services-intro__nav-link">{{ category.title }}</a>
+            <a :href="`#${category.id}`" class="services-intro__nav-link">
+              {{ trans(`services.categories.${category.id}.title`) }}
+            </a>
           </li>
         </ul>
       </nav>
@@ -38,23 +50,25 @@ useHead({ title: "Servicios" });
       <img
         class="category__image"
         :src="stockImage(category.photoId, 1000)"
-        :alt="category.imageAlt"
+        :alt="trans(`services.categories.${category.id}.imageAlt`)"
         loading="lazy"
         decoding="async"
       />
 
       <div class="category__body">
         <header class="category__header">
-          <h2 :id="`${category.id}-heading`" class="section-title">{{ category.title }}</h2>
-          <p class="section-subtitle">{{ category.blurb }}</p>
+          <h2 :id="`${category.id}-heading`" class="section-title">
+            {{ trans(`services.categories.${category.id}.title`) }}
+          </h2>
+          <p class="section-subtitle">{{ trans(`services.categories.${category.id}.blurb`) }}</p>
         </header>
 
-        <p class="category__description">{{ CATEGORY_DETAILS[category.id]?.description }}</p>
+        <p class="category__description">{{ trans(`services.categories.${category.id}.description`) }}</p>
 
         <section class="category__ideal" :aria-labelledby="`${category.id}-ideal`">
-          <h3 :id="`${category.id}-ideal`" class="category__label">Ideal para</h3>
+          <h3 :id="`${category.id}-ideal`" class="category__label">{{ trans("services.page.idealFor") }}</h3>
           <ul class="category__ideal-list" role="list">
-            <li v-for="item in CATEGORY_DETAILS[category.id]?.idealFor" :key="item" class="category__ideal-item">
+            <li v-for="item in idealFor(category.id)" :key="item" class="category__ideal-item">
               <AppIcon name="leaf" />
               {{ item }}
             </li>
@@ -62,16 +76,18 @@ useHead({ title: "Servicios" });
         </section>
 
         <ul class="treatments" role="list">
-          <li v-for="service in category.services" :key="service.name">
+          <li v-for="service in category.services" :key="service.id">
             <article class="treatment">
               <header class="treatment__header">
-                <h3 class="treatment__name">{{ service.name }}</h3>
+                <h3 class="treatment__name">{{ trans(`services.items.${service.id}.name`) }}</h3>
                 <p class="treatment__meta">
-                  <span class="treatment__duration"><AppIcon name="clock" /> {{ service.durationMinutes }} min</span>
+                  <span class="treatment__duration">
+                    <AppIcon name="clock" /> {{ trans("services.minutes", { count: service.durationMinutes }) }}
+                  </span>
                   <span class="treatment__price">{{ formatCurrency(service.price) }}</span>
                 </p>
               </header>
-              <p class="treatment__description">{{ SERVICE_DESCRIPTIONS[service.name] }}</p>
+              <p class="treatment__description">{{ trans(`services.items.${service.id}.description`) }}</p>
             </article>
           </li>
         </ul>
@@ -80,24 +96,24 @@ useHead({ title: "Servicios" });
 
     <section class="amenities" aria-labelledby="amenities-title">
       <header class="amenities__header">
-        <h2 id="amenities-title" class="section-title">Amenidades</h2>
-        <p class="section-subtitle">Incluidas con cualquier tratamiento</p>
+        <h2 id="amenities-title" class="section-title">{{ trans("services.page.amenities.title") }}</h2>
+        <p class="section-subtitle">{{ trans("services.page.amenities.subtitle") }}</p>
       </header>
 
       <ul class="amenities__grid" role="list">
-        <li v-for="amenity in AMENITIES" :key="amenity.title">
+        <li v-for="amenity in AMENITIES" :key="amenity.id">
           <article class="amenity">
             <img
               class="amenity__image"
               :src="stockImage(amenity.photoId, 700)"
-              :alt="amenity.imageAlt"
+              :alt="trans(`services.page.amenities.items.${amenity.id}.imageAlt`)"
               loading="lazy"
               decoding="async"
             />
             <!-- Absolutely positioned as one wrapper: scrim + copy travel together. -->
             <div class="amenity__body">
-              <h3 class="amenity__title">{{ amenity.title }}</h3>
-              <p class="amenity__description">{{ amenity.description }}</p>
+              <h3 class="amenity__title">{{ trans(`services.page.amenities.items.${amenity.id}.title`) }}</h3>
+              <p class="amenity__description">{{ trans(`services.page.amenities.items.${amenity.id}.description`) }}</p>
             </div>
           </article>
         </li>
@@ -105,9 +121,9 @@ useHead({ title: "Servicios" });
     </section>
 
     <section class="services-cta" aria-labelledby="services-cta-title">
-      <h2 id="services-cta-title" class="services-cta__title">¿Lista para tu momento de calma?</h2>
-      <p class="services-cta__text">Elige tus tratamientos y reserva en menos de un minuto.</p>
-      <PrimaryBtn link="/agendar">Reservar tratamiento</PrimaryBtn>
+      <h2 id="services-cta-title" class="services-cta__title">{{ trans("services.page.cta.title") }}</h2>
+      <p class="services-cta__text">{{ trans("services.page.cta.text") }}</p>
+      <PrimaryBtn :link="localePath('booking')">{{ trans("services.page.cta.action") }}</PrimaryBtn>
     </section>
   </main>
   <SiteFooter />

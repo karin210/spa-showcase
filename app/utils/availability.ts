@@ -2,7 +2,7 @@ import type { BlacklistRecord } from "~/types/dashboard";
 import { atTime, toDateKey } from "~/utils/date";
 
 // Business hours by weekday (0 = Sunday), in minutes from midnight. Mirrors the
-// hours shown in the footer (app/data/brand.ts's CONTACT.schedule).
+// hours shown in the footer (footer.schedule.* in the message catalogue).
 const OPEN_HOURS: Record<number, [number, number]> = {
   0: [10 * 60, 18 * 60], // Domingo
   1: [9 * 60, 20 * 60],

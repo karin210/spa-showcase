@@ -1,5 +1,11 @@
 <script setup lang="ts">
+import { useI18n } from "vue-i18n";
 import { BRAND, CONTACT } from "~/data/brand";
+
+// Row ids for the opening hours; each is an i18n key (footer.schedule.<id>.*).
+const SCHEDULE_ROWS = ["weekdays", "sunday"] as const;
+
+const { t: trans } = useI18n();
 
 const year = new Date().getFullYear();
 </script>
@@ -11,7 +17,7 @@ const year = new Date().getFullYear();
         <BrandMark tone="light" />
         <ul class="site-footer__list">
           <li>
-            Tel:
+            {{ trans("footer.phone") }}
             <template v-for="(phone, index) in CONTACT.phones" :key="phone.tel">
               <span v-if="index > 0"> / </span>
               <a :href="`tel:${phone.tel}`" class="site-footer__link">{{ phone.display }}</a>
@@ -22,16 +28,16 @@ const year = new Date().getFullYear();
       </address>
 
       <section class="site-footer__hours" aria-labelledby="footer-hours-title">
-        <h2 id="footer-hours-title" class="site-footer__heading">Horario</h2>
+        <h2 id="footer-hours-title" class="site-footer__heading">{{ trans("footer.hours") }}</h2>
         <dl class="site-footer__schedule">
-          <div v-for="entry in CONTACT.schedule" :key="entry.days" class="site-footer__schedule-row">
-            <dt>{{ entry.days }}</dt>
-            <dd>{{ entry.hours }}</dd>
+          <div v-for="row in SCHEDULE_ROWS" :key="row" class="site-footer__schedule-row">
+            <dt>{{ trans(`footer.schedule.${row}.days`) }}</dt>
+            <dd>{{ trans(`footer.schedule.${row}.hours`) }}</dd>
           </div>
         </dl>
       </section>
 
-      <p class="site-footer__copy">© {{ year }} {{ BRAND }}. Marca ficticia con fines de demostración.</p>
+      <p class="site-footer__copy">{{ trans("footer.copyright", { year, brand: BRAND }) }}</p>
     </div>
   </footer>
 </template>

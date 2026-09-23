@@ -12,6 +12,7 @@ export interface BlacklistRecord {
 }
 
 export interface ServiceDemand {
+  // Service id; labelled through useServiceLabels().
   service: string;
   count: number;
 }

@@ -1,0 +1,105 @@
+{
+  "meta": {
+    "description": "Alma Serena Spa & Bienestar: masajes, faciales, rituales corporales e hidroterapia. Demostración de sitio para spas."
+  },
+  "formats": {
+    "dateAtTime": "{date} a las {time}"
+  },
+  "language": {
+    "label": "Idioma",
+    "es": {
+      "short": "ES",
+      "name": "Español",
+      "switchTo": "Cambiar a español"
+    },
+    "en": {
+      "short": "EN",
+      "name": "English",
+      "switchTo": "Switch to English"
+    }
+  },
+  "languageBanner": {
+    "prompt": "¿Quieres cambiar de idioma?",
+    "close": "Cerrar aviso de idioma"
+  },
+  "nav": {
+    "primary": "Navegación principal",
+    "mobile": "Menú móvil",
+    "homeLink": "Alma Serena — página de inicio",
+    "home": "Inicio",
+    "services": "Servicios",
+    "contact": "Contacto",
+    "about": "Nosotros",
+    "careers": "Vacantes",
+    "book": "Agendar",
+    "profile": "Mi perfil",
+    "dashboard": "Panel administrativo",
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú"
+  },
+  "actions": {
+    "book": "Agendar cita",
+    "viewProfile": "Ver perfil de usuario",
+    "signOut": "Cerrar sesión",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "accept": "Aceptar",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "close": "Cerrar",
+    "backToHome": "Volver al inicio"
+  },
+  "signOutModal": {
+    "title": "Cerrar sesión",
+    "confirm": "¿Seguro que quieres cerrar sesión?",
+    "action": "Cerrar sesión",
+    "signingOut": "Cerrando sesión…",
+    "demoNotice": "Modo demostración: la sesión permanece activa."
+  },
+  "states": {
+    "processing": "Procesando…",
+    "saving": "Guardando…"
+  },
+  "toast": {
+    "region": "Notificaciones",
+    "close": "Cerrar aviso"
+  },
+  "calendar": {
+    "pickDate": "Selecciona una fecha",
+    "previousMonth": "Mes anterior",
+    "nextMonth": "Mes siguiente"
+  },
+  "footer": {
+    "phone": "Tel:",
+    "hours": "Horario",
+    "schedule": {
+      "weekdays": {
+        "days": "Lunes a sábado",
+        "hours": "9:00 a 20:00"
+      },
+      "sunday": {
+        "days": "Domingo",
+        "hours": "10:00 a 18:00"
+      }
+    },
+    "copyright": "© {year} {brand}. Marca ficticia con fines de demostración."
+  },
+  "installPrompt": {
+    "title": "Instala la app",
+    "text": "Agrega Alma Serena a tu pantalla de inicio para abrirla como una app y reservar en un par de toques.",
+    "step1": {
+      "before": "Toca el botón",
+      "control": "Compartir",
+      "after": "en la barra de Safari."
+    },
+    "step2": {
+      "before": "Elige",
+      "control": "«Agregar a inicio»"
+    },
+    "step3": {
+      "before": "Confirma tocando",
+      "control": "«Agregar»"
+    },
+    "dismiss": "Entendido"
+  }
+}

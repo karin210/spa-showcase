@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import type { ServiceDemand } from "~/types/dashboard";
+import { useServiceLabels } from "~/composables/useServiceLabels";
 
 const props = defineProps<{ items: ServiceDemand[] }>();
+
+const { serviceName } = useServiceLabels();
 
 const maxCount = computed<number>(() => Math.max(...props.items.map((item) => item.count), 1));
 </script>
@@ -10,7 +13,7 @@ const maxCount = computed<number>(() => Math.max(...props.items.map((item) => it
 <template>
   <ol class="bar-list">
     <li v-for="item in items" :key="item.service" class="bar-list__row">
-      <span class="bar-list__label">{{ item.service }}</span>
+      <span class="bar-list__label">{{ serviceName(item.service) }}</span>
       <span class="bar-list__track" aria-hidden="true">
         <span class="bar-list__fill" :style="{ width: `${(item.count / maxCount) * 100}%` }" />
       </span>

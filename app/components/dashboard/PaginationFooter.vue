@@ -1,13 +1,23 @@
 <script setup lang="ts">
+import { useI18n } from "vue-i18n";
+
 defineProps<{ page: number; totalPages: number }>();
 defineEmits<{ change: [page: number] }>();
+
+const { t: trans } = useI18n();
 </script>
 
 <template>
-  <nav v-if="totalPages > 1" class="pagination" aria-label="Paginación">
-    <button type="button" class="chip-btn" :disabled="page <= 1" @click="$emit('change', page - 1)">Anterior</button>
-    <span class="pagination__info" aria-live="polite">Página {{ page }} de {{ totalPages }}</span>
-    <button type="button" class="chip-btn" :disabled="page >= totalPages" @click="$emit('change', page + 1)">Siguiente</button>
+  <nav v-if="totalPages > 1" class="pagination" :aria-label="trans('dashboard.pagination.label')">
+    <button type="button" class="chip-btn" :disabled="page <= 1" @click="$emit('change', page - 1)">
+      {{ trans("dashboard.pagination.previous") }}
+    </button>
+    <span class="pagination__info" aria-live="polite">
+      {{ trans("dashboard.pagination.page", { page, total: totalPages }) }}
+    </span>
+    <button type="button" class="chip-btn" :disabled="page >= totalPages" @click="$emit('change', page + 1)">
+      {{ trans("dashboard.pagination.next") }}
+    </button>
   </nav>
 </template>
 

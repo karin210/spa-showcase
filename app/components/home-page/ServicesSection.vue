@@ -1,8 +1,13 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import { useI18n } from "vue-i18n";
 import type { ServiceCategory } from "~/types/services";
 import { serviceCategories, stockImage } from "~/data/services";
-import { formatCurrency } from "~/utils/format";
+import { useLocaleFormat } from "~/composables/useLocaleFormat";
+
+const { t: trans } = useI18n();
+const { formatCurrency } = useLocaleFormat();
+const localePath = useLocalePath();
 
 const activeCategory = ref<ServiceCategory | null>(null);
 const detailsOpen = ref(false);
@@ -16,8 +21,8 @@ function openDetails(category: ServiceCategory): void {
 <template>
   <section id="services" class="services" aria-labelledby="services-title">
     <header class="services__header">
-      <h2 id="services-title" class="section-title">Nuestros servicios</h2>
-      <p class="section-subtitle">Tratamientos pensados para que salgas más ligera de lo que llegaste</p>
+      <h2 id="services-title" class="section-title">{{ trans("home.services.title") }}</h2>
+      <p class="section-subtitle">{{ trans("home.services.subtitle") }}</p>
     </header>
 
     <ul class="categories-grid" role="list">
@@ -26,24 +31,26 @@ function openDetails(category: ServiceCategory): void {
           <img
             :id="`${category.id}-image`"
             :src="stockImage(category.photoId, 1200)"
-            :alt="category.imageAlt"
+            :alt="trans(`services.categories.${category.id}.imageAlt`)"
             class="category-card__image"
             loading="lazy"
             decoding="async"
           />
           <!-- Absolutely positioned as one wrapper: scrim + copy travel together. -->
           <div class="category-card__body">
-            <h3 :id="`${category.id}-title`" class="category-card__title">{{ category.title }}</h3>
-            <p class="category-card__blurb">{{ category.blurb }}</p>
+            <h3 :id="`${category.id}-title`" class="category-card__title">
+              {{ trans(`services.categories.${category.id}.title`) }}
+            </h3>
+            <p class="category-card__blurb">{{ trans(`services.categories.${category.id}.blurb`) }}</p>
             <button type="button" class="category-card__details" @click="openDetails(category)">
-              Ver tratamientos
+              {{ trans("home.services.viewTreatments") }}
             </button>
           </div>
         </article>
       </li>
     </ul>
 
-    <PrimaryBtn link="/services" class="services__more">Ver todos los servicios</PrimaryBtn>
+    <PrimaryBtn :link="localePath('services')" class="services__more">{{ trans("home.services.viewAll") }}</PrimaryBtn>
 
     <ModalDialog
       :open="detailsOpen"
@@ -51,12 +58,14 @@ function openDetails(category: ServiceCategory): void {
       dismissible
       @close="detailsOpen = false"
     >
-      <h2 id="service-details-title" class="modal-title">{{ activeCategory?.title }}</h2>
+      <h2 id="service-details-title" class="modal-title">
+        {{ activeCategory ? trans(`services.categories.${activeCategory.id}.title`) : "" }}
+      </h2>
       <ul class="service-list" role="list">
-        <li v-for="service in activeCategory?.services" :key="service.name" class="service-list__item">
-          <span class="service-list__name">{{ service.name }}</span>
+        <li v-for="service in activeCategory?.services" :key="service.id" class="service-list__item">
+          <span class="service-list__name">{{ trans(`services.items.${service.id}.name`) }}</span>
           <span class="service-list__meta">
-            <span>{{ service.durationMinutes }} min</span>
+            <span>{{ trans("services.minutes", { count: service.durationMinutes }) }}</span>
             <span class="service-list__price">{{ formatCurrency(service.price) }}</span>
           </span>
         </li>
@@ -100,6 +109,7 @@ function openDetails(category: ServiceCategory): void {
 }
 
 .services__more {
+  max-width: 300px;
   align-self: center;
 }
 

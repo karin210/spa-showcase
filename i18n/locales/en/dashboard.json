@@ -1,0 +1,216 @@
+{
+  "dashboard": {
+    "meta": {
+      "title": "Dashboard"
+    },
+    "nav": {
+      "label": "Dashboard sections",
+      "expand": "Expand menu",
+      "collapse": "Collapse menu"
+    },
+    "tabs": {
+      "users": "Users",
+      "bookings": "Bookings",
+      "team": "Team",
+      "controls": "Controls",
+      "metrics": "Metrics"
+    },
+    "roles": {
+      "admin": "Admin",
+      "employee": "Employee"
+    },
+    "status": {
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "cancelled": "Cancelled",
+      "closed": "Closed"
+    },
+    "statusPlural": {
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "cancelled": "Cancelled",
+      "closed": "Closed"
+    },
+    "dayTabs": {
+      "label": "Filter by date:",
+      "today": "Today",
+      "tomorrow": "Tomorrow",
+      "fromToday": "From today",
+      "pickDate": "Pick a date"
+    },
+    "pagination": {
+      "label": "Pagination",
+      "previous": "Previous",
+      "next": "Next",
+      "page": "Page {page} of {total}"
+    },
+    "person": {
+      "memberSince": "Member since {date}"
+    },
+    "users": {
+      "total": "Total users: {count}",
+      "sort": "Sort:",
+      "newest": "Newest first",
+      "oldest": "Oldest first",
+      "empty": "No users"
+    },
+    "team": {
+      "total": "Total members: {count}",
+      "add": "Add member",
+      "empty": "No team members",
+      "changeRole": "Change role",
+      "changeRoleOf": "Change {name}'s role",
+      "ownRole": "You can't change your own role",
+      "ownAccount": "You can't remove your own account from the team",
+      "remove": "Remove",
+      "roleChanged": "{name} is now an {role}.",
+      "removed": "{name} is no longer part of the team.",
+      "removeModal": {
+        "title": "Remove from team",
+        "removing": "Removing…",
+        "confirm": "Are you sure you want to remove {name} from the team? They'll lose dashboard access and go back to being a customer account."
+      }
+    },
+    "addMember": {
+      "title": "Add a new team member",
+      "added": "{name} is now part of the team!",
+      "exit": "Close",
+      "addAnother": "Add another member",
+      "nameLabel": "User name",
+      "namePlaceholder": "E.g. Lucía",
+      "search": "Search",
+      "searching": "Searching…",
+      "noResults": "No customer found with that name.",
+      "pick": "Select the person",
+      "confirm": "Do you want to add {name} as a team member?",
+      "role": "Role",
+      "adding": "Adding…"
+    },
+    "bookings": {
+      "heading": {
+        "today": "Today's bookings",
+        "tomorrow": "Tomorrow's bookings",
+        "fromToday": "Bookings from today",
+        "date": "Bookings for {date}"
+      },
+      "total": "Total bookings: {count}",
+      "statusFilter": "Status:",
+      "allStatuses": "All statuses",
+      "empty": "No bookings",
+      "count": "{n} booking | {n} bookings",
+      "updated": "Booking updated.",
+      "closedPaid": "Booking closed and paid.",
+      "costRecorded": "Cost recorded; payment still pending.",
+      "pendingPayment": {
+        "heading": "Awaiting payment",
+        "hint": "Past visits that don't have a payment recorded yet.",
+        "action": "Close"
+      }
+    },
+    "bookingCard": {
+      "registered": "Registered",
+      "guest": "Guest",
+      "call": "Call {name}",
+      "whatsapp": "Send {name} a WhatsApp message",
+      "whatsappMessage": "Hi {name}, this is Alma Serena Spa writing about your appointment.",
+      "statusLabel": "Status:",
+      "amountPaid": "Amount paid: {amount}",
+      "amountDue": "Amount due: {amount}",
+      "rescheduled": "Booking rescheduled. Waiting for confirmation."
+    },
+    "editBooking": {
+      "title": "Edit booking",
+      "reschedule": "Reschedule booking",
+      "day": "Day",
+      "time": "Time",
+      "status": "Status",
+      "finalCost": "Final cost (closed booking)"
+    },
+    "finalCost": {
+      "title": "Record cost",
+      "label": "Final cost",
+      "menuPrice": "Menu price: {price}"
+    },
+    "paid": {
+      "legend": "Payment",
+      "yes": "Paid",
+      "no": "Unpaid"
+    },
+    "createBooking": {
+      "trigger": "Create booking",
+      "title": "Create a booking for a customer",
+      "created": "Booking created for {name}.",
+      "createdClosed": "Booking created and closed for {name}.",
+      "another": "Create another booking",
+      "customer": "Customer",
+      "customerPlaceholder": "E.g. Ana López",
+      "phone": "Phone (optional)",
+      "phonePlaceholder": "E.g. +52 443 123 4567",
+      "date": "Date",
+      "time": "Time",
+      "services": "Services",
+      "finalCost": "Final cost (optional)",
+      "creating": "Creating…"
+    },
+    "controls": {
+      "headingDate": "Controls for {date}",
+      "total": "Total disabled time slots: {count}",
+      "empty": "No disabled time slots",
+      "allDay": "All day",
+      "serviceCount": "{n} service | {n} services",
+      "disabledServices": "Services disabled during this time:",
+      "enable": "Re-enable time slot",
+      "enabled": "Time slot enabled again.",
+      "enableModal": {
+        "action": "Enable",
+        "enabling": "Enabling…",
+        "confirm": "The disabled services {range} will be available to book again."
+      }
+    },
+    "blacklist": {
+      "title": "Disable time slot",
+      "date": "Date",
+      "schedule": "Time",
+      "pickRange": "Choose a time range",
+      "from": "From",
+      "to": "To",
+      "rangeError": "The end time must be later than the start time.",
+      "services": "Which services won't be available?",
+      "action": "Disable",
+      "saved": "Time slot disabled."
+    },
+    "metrics": {
+      "period": "Period:",
+      "periods": {
+        "day": "Today",
+        "week": "This week",
+        "month": "This month"
+      },
+      "pickDay": "Pick a day:",
+      "weekOf": "Week of {start} to {end}",
+      "revenue": {
+        "title": "Revenue",
+        "total": "Total revenue",
+        "average": "Average revenue per booking"
+      },
+      "agenda": {
+        "title": "Schedule",
+        "occupancy": "Occupancy rate",
+        "capacity": "Capacity: {count} treatments per day",
+        "cancellations": "Cancellation rate"
+      },
+      "clients": {
+        "title": "Clients",
+        "subtitle": "All-time, independent of the selected period.",
+        "retention": "Retention rate",
+        "retentionCaption": "Accounts with a visit in the last {days} days",
+        "new": "New clients",
+        "newCaption": "With and without an account"
+      },
+      "topServices": {
+        "title": "Most requested treatments",
+        "empty": "No paid treatments in this period."
+      }
+    }
+  }
+}

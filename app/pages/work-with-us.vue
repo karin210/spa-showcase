@@ -1,11 +1,20 @@
 <script setup lang="ts">
+import { useI18n } from "vue-i18n";
 import { whatsappUrl } from "~/data/brand";
-import { VACANCIES, WORK_BANNER, WORK_BENEFITS, WORK_INTRO } from "~/data/vacancies";
+import { VACANCY_IDS, WORK_BANNER_PHOTO_ID, WORK_BENEFIT_IDS } from "~/data/vacancies";
 
-useHead({ title: "Vacantes" });
+const { t: trans, tm, rt } = useI18n();
 
-function applyUrl(vacancyTitle: string): string {
-  return whatsappUrl(`¡Hola! Me interesa la vacante de ${vacancyTitle}. ¿Me podrían dar más información?`);
+useHead(() => ({ title: trans("careers.meta.title") }));
+
+// Responsibilities and requirements are lists in the catalogue, resolved one by one.
+function vacancyList(vacancyId: string, list: "responsibilities" | "requirements"): string[] {
+  return (tm(`careers.vacancies.items.${vacancyId}.${list}`) as unknown[]).map((item) => rt(item as string));
+}
+
+function applyUrl(vacancyId: string): string {
+  const title = trans(`careers.vacancies.items.${vacancyId}.title`);
+  return whatsappUrl(trans("careers.vacancies.applyMessage", { title }));
 }
 </script>
 
@@ -13,69 +22,79 @@ function applyUrl(vacancyTitle: string): string {
   <SiteHeader />
   <main class="work-page">
     <PageBanner
-      :photo-id="WORK_BANNER.photoId"
-      :image-alt="WORK_BANNER.imageAlt"
-      eyebrow="Trabaja con nosotros"
-      title="Cuida a otras personas en un lugar que también te cuida"
+      :photo-id="WORK_BANNER_PHOTO_ID"
+      :image-alt="trans('careers.banner.imageAlt')"
+      :eyebrow="trans('careers.banner.eyebrow')"
+      :title="trans('careers.banner.title')"
       title-id="work-title"
     />
 
     <section class="benefits" aria-labelledby="benefits-title">
       <header class="benefits__header">
-        <h2 id="benefits-title" class="section-title">¿Por qué Alma Serena?</h2>
-        <p class="benefits__intro">{{ WORK_INTRO }}</p>
+        <h2 id="benefits-title" class="section-title">{{ trans("careers.benefits.title") }}</h2>
+        <p class="benefits__intro">{{ trans("careers.benefits.intro") }}</p>
       </header>
 
       <ul class="benefits__grid" role="list">
-        <li v-for="benefit in WORK_BENEFITS" :key="benefit.title" class="benefit">
+        <li v-for="benefitId in WORK_BENEFIT_IDS" :key="benefitId" class="benefit">
           <AppIcon name="leaf" class="benefit__icon" />
-          <h3 class="benefit__title">{{ benefit.title }}</h3>
-          <p class="benefit__description">{{ benefit.description }}</p>
+          <h3 class="benefit__title">{{ trans(`careers.benefits.items.${benefitId}.title`) }}</h3>
+          <p class="benefit__description">{{ trans(`careers.benefits.items.${benefitId}.description`) }}</p>
         </li>
       </ul>
     </section>
 
     <section class="vacancies" aria-labelledby="vacancies-title">
       <header class="vacancies__header">
-        <h2 id="vacancies-title" class="section-title">Vacantes abiertas</h2>
-        <p class="section-subtitle">{{ VACANCIES.length }} posiciones disponibles en Morelia</p>
+        <h2 id="vacancies-title" class="section-title">{{ trans("careers.vacancies.title") }}</h2>
+        <p class="section-subtitle">{{ trans("careers.vacancies.count", VACANCY_IDS.length) }}</p>
       </header>
 
       <ul class="vacancies__list" role="list">
-        <li v-for="vacancy in VACANCIES" :key="vacancy.id">
-          <article class="vacancy" :aria-labelledby="`${vacancy.id}-title`">
+        <li v-for="vacancyId in VACANCY_IDS" :key="vacancyId">
+          <article class="vacancy" :aria-labelledby="`${vacancyId}-title`">
             <header class="vacancy__header">
-              <h3 :id="`${vacancy.id}-title`" class="vacancy__title">{{ vacancy.title }}</h3>
+              <h3 :id="`${vacancyId}-title`" class="vacancy__title">
+                {{ trans(`careers.vacancies.items.${vacancyId}.title`) }}
+              </h3>
               <ul class="vacancy__tags" role="list">
-                <li class="vacancy__tag">{{ vacancy.employmentType }}</li>
-                <li class="vacancy__tag"><AppIcon name="clock" /> {{ vacancy.schedule }}</li>
-                <li class="vacancy__tag vacancy__tag--salary">{{ vacancy.salary }}</li>
+                <li class="vacancy__tag">{{ trans(`careers.vacancies.items.${vacancyId}.employmentType`) }}</li>
+                <li class="vacancy__tag">
+                  <AppIcon name="clock" /> {{ trans(`careers.vacancies.items.${vacancyId}.schedule`) }}
+                </li>
+                <li class="vacancy__tag vacancy__tag--salary">
+                  {{ trans(`careers.vacancies.items.${vacancyId}.salary`) }}
+                </li>
               </ul>
             </header>
 
-            <p class="vacancy__summary">{{ vacancy.summary }}</p>
+            <p class="vacancy__summary">{{ trans(`careers.vacancies.items.${vacancyId}.summary`) }}</p>
 
             <CollapsibleDisclosure class="vacancy__details">
-              <template #summary>Ver responsabilidades y requisitos</template>
+              <template #summary>{{ trans("careers.vacancies.details") }}</template>
               <div class="vacancy__details-body">
-                <section class="vacancy__block" :aria-labelledby="`${vacancy.id}-responsibilities`">
-                  <h4 :id="`${vacancy.id}-responsibilities`" class="vacancy__label">Responsabilidades</h4>
+                <section class="vacancy__block" :aria-labelledby="`${vacancyId}-responsibilities`">
+                  <h4 :id="`${vacancyId}-responsibilities`" class="vacancy__label">
+                    {{ trans("careers.vacancies.responsibilities") }}
+                  </h4>
                   <ul class="vacancy__bullets">
-                    <li v-for="item in vacancy.responsibilities" :key="item">{{ item }}</li>
+                    <li v-for="item in vacancyList(vacancyId, 'responsibilities')" :key="item">{{ item }}</li>
                   </ul>
                 </section>
-                <section class="vacancy__block" :aria-labelledby="`${vacancy.id}-requirements`">
-                  <h4 :id="`${vacancy.id}-requirements`" class="vacancy__label">Requisitos</h4>
+                <section class="vacancy__block" :aria-labelledby="`${vacancyId}-requirements`">
+                  <h4 :id="`${vacancyId}-requirements`" class="vacancy__label">
+                    {{ trans("careers.vacancies.requirements") }}
+                  </h4>
                   <ul class="vacancy__bullets">
-                    <li v-for="item in vacancy.requirements" :key="item">{{ item }}</li>
+                    <li v-for="item in vacancyList(vacancyId, 'requirements')" :key="item">{{ item }}</li>
                   </ul>
                 </section>
               </div>
             </CollapsibleDisclosure>
 
-            <SecondaryBtn :href="applyUrl(vacancy.title)" external class="vacancy__apply">
+            <SecondaryBtn :href="applyUrl(vacancyId)" external class="vacancy__apply">
               <template #icon><AppIcon name="whatsapp" /></template>
-              Postularme por WhatsApp
+              {{ trans("careers.vacancies.apply") }}
             </SecondaryBtn>
           </article>
         </li>

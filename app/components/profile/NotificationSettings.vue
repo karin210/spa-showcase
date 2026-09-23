@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { simulateRequest } from "~/utils/mock";
 
 // Mock of the push-notification opt-in: toggles local state only.
+const { t: trans } = useI18n();
 const enabled = ref(false);
 const enabling = ref(false);
 
@@ -16,18 +18,17 @@ async function enable(): Promise<void> {
 
 <template>
   <section class="profile-section" aria-labelledby="notifications-heading">
-    <h3 id="notifications-heading" class="profile-section__heading">Notificaciones</h3>
+    <h3 id="notifications-heading" class="profile-section__heading">{{ trans("profile.notifications.title") }}</h3>
     <div v-if="enabled" class="notifications__active">
-      <span class="notifications__badge">Activadas</span>
+      <span class="notifications__badge">{{ trans("profile.notifications.enabled") }}</span>
       <p class="notifications__hint">
-        Te avisaremos cuando confirmemos o movamos tus citas. Para desactivarlas, cambia los permisos del sitio en tu
-        navegador.
+        {{ trans("profile.notifications.enabledHint") }}
       </p>
     </div>
     <template v-else>
-      <p class="notifications__hint">Recibe recordatorios de tus citas y avisos cuando el spa confirme tu reserva.</p>
+      <p class="notifications__hint">{{ trans("profile.notifications.hint") }}</p>
       <SecondaryBtn :disabled="enabling" @click="enable">
-        {{ enabling ? "Activando…" : "Activar notificaciones" }}
+        {{ enabling ? trans("profile.notifications.enabling") : trans("profile.notifications.enable") }}
       </SecondaryBtn>
     </template>
   </section>

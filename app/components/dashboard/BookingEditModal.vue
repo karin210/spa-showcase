@@ -1,13 +1,18 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import type { BookingEdit, BookingRecord, BookingStatus } from "~/types/booking";
-import { STATUS_LABELS } from "~/utils/timeSlots";
 import { combineDateAndTime, toDateKey, toTimeValue } from "~/utils/date";
-import { formatDateAtTime } from "~/utils/format";
+import { useLocaleFormat } from "~/composables/useLocaleFormat";
+import { useServiceLabels } from "~/composables/useServiceLabels";
 import { simulateRequest } from "~/utils/mock";
 
 const props = defineProps<{ open: boolean; booking: BookingRecord | null }>();
 const emit = defineEmits<{ close: []; save: [edit: BookingEdit] }>();
+
+const { t: trans } = useI18n();
+const { formatDateAtTime } = useLocaleFormat();
+const { serviceList } = useServiceLabels();
 
 // Closing is only possible by recording a paid cost (see FinalCostModal), so it is
 // not offered here; a closed booking's status is locked and only its cost can change.
@@ -51,41 +56,45 @@ async function submit(): Promise<void> {
 <template>
   <ModalDialog :open="open" labelledby="booking-edit-title" @close="emit('close')">
     <form v-if="booking" class="edit-booking" @submit.prevent="submit">
-      <h2 id="booking-edit-title" class="modal-title">Editar cita</h2>
+      <h2 id="booking-edit-title" class="modal-title">{{ trans("dashboard.editBooking.title") }}</h2>
       <p class="modal-text">
-        <strong>{{ booking.customerName }}</strong> · {{ booking.services.join(", ") }}<br />
+        <strong>{{ booking.customerName }}</strong> · {{ serviceList(booking.services) }}<br />
         {{ formatDateAtTime(booking.appointmentAt) }}
       </p>
 
       <CollapsibleDisclosure class="edit-booking__reschedule">
-        <template #summary>Reagendar cita</template>
+        <template #summary>{{ trans("dashboard.editBooking.reschedule") }}</template>
         <div class="edit-booking__row">
           <label class="modal-field">
-            Día
+            {{ trans("dashboard.editBooking.day") }}
             <input v-model="dateValue" type="date" class="modal-input" required :disabled="saving" />
           </label>
           <label class="modal-field">
-            Hora
+            {{ trans("dashboard.editBooking.time") }}
             <input v-model="timeValue" type="time" min="09:00" max="19:30" step="900" class="modal-input" required :disabled="saving" />
           </label>
         </div>
       </CollapsibleDisclosure>
 
       <label v-if="!isClosed" class="modal-field">
-        Estado
+        {{ trans("dashboard.editBooking.status") }}
         <select v-model="status" class="modal-input" :disabled="saving">
-          <option v-for="option in EDITABLE_STATUSES" :key="option" :value="option">{{ STATUS_LABELS[option] }}</option>
+          <option v-for="option in EDITABLE_STATUSES" :key="option" :value="option">
+            {{ trans(`dashboard.status.${option}`) }}
+          </option>
         </select>
       </label>
       <label v-else class="modal-field">
-        Costo final (cita cerrada)
+        {{ trans("dashboard.editBooking.finalCost") }}
         <input v-model.number="finalCost" type="number" min="0" step="0.01" inputmode="decimal" class="modal-input" :disabled="saving" />
       </label>
 
       <div class="modal-actions">
-        <button type="button" class="modal-btn modal-btn-cancel" :disabled="saving" @click="emit('close')">Cancelar</button>
+        <button type="button" class="modal-btn modal-btn-cancel" :disabled="saving" @click="emit('close')">
+          {{ trans("actions.cancel") }}
+        </button>
         <button type="submit" class="modal-btn modal-btn-primary" :disabled="saving || !isValid">
-          {{ saving ? "Guardando…" : "Guardar" }}
+          {{ saving ? trans("states.saving") : trans("actions.save") }}
         </button>
       </div>
     </form>

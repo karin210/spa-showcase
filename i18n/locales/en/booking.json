@@ -1,0 +1,52 @@
+{
+  "booking": {
+    "meta": {
+      "title": "Book"
+    },
+    "title": "Book an appointment",
+    "steps": {
+      "services": {
+        "title": "Which treatments would you like to book?",
+        "label": "Treatments"
+      },
+      "date": {
+        "title": "What day would you like to come in?",
+        "label": "Date"
+      },
+      "time": {
+        "title": "What time?",
+        "label": "Time"
+      },
+      "summary": {
+        "title": "Confirm your booking",
+        "label": "Summary"
+      }
+    },
+    "progress": {
+      "label": "Booking progress",
+      "title": "Your booking details",
+      "editLabel": "Edit: {step}"
+    },
+    "services": {
+      "legend": "Choose one or more treatments",
+      "continue": "Continue ({count})"
+    },
+    "time": {
+      "empty": "There are no times available that day for the treatments you chose. Go back to the date and pick another day."
+    },
+    "summary": {
+      "customer": "Guest",
+      "treatments": "Treatments",
+      "dateTime": "Date and time",
+      "duration": "Duration",
+      "total": "Estimated total",
+      "confirm": "Confirm booking",
+      "confirming": "Confirming…"
+    },
+    "success": {
+      "title": "Your appointment is confirmed!",
+      "text": "We'll see you on {date} at {time}. You can view or cancel your appointment from your profile at any time.",
+      "profile": "Go to my profile"
+    }
+  }
+}

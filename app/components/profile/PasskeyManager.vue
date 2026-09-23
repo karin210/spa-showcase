@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { formatLongDate } from "~/utils/format";
+import { useI18n } from "vue-i18n";
+import { useLocaleFormat } from "~/composables/useLocaleFormat";
 import { addDays } from "~/utils/date";
 import { mockId, simulateRequest } from "~/utils/mock";
 
@@ -10,7 +11,11 @@ interface PasskeySummary {
   createdAt: Date;
 }
 
-// Mock passkey list: add/remove only change local state.
+const { t: trans } = useI18n();
+const { formatLongDate } = useLocaleFormat();
+
+// Mock passkey list: add/remove only change local state. The names are user data,
+// so they stay as typed rather than being translated.
 const passkeys = ref<PasskeySummary[]>([
   { id: "pk-1", name: "iPhone de Valeria", createdAt: addDays(new Date(), -120) },
   { id: "pk-2", name: "Laptop del spa", createdAt: addDays(new Date(), -18) },
@@ -24,7 +29,7 @@ async function create(): Promise<void> {
   await simulateRequest();
   passkeys.value = [
     ...passkeys.value,
-    { id: mockId("pk"), name: newName.value.trim() || "Nueva llave de acceso", createdAt: new Date() },
+    { id: mockId("pk"), name: newName.value.trim() || trans("profile.passkeys.defaultName"), createdAt: new Date() },
   ];
   busy.value = false;
   adding.value = false;
@@ -41,41 +46,43 @@ async function remove(id: string): Promise<void> {
 
 <template>
   <section class="profile-section passkeys" aria-labelledby="passkeys-heading">
-    <h3 id="passkeys-heading" class="profile-section__heading">Tus llaves de acceso</h3>
-    <p class="passkeys__note">Inicia sesión sin contraseña, con la huella, el rostro o el PIN de tus dispositivos.</p>
+    <h3 id="passkeys-heading" class="profile-section__heading">{{ trans("profile.passkeys.title") }}</h3>
+    <p class="passkeys__note">{{ trans("profile.passkeys.note") }}</p>
 
     <ul v-if="passkeys.length > 0" class="passkeys__list" role="list">
       <li v-for="passkey in passkeys" :key="passkey.id" class="passkey">
         <div class="passkey__info">
           <span class="passkey__name">{{ passkey.name }}</span>
           <time class="passkey__date" :datetime="passkey.createdAt.toISOString()">
-            Añadida el {{ formatLongDate(passkey.createdAt) }}
+            {{ trans("profile.passkeys.added", { date: formatLongDate(passkey.createdAt) }) }}
           </time>
         </div>
         <button
           type="button"
           class="passkey__remove"
           :disabled="busy"
-          :aria-label="`Eliminar la llave de acceso ${passkey.name}`"
+          :aria-label="trans('profile.passkeys.removeLabel', { name: passkey.name })"
           @click="remove(passkey.id)"
         >
-          Eliminar
+          {{ trans("actions.delete") }}
         </button>
       </li>
     </ul>
-    <p v-else class="passkeys__note">Aún no tienes llaves de acceso.</p>
+    <p v-else class="passkeys__note">{{ trans("profile.passkeys.empty") }}</p>
 
     <form v-if="adding" class="passkeys__form" @submit.prevent="create">
       <label class="modal-field">
-        Nombre de la llave de acceso
-        <input v-model="newName" class="modal-input" type="text" maxlength="60" placeholder="Ej. llave de mi iPhone" />
+        {{ trans("profile.passkeys.nameLabel") }}
+        <input v-model="newName" class="modal-input" type="text" maxlength="60" :placeholder="trans('profile.passkeys.namePlaceholder')" />
       </label>
       <div class="passkeys__form-actions">
-        <SecondaryBtn type="submit" :disabled="busy">{{ busy ? "Creando…" : "Crear llave de acceso" }}</SecondaryBtn>
-        <button type="button" class="modal-btn modal-btn-cancel" :disabled="busy" @click="adding = false">Cancelar</button>
+        <SecondaryBtn type="submit" :disabled="busy">{{ busy ? trans("profile.passkeys.creating") : trans("profile.passkeys.create") }}</SecondaryBtn>
+        <button type="button" class="modal-btn modal-btn-cancel" :disabled="busy" @click="adding = false">
+          {{ trans("actions.cancel") }}
+        </button>
       </div>
     </form>
-    <SecondaryBtn v-else :disabled="busy" @click="adding = true">Añadir llave de acceso</SecondaryBtn>
+    <SecondaryBtn v-else :disabled="busy" @click="adding = true">{{ trans("profile.passkeys.add") }}</SecondaryBtn>
   </section>
 </template>
 

@@ -2,7 +2,7 @@ export type BookingStatus = "pending" | "confirmed" | "cancelled" | "closed";
 
 export interface BookingRecord {
   id: string;
-  // Service names as listed in the catalogue (app/data/services.ts).
+  // Service ids from the catalogue (app/data/services.ts).
   services: string[];
   customerName: string;
   email: string | null;

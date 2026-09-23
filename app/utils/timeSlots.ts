@@ -1,9 +1,11 @@
 import type { BookingRecord, BookingStatus } from "~/types/booking";
-import { formatTime } from "~/utils/format";
+
+// Status labels live in the message catalogue (dashboard.status.<status>).
 
 export interface TimeSlotGroup {
   key: string;
-  display: string;
+  // First booking time in the slot; formatted by the caller in the active locale.
+  startsAt: Date;
   bookings: BookingRecord[];
 }
 
@@ -23,17 +25,10 @@ export function groupBookingsByTimeSlot(bookings: BookingRecord[]): TimeSlotGrou
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([key, slotBookings]) => ({
       key,
-      display: formatTime(slotBookings[0]!.appointmentAt),
+      startsAt: slotBookings[0]!.appointmentAt,
       bookings: slotBookings,
     }));
 }
-
-export const STATUS_LABELS: Record<BookingStatus, string> = {
-  pending: "Pendiente",
-  confirmed: "Confirmada",
-  cancelled: "Cancelada",
-  closed: "Cerrada",
-};
 
 export function countByStatus(bookings: BookingRecord[]): [BookingStatus, number][] {
   const counts = new Map<BookingStatus, number>();

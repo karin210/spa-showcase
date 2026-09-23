@@ -1,13 +1,16 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import type { BookingEdit, BookingRecord, BookingStatus } from "~/types/booking";
 import type { DayTab } from "~/types/dashboard";
 import { useBookings } from "~/composables/useBookings";
 import { useToast } from "~/composables/useToast";
 import { addDays, startOfDay, toDateKey } from "~/utils/date";
-import { formatLongDate, formatWeekdayDate } from "~/utils/format";
-import { STATUS_LABELS, countByStatus, groupBookingsByTimeSlot, type TimeSlotGroup } from "~/utils/timeSlots";
+import { useLocaleFormat } from "~/composables/useLocaleFormat";
+import { countByStatus, groupBookingsByTimeSlot, type TimeSlotGroup } from "~/utils/timeSlots";
 
+const { t: trans } = useI18n();
+const { formatLongDate, formatTime, formatWeekdayDate } = useLocaleFormat();
 const { bookings, updateBooking } = useBookings();
 const toast = useToast();
 
@@ -43,7 +46,7 @@ interface DateGroup {
   slots: TimeSlotGroup[];
 }
 
-// "Desde hoy" spans many days, so group by date first, then by time slot.
+// The "from today" view spans many days, so group by date first, then by time slot.
 const dateGroups = computed<DateGroup[]>(() => {
   const byDate = new Map<string, BookingRecord[]>();
   for (const booking of filteredBookings.value) {
@@ -68,10 +71,10 @@ const pendingPayment = computed<BookingRecord[]>(() =>
 );
 
 const heading = computed<string>(() => {
-  if (dayTab.value === "today") return "Citas de hoy";
-  if (dayTab.value === "tomorrow") return "Citas de mañana";
-  if (dayTab.value === "fromToday") return "Citas desde hoy";
-  return `Citas del ${formatLongDate(selectedDate.value)}`;
+  if (dayTab.value === "today") return trans("dashboard.bookings.heading.today");
+  if (dayTab.value === "tomorrow") return trans("dashboard.bookings.heading.tomorrow");
+  if (dayTab.value === "fromToday") return trans("dashboard.bookings.heading.fromToday");
+  return trans("dashboard.bookings.heading.date", { date: formatLongDate(selectedDate.value) });
 });
 
 function selectDayTab(tab: DayTab): void {
@@ -106,7 +109,7 @@ function saveEdit(edit: BookingEdit): void {
     ...(edit.finalCost !== undefined ? { finalCost: edit.finalCost } : {}),
   });
   editing.value = null;
-  toast.show("Cita actualizada.");
+  toast.show(trans("dashboard.bookings.updated"));
 }
 
 // ── Final cost ──
@@ -121,7 +124,7 @@ function saveFinalCost(payload: { finalCost: number; paid: boolean }): void {
     status: payload.paid ? "closed" : booking.status,
   });
   closing.value = null;
-  toast.show(payload.paid ? "Cita cerrada y pagada." : "Costo registrado; queda pendiente de pago.");
+  toast.show(payload.paid ? trans("dashboard.bookings.closedPaid") : trans("dashboard.bookings.costRecorded"));
 }
 </script>
 
@@ -129,19 +132,19 @@ function saveFinalCost(payload: { finalCost: number; paid: boolean }): void {
   <section class="panel" aria-labelledby="bookings-heading">
     <header class="panel-header">
       <h2 id="bookings-heading" class="panel-heading">{{ heading }}</h2>
-      <p class="panel-count">Total de citas: {{ filteredBookings.length }}</p>
+      <p class="panel-count">{{ trans("dashboard.bookings.total", { count: filteredBookings.length }) }}</p>
     </header>
 
     <div class="panel-toolbar">
       <DashboardDayTabs :model-value="dayTab" :tabs="['today', 'tomorrow', 'fromToday', 'pickDate']" @select="selectDayTab" />
       <label class="toolbar-section">
-        <span class="toolbar-label">Estado:</span>
+        <span class="toolbar-label">{{ trans("dashboard.bookings.statusFilter") }}</span>
         <select v-model="statusFilter" class="panel-select">
-          <option value="all">Todos los estados</option>
-          <option value="pending">Pendientes</option>
-          <option value="confirmed">Confirmadas</option>
-          <option value="cancelled">Canceladas</option>
-          <option value="closed">Cerradas</option>
+          <option value="all">{{ trans("dashboard.bookings.allStatuses") }}</option>
+          <option value="pending">{{ trans("dashboard.statusPlural.pending") }}</option>
+          <option value="confirmed">{{ trans("dashboard.statusPlural.confirmed") }}</option>
+          <option value="cancelled">{{ trans("dashboard.statusPlural.cancelled") }}</option>
+          <option value="closed">{{ trans("dashboard.statusPlural.closed") }}</option>
         </select>
       </label>
       <DashboardCreateBookingModal />
@@ -149,14 +152,14 @@ function saveFinalCost(payload: { finalCost: number; paid: boolean }): void {
 
     <DashboardBookingRail
       v-if="pendingPayment.length > 0"
-      heading="Pendientes de pago"
-      hint="Citas que ya pasaron y aún no tienen un pago registrado."
-      action-label="Cerrar"
+      :heading="trans('dashboard.bookings.pendingPayment.heading')"
+      :hint="trans('dashboard.bookings.pendingPayment.hint')"
+      :action-label="trans('dashboard.bookings.pendingPayment.action')"
       :bookings="pendingPayment"
       @action="closing = $event"
     />
 
-    <p v-if="filteredBookings.length === 0" class="panel-state">No hay citas</p>
+    <p v-if="filteredBookings.length === 0" class="panel-state">{{ trans("dashboard.bookings.empty") }}</p>
 
     <div v-else class="date-groups">
       <section v-for="group in dateGroups" :key="group.key" class="date-group" :aria-label="group.label">
@@ -166,12 +169,12 @@ function saveFinalCost(payload: { finalCost: number; paid: boolean }): void {
             <CollapsibleDisclosure class="slot__disclosure">
               <template #summary>
                 <span class="slot__summary">
-                  <span class="slot__time">{{ slot.display }}</span>
+                  <span class="slot__time">{{ formatTime(slot.startsAt) }}</span>
                   <span class="slot__meta">
-                    {{ slot.bookings.length }} {{ slot.bookings.length === 1 ? "cita" : "citas" }} —
+                    {{ trans("dashboard.bookings.count", slot.bookings.length) }} —
                     <span v-for="[status, count] in countByStatus(slot.bookings)" :key="status" class="slot__status">
                       <span class="status-dot" :class="`status-dot--${status}`" />
-                      {{ count }} {{ STATUS_LABELS[status] }}
+                      {{ count }} {{ trans(`dashboard.status.${status}`) }}
                     </span>
                   </span>
                 </span>

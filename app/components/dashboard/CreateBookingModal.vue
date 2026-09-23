@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { computed, reactive, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { useBookings } from "~/composables/useBookings";
 import { useUsers } from "~/composables/useUsers";
 import { combineDateAndTime, toDateKey } from "~/utils/date";
 import { simulateRequest } from "~/utils/mock";
 
 // Trigger + non-dismissible form for staff to book on a customer's behalf.
+const { t: trans } = useI18n();
 const { addBooking } = useBookings();
 const { users } = useUsers();
 
@@ -57,38 +59,42 @@ async function submit(): Promise<void> {
   saving.value = false;
   createdMessage.value =
     record.status === "closed"
-      ? `Cita creada y cerrada para ${record.customerName}.`
-      : `Cita creada para ${record.customerName}.`;
+      ? trans("dashboard.createBooking.createdClosed", { name: record.customerName })
+      : trans("dashboard.createBooking.created", { name: record.customerName });
 }
 </script>
 
 <template>
   <SecondaryBtn @click="start">
     <template #icon><AppIcon name="calendar" /></template>
-    Crear cita
+    {{ trans("dashboard.createBooking.trigger") }}
   </SecondaryBtn>
 
   <ModalDialog :open="open" labelledby="create-booking-title" width="wide" @close="open = false">
-    <h2 id="create-booking-title" class="modal-title">Crear cita para un cliente</h2>
+    <h2 id="create-booking-title" class="modal-title">{{ trans("dashboard.createBooking.title") }}</h2>
 
     <template v-if="createdMessage">
       <p class="create-booking__success" role="status">{{ createdMessage }}</p>
       <div class="modal-actions">
-        <button type="button" class="modal-btn modal-btn-cancel" @click="open = false">Salir</button>
-        <button type="button" class="modal-btn modal-btn-primary" @click="start">Crear otra cita</button>
+        <button type="button" class="modal-btn modal-btn-cancel" @click="open = false">
+          {{ trans("dashboard.addMember.exit") }}
+        </button>
+        <button type="button" class="modal-btn modal-btn-primary" @click="start">
+          {{ trans("dashboard.createBooking.another") }}
+        </button>
       </div>
     </template>
 
     <form v-else class="create-booking" @submit.prevent="submit">
       <div class="create-booking__row">
         <label class="modal-field">
-          Cliente
+          {{ trans("dashboard.createBooking.customer") }}
           <input
             v-model="form.customerName"
             class="modal-input"
             type="text"
             list="customer-suggestions"
-            placeholder="Ej: Ana López"
+            :placeholder="trans('dashboard.createBooking.customerPlaceholder')"
             autocomplete="off"
             required
           />
@@ -97,33 +103,35 @@ async function submit(): Promise<void> {
           </datalist>
         </label>
         <label class="modal-field">
-          Teléfono (opcional)
-          <input v-model="form.phone" class="modal-input" type="tel" placeholder="Ej: +52 443 123 4567" />
+          {{ trans("dashboard.createBooking.phone") }}
+          <input v-model="form.phone" class="modal-input" type="tel" :placeholder="trans('dashboard.createBooking.phonePlaceholder')" />
         </label>
         <label class="modal-field">
-          Fecha
+          {{ trans("dashboard.createBooking.date") }}
           <input v-model="form.date" class="modal-input" type="date" required />
         </label>
         <label class="modal-field">
-          Hora
+          {{ trans("dashboard.createBooking.time") }}
           <input v-model="form.time" class="modal-input" type="time" min="09:00" max="19:30" step="900" required />
         </label>
       </div>
 
-      <ServicePicker v-model="form.services" legend="Servicios" />
+      <ServicePicker v-model="form.services" :legend="trans('dashboard.createBooking.services')" />
 
       <div class="create-booking__row">
         <label class="modal-field">
-          Costo final (opcional)
+          {{ trans("dashboard.createBooking.finalCost") }}
           <input v-model.number="form.finalCost" class="modal-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" />
         </label>
         <DashboardPaidStatusField v-if="form.finalCost !== null && String(form.finalCost) !== ''" v-model="form.paid" />
       </div>
 
       <div class="modal-actions">
-        <button type="button" class="modal-btn modal-btn-cancel" :disabled="saving" @click="open = false">Cancelar</button>
+        <button type="button" class="modal-btn modal-btn-cancel" :disabled="saving" @click="open = false">
+          {{ trans("actions.cancel") }}
+        </button>
         <button type="submit" class="modal-btn modal-btn-primary" :disabled="saving || !isValid">
-          {{ saving ? "Creando…" : "Crear cita" }}
+          {{ saving ? trans("dashboard.createBooking.creating") : trans("dashboard.createBooking.trigger") }}
         </button>
       </div>
     </form>

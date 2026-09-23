@@ -1,0 +1,68 @@
+{
+  "about": {
+    "meta": {
+      "title": "Nosotros"
+    },
+    "banner": {
+      "eyebrow": "Nuestra historia",
+      "title": "Hacemos del descanso un ritual",
+      "imageAlt": "Sauna de madera iluminada con luz cálida"
+    },
+    "origin": {
+      "title": "Cómo empezamos",
+      "text": "Alma Serena nació en 2016, cuando dos terapeutas morelianas abrieron una pequeña cabina de masaje en el centro histórico con una idea sencilla: que cuidarse no debería sentirse como un lujo lejano. Hoy nuestro propósito sigue siendo el mismo: ofrecer a nuestra comunidad un espacio cercano y honesto para detenerse, sanar y volver a casa con más calma."
+    },
+    "philosophy": {
+      "title": "Nuestra filosofía",
+      "imageAlt": "Ritual corporal con frutas, flores y aceites sobre piso de talavera",
+      "paragraphs": [
+        "Creemos que el descanso no es un lujo, sino una forma de cuidarse. Alma Serena nació como un refugio donde el tiempo se detiene lo suficiente para escuchar al cuerpo.",
+        "Cada tratamiento combina técnicas contemporáneas con saberes tradicionales de Michoacán: plantas locales, barro, aceites y el ritmo pausado de quien hace las cosas con intención.",
+        "No seguimos protocolos de reloj. Escuchamos primero, recomendamos después y ajustamos cada sesión a lo que necesitas ese día."
+      ]
+    },
+    "promise": {
+      "quote": "Que salgas de aquí respirando distinto a como llegaste: más lento, más hondo, más tuyo.",
+      "caption": "Nuestra promesa"
+    },
+    "values": {
+      "title": "Nuestros valores",
+      "subtitle": "Lo que guía cada tratamiento, cada día",
+      "items": {
+        "mindful-care": {
+          "title": "Cuidado consciente",
+          "description": "Atendemos a la persona completa, no solo al síntoma. Cada sesión empieza con una conversación breve para entender cómo llegas."
+        },
+        "local-roots": {
+          "title": "Raíces locales",
+          "description": "Trabajamos con productores michoacanos de hierbas, miel y arcillas, y apoyamos a artesanas de la región en nuestros espacios."
+        },
+        "sustainability": {
+          "title": "Sostenibilidad",
+          "description": "Usamos productos biodegradables, textiles de algodón orgánico y un sistema de captación de agua de lluvia para la hidroterapia."
+        },
+        "transparency": {
+          "title": "Transparencia",
+          "description": "Precios claros, sin cargos sorpresa, y recomendaciones honestas: si un tratamiento no es para ti, te lo diremos."
+        },
+        "growing-team": {
+          "title": "Equipo que crece",
+          "description": "Nuestras terapeutas reciben formación continua y un salario justo, porque un equipo cuidado cuida mejor."
+        },
+        "safe-spaces": {
+          "title": "Espacios seguros",
+          "description": "Un ambiente respetuoso e incluyente, donde cada persona decide el ritmo, la presión y el nivel de conversación."
+        }
+      }
+    },
+    "milestones": {
+      "title": "Nuestro progreso",
+      "items": {
+        "2016": "Abrimos una pequeña cabina de masaje en el centro histórico de Morelia.",
+        "2019": "Nos mudamos a Jardines del Lago y sumamos faciales y rituales corporales.",
+        "2022": "Inauguramos el área de hidroterapia con sauna y vapor de eucalipto.",
+        "2025": "Más de 12,000 visitas y un equipo de 14 terapeutas certificadas."
+      }
+    }
+  }
+}

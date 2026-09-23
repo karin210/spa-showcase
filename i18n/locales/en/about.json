@@ -1,0 +1,68 @@
+{
+  "about": {
+    "meta": {
+      "title": "About us"
+    },
+    "banner": {
+      "eyebrow": "Our story",
+      "title": "We turn rest into a ritual",
+      "imageAlt": "Wooden sauna lit with warm light"
+    },
+    "origin": {
+      "title": "How we started",
+      "text": "Alma Serena was born in 2016, when two therapists from Morelia opened a small massage room in the historic center with a simple idea: taking care of yourself shouldn't feel like a distant luxury. Today our purpose is still the same: to give our community a warm, honest place to slow down, heal and go home a little calmer."
+    },
+    "philosophy": {
+      "title": "Our philosophy",
+      "imageAlt": "Body ritual with fruit, flowers and oils on a Talavera tile floor",
+      "paragraphs": [
+        "We believe rest isn't a luxury but a way of caring for yourself. Alma Serena was born as a refuge where time slows down just enough to listen to the body.",
+        "Every treatment blends contemporary techniques with the traditional knowledge of Michoacán: local plants, clay, oils and the unhurried pace of doing things with intention.",
+        "We don't follow clock-driven protocols. We listen first, recommend second, and tailor each session to what you need that day."
+      ]
+    },
+    "promise": {
+      "quote": "That you leave here breathing differently than when you arrived: slower, deeper, more yourself.",
+      "caption": "Our promise"
+    },
+    "values": {
+      "title": "Our values",
+      "subtitle": "What guides every treatment, every day",
+      "items": {
+        "mindful-care": {
+          "title": "Mindful care",
+          "description": "We care for the whole person, not just the symptom. Every session starts with a short conversation to understand how you're arriving."
+        },
+        "local-roots": {
+          "title": "Local roots",
+          "description": "We work with Michoacán growers of herbs, honey and clays, and showcase local women artisans in our spaces."
+        },
+        "sustainability": {
+          "title": "Sustainability",
+          "description": "We use biodegradable products, organic cotton linens and a rainwater collection system for our hydrotherapy."
+        },
+        "transparency": {
+          "title": "Transparency",
+          "description": "Clear prices, no surprise charges, and honest recommendations: if a treatment isn't right for you, we'll tell you."
+        },
+        "growing-team": {
+          "title": "A team that grows",
+          "description": "Our therapists receive ongoing training and fair pay, because a team that is cared for cares better."
+        },
+        "safe-spaces": {
+          "title": "Safe spaces",
+          "description": "A respectful, inclusive environment where each person sets the pace, the pressure and how much to talk."
+        }
+      }
+    },
+    "milestones": {
+      "title": "Our journey",
+      "items": {
+        "2016": "We opened a small massage room in Morelia's historic center.",
+        "2019": "We moved to Jardines del Lago and added facials and body rituals.",
+        "2022": "We opened the hydrotherapy area with a sauna and eucalyptus steam.",
+        "2025": "Over 12,000 visits and a team of 14 certified therapists."
+      }
+    }
+  }
+}

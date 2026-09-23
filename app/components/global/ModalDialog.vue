@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 
 // The single native-<dialog> shell every modal is built on. Two flavours:
 //  - dismissible: closes on backdrop click, Escape, or the floating X.
@@ -15,6 +16,8 @@ const props = withDefaults(
 );
 
 const emit = defineEmits<{ close: [] }>();
+
+const { t: trans } = useI18n();
 
 const dialogEl = ref<HTMLDialogElement | null>(null);
 
@@ -52,7 +55,7 @@ function onClick(event: MouseEvent): void {
       v-if="dismissible"
       type="button"
       class="modal-close-floating"
-      aria-label="Cerrar"
+      :aria-label="trans('actions.close')"
       @click="emit('close')"
     >
       <AppIcon name="close" />

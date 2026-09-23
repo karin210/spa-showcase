@@ -1,0 +1,102 @@
+{
+  "careers": {
+    "meta": {
+      "title": "Careers"
+    },
+    "banner": {
+      "eyebrow": "Work with us",
+      "title": "Care for others in a place that cares for you too",
+      "imageAlt": "A therapist's hands giving a back massage"
+    },
+    "benefits": {
+      "title": "Why Alma Serena?",
+      "intro": "We're looking for people who enjoy caring for others. At Alma Serena you'll find a warm team, respectful schedules and room to keep learning.",
+      "items": {
+        "benefits": {
+          "title": "Statutory benefits and more",
+          "description": "Social security (IMSS) from day one, a 30-day year-end bonus and grocery vouchers."
+        },
+        "training": {
+          "title": "Ongoing training",
+          "description": "Two paid specialization courses a year, plus in-house certifications."
+        },
+        "treatments": {
+          "title": "Treatments for you",
+          "description": "One free treatment a month and 40% off for your family."
+        },
+        "schedules": {
+          "title": "Humane schedules",
+          "description": "Fixed shifts published a month ahead and two days off a week."
+        }
+      }
+    },
+    "vacancies": {
+      "title": "Open positions",
+      "count": "No open positions | {n} open position in Morelia | {n} open positions in Morelia",
+      "details": "See responsibilities and requirements",
+      "responsibilities": "Responsibilities",
+      "requirements": "Requirements",
+      "apply": "Apply on WhatsApp",
+      "applyMessage": "Hi! I'm interested in the {title} position. Could you tell me more?",
+      "items": {
+        "massage-therapist": {
+          "title": "Massage therapist",
+          "employmentType": "Full-time",
+          "schedule": "Tuesday to Saturday, 11:00 AM to 8:00 PM",
+          "salary": "MX{'$'}14,000 – MX{'$'}18,000 per month + commissions",
+          "summary": "You'll give relaxing, deep-tissue and hot stone massages, tailoring each session to what the guest needs that day.",
+          "responsibilities": [
+            "Run the short welcome consultation before each session",
+            "Deliver menu massages with the right technique and pressure",
+            "Prepare and reset the treatment room between sessions",
+            "Log notes and recommendations in each client's file"
+          ],
+          "requirements": [
+            "Massage therapy certification or a related technical degree",
+            "At least 2 years of experience in a spa or hotel",
+            "A warm, discreet manner",
+            "Nice to have: hot stone or reflexology experience"
+          ]
+        },
+        "cosmetologist": {
+          "title": "Facial cosmetologist",
+          "employmentType": "Part-time",
+          "schedule": "Thursday to Sunday, 10:00 AM to 3:00 PM",
+          "salary": "MX{'$'}9,000 – MX{'$'}11,000 per month + commissions",
+          "summary": "You'll run our facials, from assessing the skin to recommending an at-home care routine.",
+          "responsibilities": [
+            "Assess each client's skin type and condition",
+            "Perform hydrating, anti-aging and deep-cleansing facials",
+            "Recommend care routines using our product line",
+            "Keep track of the facial room's inventory"
+          ],
+          "requirements": [
+            "A degree or technical diploma in cosmetology",
+            "At least 1 year of hands-on treatment experience",
+            "Knowledge of cosmetic actives and basic devices",
+            "Available to work weekends"
+          ]
+        },
+        "front-desk": {
+          "title": "Front desk and guest services",
+          "employmentType": "Full-time",
+          "schedule": "Monday to Friday, 9:00 AM to 5:00 PM",
+          "salary": "MX{'$'}11,000 – MX{'$'}12,500 per month",
+          "summary": "You'll be the first face of Alma Serena: welcoming every guest, managing the schedule and keeping each visit flowing unhurried.",
+          "responsibilities": [
+            "Welcome guests and guide them to the locker rooms and lounges",
+            "Handle bookings by phone, WhatsApp and the online system",
+            "Take payments and close out the register each day",
+            "Answer questions about treatments, packages and gift cards"
+          ],
+          "requirements": [
+            "High school diploma",
+            "Experience in customer service or reception",
+            "Comfortable with computers and digital calendars",
+            "Nice to have: conversational Spanish and English"
+          ]
+        }
+      }
+    }
+  }
+}

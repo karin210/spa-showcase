@@ -1,12 +1,18 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import type { BookingRecord } from "~/types/booking";
 import { servicePrice } from "~/data/services";
-import { formatCurrency, formatDateAtTime } from "~/utils/format";
+import { useLocaleFormat } from "~/composables/useLocaleFormat";
+import { useServiceLabels } from "~/composables/useServiceLabels";
 import { simulateRequest } from "~/utils/mock";
 
 const props = defineProps<{ open: boolean; booking: BookingRecord | null }>();
 const emit = defineEmits<{ close: []; save: [payload: { finalCost: number; paid: boolean }] }>();
+
+const { t: trans } = useI18n();
+const { formatCurrency, formatDateAtTime } = useLocaleFormat();
+const { serviceList } = useServiceLabels();
 
 const finalCost = ref<number | null>(null);
 const paid = ref(true);
@@ -14,7 +20,7 @@ const saving = ref(false);
 
 // Suggest the menu price; staff adjust it for tips, discounts or extras.
 const menuPrice = computed<number>(() =>
-  (props.booking?.services ?? []).reduce((sum, name) => sum + servicePrice(name), 0),
+  (props.booking?.services ?? []).reduce((sum, id) => sum + servicePrice(id), 0),
 );
 
 watch(
@@ -40,13 +46,13 @@ async function submit(): Promise<void> {
 <template>
   <ModalDialog :open="open" labelledby="final-cost-title" width="narrow" @close="emit('close')">
     <form v-if="booking" class="final-cost" @submit.prevent="submit">
-      <h2 id="final-cost-title" class="modal-title">Registrar costo</h2>
+      <h2 id="final-cost-title" class="modal-title">{{ trans("dashboard.finalCost.title") }}</h2>
       <p class="modal-text">
-        <strong>{{ booking.customerName }} — {{ booking.services.join(", ") }}</strong><br />
+        <strong>{{ booking.customerName }} — {{ serviceList(booking.services) }}</strong><br />
         {{ formatDateAtTime(booking.appointmentAt) }}
       </p>
       <label class="modal-field">
-        Costo final
+        {{ trans("dashboard.finalCost.label") }}
         <input
           v-model.number="finalCost"
           type="number"
@@ -58,13 +64,17 @@ async function submit(): Promise<void> {
           :disabled="saving"
           required
         />
-        <span class="final-cost__hint">Precio de menú: {{ formatCurrency(menuPrice) }}</span>
+        <span class="final-cost__hint">
+          {{ trans("dashboard.finalCost.menuPrice", { price: formatCurrency(menuPrice) }) }}
+        </span>
       </label>
       <DashboardPaidStatusField v-model="paid" :disabled="saving" />
       <div class="modal-actions">
-        <button type="button" class="modal-btn modal-btn-cancel" :disabled="saving" @click="emit('close')">Cancelar</button>
+        <button type="button" class="modal-btn modal-btn-cancel" :disabled="saving" @click="emit('close')">
+          {{ trans("actions.cancel") }}
+        </button>
         <button type="submit" class="modal-btn modal-btn-primary" :disabled="saving || !isValid">
-          {{ saving ? "Guardando…" : "Guardar" }}
+          {{ saving ? trans("states.saving") : trans("actions.save") }}
         </button>
       </div>
     </form>

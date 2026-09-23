@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import type { UserRecord, UserRole } from "~/types/user";
 import { useUsers } from "~/composables/useUsers";
 import { simulateRequest } from "~/utils/mock";
@@ -9,6 +10,7 @@ import { initials } from "~/utils/format";
 const props = defineProps<{ open: boolean }>();
 const emit = defineEmits<{ close: [] }>();
 
+const { t: trans } = useI18n();
 const { users, setRole } = useUsers();
 
 const query = ref("");
@@ -63,33 +65,43 @@ async function confirm(): Promise<void> {
 
 <template>
   <ModalDialog :open="open" labelledby="add-member-title" @close="emit('close')">
-    <h2 id="add-member-title" class="modal-title">Añadir un nuevo miembro al equipo</h2>
+    <h2 id="add-member-title" class="modal-title">{{ trans("dashboard.addMember.title") }}</h2>
 
     <template v-if="addedName">
-      <p class="add-member__success" role="status">¡{{ addedName }} ahora es parte del equipo!</p>
+      <p class="add-member__success" role="status">{{ trans("dashboard.addMember.added", { name: addedName }) }}</p>
       <div class="modal-actions">
-        <button type="button" class="modal-btn modal-btn-cancel" @click="emit('close')">Salir</button>
-        <button type="button" class="modal-btn modal-btn-primary" @click="reset">Añadir otro miembro</button>
+        <button type="button" class="modal-btn modal-btn-cancel" @click="emit('close')">
+          {{ trans("dashboard.addMember.exit") }}
+        </button>
+        <button type="button" class="modal-btn modal-btn-primary" @click="reset">
+          {{ trans("dashboard.addMember.addAnother") }}
+        </button>
       </div>
     </template>
 
     <template v-else>
       <form class="add-member__search" role="search" @submit.prevent="search">
         <label class="modal-field add-member__query">
-          Nombre del usuario
-          <input v-model="query" class="modal-input" type="search" placeholder="Ej: Lucía" autocomplete="off" />
+          {{ trans("dashboard.addMember.nameLabel") }}
+          <input
+            v-model="query"
+            class="modal-input"
+            type="search"
+            :placeholder="trans('dashboard.addMember.namePlaceholder')"
+            autocomplete="off"
+          />
         </label>
         <SecondaryBtn type="submit" :disabled="searching || !query.trim()">
-          {{ searching ? "Buscando…" : "Buscar" }}
+          {{ searching ? trans("dashboard.addMember.searching") : trans("dashboard.addMember.search") }}
         </SecondaryBtn>
       </form>
 
       <p v-if="searched && results.length === 0" class="modal-error" role="status">
-        No se encontró ningún cliente con ese nombre.
+        {{ trans("dashboard.addMember.noResults") }}
       </p>
 
       <fieldset v-if="results.length > 0" class="add-member__results">
-        <legend class="add-member__legend">Selecciona a la persona</legend>
+        <legend class="add-member__legend">{{ trans("dashboard.addMember.pick") }}</legend>
         <label v-for="user in results" :key="user.id" class="add-member__result">
           <input v-model="selected" type="radio" name="member-candidate" :value="user" class="visually-hidden" />
           <img v-if="user.photoURL" :src="user.photoURL" alt="" class="add-member__avatar" />
@@ -101,20 +113,26 @@ async function confirm(): Promise<void> {
       </fieldset>
 
       <template v-if="selected">
-        <p class="modal-text">¿Quieres añadir a <strong>{{ selected.firstName }} {{ selected.lastName }}</strong> como miembro del equipo?</p>
+        <i18n-t keypath="dashboard.addMember.confirm" tag="p" class="modal-text" scope="global">
+          <template #name>
+            <strong>{{ selected.firstName }} {{ selected.lastName }}</strong>
+          </template>
+        </i18n-t>
         <label class="modal-field">
-          Rol
+          {{ trans("dashboard.addMember.role") }}
           <select v-model="role" class="modal-input">
-            <option value="employee">Empleado</option>
-            <option value="admin">Admin</option>
+            <option value="employee">{{ trans("dashboard.roles.employee") }}</option>
+            <option value="admin">{{ trans("dashboard.roles.admin") }}</option>
           </select>
         </label>
       </template>
 
       <div class="modal-actions">
-        <button type="button" class="modal-btn modal-btn-cancel" :disabled="saving" @click="emit('close')">Cancelar</button>
+        <button type="button" class="modal-btn modal-btn-cancel" :disabled="saving" @click="emit('close')">
+          {{ trans("actions.cancel") }}
+        </button>
         <button type="button" class="modal-btn modal-btn-primary" :disabled="saving || !selected" @click="confirm">
-          {{ saving ? "Añadiendo…" : "Aceptar" }}
+          {{ saving ? trans("dashboard.addMember.adding") : trans("actions.accept") }}
         </button>
       </div>
     </template>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import { formatLongDate, formatMonthName } from "~/utils/format";
+import { useI18n } from "vue-i18n";
+import { useLocaleFormat } from "~/composables/useLocaleFormat";
 
 // Second step: pick an appointment date. Inline (not a dialog) so it sits directly
 // in the step panel; visually related to global/CalendarModal but with its own
@@ -9,15 +10,8 @@ const props = defineProps<{ initialDate: Date | null; isDateDisabled: (date: Dat
 
 const emit = defineEmits<{ complete: [date: Date] }>();
 
-const WEEKDAYS: { initial: string; name: string }[] = [
-  { initial: "L", name: "lunes" },
-  { initial: "M", name: "martes" },
-  { initial: "M", name: "miércoles" },
-  { initial: "J", name: "jueves" },
-  { initial: "V", name: "viernes" },
-  { initial: "S", name: "sábado" },
-  { initial: "D", name: "domingo" },
-];
+const { t: trans } = useI18n();
+const { formatLongDate, formatMonthName, weekdays } = useLocaleFormat();
 
 const today = new Date();
 today.setHours(0, 0, 0, 0);
@@ -78,14 +72,24 @@ function selectDay(day: number | null): void {
 <template>
   <div class="booking-calendar">
     <div class="calendar__caption">
-      <button type="button" class="calendar__nav" :disabled="isPrevMonthDisabled" aria-label="Mes anterior" @click="changeMonth(-1)">‹</button>
+      <button
+        type="button"
+        class="calendar__nav"
+        :disabled="isPrevMonthDisabled"
+        :aria-label="trans('calendar.previousMonth')"
+        @click="changeMonth(-1)"
+      >
+        ‹
+      </button>
       <span>{{ formatMonthName(viewMonth) }} {{ viewMonth.getFullYear() }}</span>
-      <button type="button" class="calendar__nav" aria-label="Mes siguiente" @click="changeMonth(1)">›</button>
+      <button type="button" class="calendar__nav" :aria-label="trans('calendar.nextMonth')" @click="changeMonth(1)">
+        ›
+      </button>
     </div>
     <table class="calendar">
       <thead>
         <tr>
-          <th v-for="weekday in WEEKDAYS" :key="weekday.name" scope="col" class="calendar__weekday">
+          <th v-for="weekday in weekdays" :key="weekday.name" scope="col" class="calendar__weekday">
             <abbr :title="weekday.name">{{ weekday.initial }}</abbr>
           </th>
         </tr>

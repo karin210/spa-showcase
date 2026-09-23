@@ -16,4 +16,5 @@ export type IconName =
   | "clock"
   | "leaf"
   | "info"
-  | "arrow-up";
+  | "arrow-up"
+  | "share";

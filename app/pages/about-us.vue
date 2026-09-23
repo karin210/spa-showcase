@@ -1,37 +1,46 @@
 <script setup lang="ts">
+import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 import { stockImage } from "~/data/services";
-import { ABOUT_BANNER, COMPANY_VALUES, MILESTONES, ORIGIN_STORY, PHILOSOPHY, PROMISE_QUOTE } from "~/data/about";
+import { ABOUT_BANNER_PHOTO_ID, COMPANY_VALUE_IDS, MILESTONE_YEARS, PHILOSOPHY_PHOTO_ID } from "~/data/about";
 
-useHead({ title: "Nosotros" });
+const { t: trans, tm, rt } = useI18n();
+
+useHead(() => ({ title: trans("about.meta.title") }));
+
+// The philosophy is a list of paragraphs in the catalogue, resolved one by one.
+const philosophyParagraphs = computed<string[]>(() =>
+  (tm("about.philosophy.paragraphs") as unknown[]).map((paragraph) => rt(paragraph as string)),
+);
 </script>
 
 <template>
   <SiteHeader />
   <main class="about-page">
     <PageBanner
-      :photo-id="ABOUT_BANNER.photoId"
-      :image-alt="ABOUT_BANNER.imageAlt"
-      eyebrow="Nuestra historia"
-      title="Hacemos del descanso un ritual"
+      :photo-id="ABOUT_BANNER_PHOTO_ID"
+      :image-alt="trans('about.banner.imageAlt')"
+      :eyebrow="trans('about.banner.eyebrow')"
+      :title="trans('about.banner.title')"
       title-id="about-title"
     />
 
     <section class="origin" aria-labelledby="origin-title">
-      <h2 id="origin-title" class="section-title">Cómo empezamos</h2>
-      <p class="origin__paragraph">{{ ORIGIN_STORY }}</p>
+      <h2 id="origin-title" class="section-title">{{ trans("about.origin.title") }}</h2>
+      <p class="origin__paragraph">{{ trans("about.origin.text") }}</p>
     </section>
 
     <section class="philosophy" aria-labelledby="philosophy-title">
       <div class="philosophy__text">
-        <h2 id="philosophy-title" class="section-title">Nuestra filosofía</h2>
-        <p v-for="paragraph in PHILOSOPHY.paragraphs" :key="paragraph" class="philosophy__paragraph">
+        <h2 id="philosophy-title" class="section-title">{{ trans("about.philosophy.title") }}</h2>
+        <p v-for="paragraph in philosophyParagraphs" :key="paragraph" class="philosophy__paragraph">
           {{ paragraph }}
         </p>
       </div>
       <img
         class="philosophy__image"
-        :src="stockImage(PHILOSOPHY.photoId, 1000)"
-        :alt="PHILOSOPHY.imageAlt"
+        :src="stockImage(PHILOSOPHY_PHOTO_ID, 1000)"
+        :alt="trans('about.philosophy.imageAlt')"
         loading="lazy"
         decoding="async"
       />
@@ -39,34 +48,34 @@ useHead({ title: "Nosotros" });
 
     <figure class="promise">
       <blockquote class="promise__quote">
-        <p>“{{ PROMISE_QUOTE }}”</p>
+        <p>“{{ trans("about.promise.quote") }}”</p>
       </blockquote>
-      <figcaption class="promise__caption">Nuestra promesa</figcaption>
+      <figcaption class="promise__caption">{{ trans("about.promise.caption") }}</figcaption>
     </figure>
 
     <section class="values" aria-labelledby="values-title">
       <header class="values__header">
-        <h2 id="values-title" class="section-title">Nuestros valores</h2>
-        <p class="section-subtitle">Lo que guía cada tratamiento, cada día</p>
+        <h2 id="values-title" class="section-title">{{ trans("about.values.title") }}</h2>
+        <p class="section-subtitle">{{ trans("about.values.subtitle") }}</p>
       </header>
 
       <ol class="values__grid" role="list">
-        <li v-for="(value, index) in COMPANY_VALUES" :key="value.title">
+        <li v-for="(valueId, index) in COMPANY_VALUE_IDS" :key="valueId">
           <article class="value-card">
             <span class="value-card__number" aria-hidden="true">{{ String(index + 1).padStart(2, "0") }}</span>
-            <h3 class="value-card__title">{{ value.title }}</h3>
-            <p class="value-card__description">{{ value.description }}</p>
+            <h3 class="value-card__title">{{ trans(`about.values.items.${valueId}.title`) }}</h3>
+            <p class="value-card__description">{{ trans(`about.values.items.${valueId}.description`) }}</p>
           </article>
         </li>
       </ol>
     </section>
 
     <section class="milestones" aria-labelledby="milestones-title">
-      <h2 id="milestones-title" class="section-title">Nuestro progreso</h2>
+      <h2 id="milestones-title" class="section-title">{{ trans("about.milestones.title") }}</h2>
       <ol class="milestones__list" role="list">
-        <li v-for="milestone in MILESTONES" :key="milestone.year" class="milestones__item">
-          <p class="milestones__year">{{ milestone.year }}</p>
-          <p class="milestones__description">{{ milestone.description }}</p>
+        <li v-for="year in MILESTONE_YEARS" :key="year" class="milestones__item">
+          <p class="milestones__year">{{ year }}</p>
+          <p class="milestones__description">{{ trans(`about.milestones.items.${year}`) }}</p>
         </li>
       </ol>
     </section>

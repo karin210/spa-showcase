@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 import { allServices } from "~/data/services";
-import { formatCurrency, formatDateAtTime } from "~/utils/format";
+import { useLocaleFormat } from "~/composables/useLocaleFormat";
+import { useServiceLabels } from "~/composables/useServiceLabels";
 
 // Final step: review every selection and confirm. Submission itself is owned by
 // the page (the orchestrator); this component only presents the review and CTA.
@@ -15,40 +17,44 @@ const props = defineProps<{
 
 defineEmits<{ confirm: [] }>();
 
+const { t: trans } = useI18n();
+const { formatCurrency, formatDateAtTime } = useLocaleFormat();
+const { serviceName } = useServiceLabels();
+
+const selectedServices = computed(() => allServices.filter((service) => props.services.includes(service.id)));
+
 const totalDuration = computed<number>(() =>
-  props.services.reduce((sum, name) => sum + (allServices.find((s) => s.name === name)?.durationMinutes ?? 0), 0),
+  selectedServices.value.reduce((sum, service) => sum + service.durationMinutes, 0),
 );
 
-const totalPrice = computed<number>(() =>
-  props.services.reduce((sum, name) => sum + (allServices.find((s) => s.name === name)?.price ?? 0), 0),
-);
+const totalPrice = computed<number>(() => selectedServices.value.reduce((sum, service) => sum + service.price, 0));
 </script>
 
 <template>
   <div class="summary">
     <dl class="summary__list">
       <div class="summary__row">
-        <dt class="summary__term">Cliente</dt>
+        <dt class="summary__term">{{ trans("booking.summary.customer") }}</dt>
         <dd class="summary__value">{{ customerName }}</dd>
       </div>
       <div class="summary__row">
-        <dt class="summary__term">Tratamientos</dt>
+        <dt class="summary__term">{{ trans("booking.summary.treatments") }}</dt>
         <dd class="summary__value">
           <ul class="summary__services" role="list">
-            <li v-for="service in services" :key="service">{{ service }}</li>
+            <li v-for="service in services" :key="service">{{ serviceName(service) }}</li>
           </ul>
         </dd>
       </div>
       <div class="summary__row">
-        <dt class="summary__term">Fecha y hora</dt>
+        <dt class="summary__term">{{ trans("booking.summary.dateTime") }}</dt>
         <dd class="summary__value summary__value--capitalize">{{ formatDateAtTime(dateTime) }}</dd>
       </div>
       <div class="summary__row">
-        <dt class="summary__term">Duración</dt>
-        <dd class="summary__value">{{ totalDuration }} min</dd>
+        <dt class="summary__term">{{ trans("booking.summary.duration") }}</dt>
+        <dd class="summary__value">{{ trans("services.minutes", { count: totalDuration }) }}</dd>
       </div>
       <div class="summary__row">
-        <dt class="summary__term">Total estimado</dt>
+        <dt class="summary__term">{{ trans("booking.summary.total") }}</dt>
         <dd class="summary__value">{{ formatCurrency(totalPrice) }}</dd>
       </div>
     </dl>
@@ -56,7 +62,7 @@ const totalPrice = computed<number>(() =>
     <p v-if="errorMessage" class="summary__error" role="alert">{{ errorMessage }}</p>
 
     <PrimaryBtn class="summary__confirm" :disabled="submitting" @click="$emit('confirm')">
-      {{ submitting ? "Confirmando…" : "Confirmar reserva" }}
+      {{ submitting ? trans("booking.summary.confirming") : trans("booking.summary.confirm") }}
     </PrimaryBtn>
   </div>
 </template>

@@ -1,28 +1,35 @@
 <script setup lang="ts">
+import { useI18n } from "vue-i18n";
 import { serviceCategories } from "~/data/services";
-import { formatCurrency } from "~/utils/format";
+import { useLocaleFormat } from "~/composables/useLocaleFormat";
 
 // First step: pick one or more treatments, grouped by category behind a
 // <details>/<summary> disclosure per category (via CollapsibleDisclosure) —
 // mirrors the reference app's booking ServicesMenu, so a long catalogue reads
 // as a handful of collapsed groups rather than one long scrolling list.
+// The model holds service ids.
 const selected = defineModel<string[]>({ required: true });
+
+const { t: trans } = useI18n();
+const { formatCurrency } = useLocaleFormat();
 </script>
 
 <template>
   <fieldset class="services-menu">
-    <legend class="visually-hidden">Elige uno o más tratamientos</legend>
+    <legend class="visually-hidden">{{ trans("booking.services.legend") }}</legend>
     <ul class="services-menu__groups" role="list">
       <li v-for="category in serviceCategories" :key="category.id" class="services-menu__group">
         <CollapsibleDisclosure class="services-menu__dropdown">
-          <template #summary>{{ category.title }}</template>
+          <template #summary>{{ trans(`services.categories.${category.id}.title`) }}</template>
           <ul class="services-menu__options" role="list">
-            <li v-for="service in category.services" :key="service.name">
-              <label class="services-menu__option" :class="{ 'services-menu__option--checked': selected.includes(service.name) }">
-                <input v-model="selected" type="checkbox" :value="service.name" class="services-menu__checkbox" />
+            <li v-for="service in category.services" :key="service.id">
+              <label class="services-menu__option" :class="{ 'services-menu__option--checked': selected.includes(service.id) }">
+                <input v-model="selected" type="checkbox" :value="service.id" class="services-menu__checkbox" />
                 <span class="services-menu__option-text">
-                  <span class="services-menu__option-name">{{ service.name }}</span>
-                  <span class="services-menu__option-meta">{{ service.durationMinutes }} min · {{ formatCurrency(service.price) }}</span>
+                  <span class="services-menu__option-name">{{ trans(`services.items.${service.id}.name`) }}</span>
+                  <span class="services-menu__option-meta">
+                    {{ trans("services.minutes", { count: service.durationMinutes }) }} · {{ formatCurrency(service.price) }}
+                  </span>
                 </span>
               </label>
             </li>

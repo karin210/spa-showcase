@@ -1,12 +1,17 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import type { BlacklistRecord, DayTab } from "~/types/dashboard";
 import { useBlacklist } from "~/composables/useBlacklist";
 import { useToast } from "~/composables/useToast";
 import { addDays, startOfDay, toDateKey } from "~/utils/date";
-import { formatLongDate, formatShortWeekday, formatTime } from "~/utils/format";
+import { useLocaleFormat } from "~/composables/useLocaleFormat";
+import { useServiceLabels } from "~/composables/useServiceLabels";
 import { simulateRequest } from "~/utils/mock";
 
+const { t: trans } = useI18n();
+const { formatLongDate, formatShortWeekday, formatTime } = useLocaleFormat();
+const { serviceName } = useServiceLabels();
 const { records, removeRecord } = useBlacklist();
 const toast = useToast();
 
@@ -21,7 +26,9 @@ const dayRecords = computed<BlacklistRecord[]>(() =>
 );
 
 const heading = computed<string>(() =>
-  dayTab.value === "pickDate" ? `Controles del ${formatLongDate(selectedDate.value)}` : "Controles",
+  dayTab.value === "pickDate"
+    ? trans("dashboard.controls.headingDate", { date: formatLongDate(selectedDate.value) })
+    : trans("dashboard.tabs.controls"),
 );
 
 function selectDayTab(tab: DayTab): void {
@@ -43,7 +50,9 @@ function isAllDay(record: BlacklistRecord): boolean {
 }
 
 function rangeLabel(record: BlacklistRecord): string {
-  return isAllDay(record) ? "Todo el día" : `${formatTime(record.startTime)} – ${formatTime(record.endTime)}`;
+  return isAllDay(record)
+    ? trans("dashboard.controls.allDay")
+    : `${formatTime(record.startTime)} – ${formatTime(record.endTime)}`;
 }
 
 // ── Re-enable ──
@@ -58,7 +67,7 @@ async function confirmEnable(): Promise<void> {
   removeRecord(record.id);
   enabling.value = false;
   recordToEnable.value = null;
-  toast.show("Horario habilitado de nuevo.");
+  toast.show(trans("dashboard.controls.enabled"));
 }
 </script>
 
@@ -66,7 +75,7 @@ async function confirmEnable(): Promise<void> {
   <section class="panel" aria-labelledby="controls-heading">
     <header class="panel-header">
       <h2 id="controls-heading" class="panel-heading">{{ heading }}</h2>
-      <p class="panel-count">Total de horarios deshabilitados: {{ dayRecords.length }}</p>
+      <p class="panel-count">{{ trans("dashboard.controls.total", { count: dayRecords.length }) }}</p>
     </header>
 
     <div class="panel-toolbar">
@@ -74,7 +83,7 @@ async function confirmEnable(): Promise<void> {
       <DashboardAddToBlacklistModal />
     </div>
 
-    <p v-if="dayRecords.length === 0" class="panel-state">No hay horarios deshabilitados</p>
+    <p v-if="dayRecords.length === 0" class="panel-state">{{ trans("dashboard.controls.empty") }}</p>
 
     <ul v-else class="block-list" role="list">
       <li v-for="record in dayRecords" :key="record.id" class="block">
@@ -83,17 +92,19 @@ async function confirmEnable(): Promise<void> {
             <span class="block__summary">
               <span class="block__range">{{ rangeLabel(record) }}</span>
               <span class="block__meta">
-                {{ formatShortWeekday(record.startTime) }} — {{ record.services.length }}
-                {{ record.services.length === 1 ? "servicio" : "servicios" }}
+                {{ formatShortWeekday(record.startTime) }} —
+                {{ trans("dashboard.controls.serviceCount", record.services.length) }}
               </span>
             </span>
           </template>
           <div class="block__body">
-            <span class="block__subtitle">Servicios deshabilitados en este horario:</span>
+            <span class="block__subtitle">{{ trans("dashboard.controls.disabledServices") }}</span>
             <ul class="block__services" role="list">
-              <li v-for="service in record.services" :key="service">{{ service }}</li>
+              <li v-for="service in record.services" :key="service">{{ serviceName(service) }}</li>
             </ul>
-            <button type="button" class="block__enable" @click="recordToEnable = record">Habilitar horario</button>
+            <button type="button" class="block__enable" @click="recordToEnable = record">
+              {{ trans("dashboard.controls.enable") }}
+            </button>
           </div>
         </CollapsibleDisclosure>
       </li>
@@ -103,16 +114,18 @@ async function confirmEnable(): Promise<void> {
 
     <ConfirmModal
       :open="!!recordToEnable"
-      title="Habilitar horario"
-      confirm-label="Habilitar"
-      busy-label="Habilitando…"
+      :title="trans('dashboard.controls.enable')"
+      :confirm-label="trans('dashboard.controls.enableModal.action')"
+      :busy-label="trans('dashboard.controls.enableModal.enabling')"
       :busy="enabling"
       @close="recordToEnable = null"
       @confirm="confirmEnable"
     >
-      Los servicios deshabilitados
-      <strong v-if="recordToEnable">({{ rangeLabel(recordToEnable) }}, {{ formatShortWeekday(recordToEnable.startTime) }})</strong>
-      volverán a estar disponibles para reservar.
+      <i18n-t v-if="recordToEnable" keypath="dashboard.controls.enableModal.confirm" tag="span" scope="global">
+        <template #range>
+          <strong>({{ rangeLabel(recordToEnable) }}, {{ formatShortWeekday(recordToEnable.startTime) }})</strong>
+        </template>
+      </i18n-t>
     </ConfirmModal>
   </section>
 </template>

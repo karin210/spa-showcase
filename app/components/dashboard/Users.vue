@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import type { UserRecord } from "~/types/user";
 import { useUsers } from "~/composables/useUsers";
 
 const PAGE_SIZE = 8;
-const ROLE_LABELS = { admin: "Admin", employee: "Empleado" } as const;
 
+const { t: trans } = useI18n();
 const { users } = useUsers();
 
 const sort = ref<"asc" | "desc">("desc");
@@ -32,25 +33,25 @@ function onSortChange(): void {
 <template>
   <section class="panel" aria-labelledby="users-heading">
     <header class="panel-header">
-      <h2 id="users-heading" class="panel-heading">Usuarios</h2>
-      <p class="panel-count">Total de usuarios: {{ users.length }}</p>
+      <h2 id="users-heading" class="panel-heading">{{ trans("dashboard.tabs.users") }}</h2>
+      <p class="panel-count">{{ trans("dashboard.users.total", { count: users.length }) }}</p>
     </header>
 
     <div class="panel-toolbar">
       <label class="toolbar-section">
-        <span class="toolbar-label">Ordenar:</span>
+        <span class="toolbar-label">{{ trans("dashboard.users.sort") }}</span>
         <select v-model="sort" class="panel-select" @change="onSortChange">
-          <option value="desc">Más recientes primero</option>
-          <option value="asc">Más antiguos primero</option>
+          <option value="desc">{{ trans("dashboard.users.newest") }}</option>
+          <option value="asc">{{ trans("dashboard.users.oldest") }}</option>
         </select>
       </label>
     </div>
 
-    <p v-if="users.length === 0" class="panel-state">No hay usuarios</p>
+    <p v-if="users.length === 0" class="panel-state">{{ trans("dashboard.users.empty") }}</p>
     <ul v-else class="person-list" role="list">
       <DashboardPersonCard v-for="user in pageUsers" :key="user.id" :user="user">
         <template v-if="user.role" #actions>
-          <span class="role-badge">{{ ROLE_LABELS[user.role] }}</span>
+          <span class="role-badge">{{ trans(`dashboard.roles.${user.role}`) }}</span>
         </template>
       </DashboardPersonCard>
     </ul>

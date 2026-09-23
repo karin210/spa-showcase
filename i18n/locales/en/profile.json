@@ -1,0 +1,86 @@
+{
+  "profile": {
+    "meta": {
+      "title": "Profile"
+    },
+    "card": {
+      "photoAlt": "Profile photo of {name}"
+    },
+    "treatments": {
+      "title": "About your treatments"
+    },
+    "upcoming": {
+      "title": "Upcoming appointments",
+      "empty": "You have no appointments booked. Treat yourself to your next moment of calm!"
+    },
+    "cancelled": {
+      "title": "Cancelled appointments"
+    },
+    "status": {
+      "label": "Status:",
+      "paid": "Paid",
+      "confirmed": "Confirmed",
+      "cancelled": "Cancelled"
+    },
+    "lastService": {
+      "title": "Last treatment"
+    },
+    "history": {
+      "title": "Treatment history",
+      "enlarge": "Enlarge treatment image: {name}",
+      "fallbackAlt": "Spa products"
+    },
+    "session": {
+      "title": "Session settings",
+      "heading": "Session"
+    },
+    "cancelModal": {
+      "title": "Cancel appointment",
+      "cancelling": "Cancelling…",
+      "confirm": "Are you sure you want to cancel your appointment for {booking}?"
+    },
+    "edit": {
+      "title": "Edit your details",
+      "photoPreview": "Preview of your profile photo",
+      "changePhoto": "Change photo",
+      "photoError": "Please choose an image file.",
+      "save": "Save changes",
+      "saved": "Your details were updated.",
+      "fields": {
+        "firstName": {
+          "label": "First name",
+          "helper": "Enter your first name"
+        },
+        "lastName": {
+          "label": "Last name",
+          "helper": "Enter your last name"
+        },
+        "phone": {
+          "label": "Phone",
+          "helper": "Enter a valid phone number (10 digits)"
+        }
+      }
+    },
+    "notifications": {
+      "title": "Notifications",
+      "enabled": "On",
+      "enabledHint": "We'll let you know when we confirm or move your appointments. To turn them off, change this site's permissions in your browser.",
+      "hint": "Get appointment reminders and a heads-up when the spa confirms your booking.",
+      "enable": "Turn on notifications",
+      "enabling": "Turning on…"
+    },
+    "passkeys": {
+      "title": "Your passkeys",
+      "note": "Sign in without a password, using your device's fingerprint, face or PIN.",
+      "added": "Added {date}",
+      "removeLabel": "Remove the passkey {name}",
+      "empty": "You don't have any passkeys yet.",
+      "nameLabel": "Passkey name",
+      "namePlaceholder": "E.g. my iPhone passkey",
+      "defaultName": "New passkey",
+      "create": "Create passkey",
+      "creating": "Creating…",
+      "add": "Add a passkey"
+    }
+  }
+}

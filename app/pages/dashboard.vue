@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import { useI18n } from "vue-i18n";
 import type { DashboardTab } from "~/types/dashboard";
 
-definePageMeta({ path: "/panel-administrativo" });
-useHead({ title: "Panel" });
+const { t: trans } = useI18n();
+
+useHead(() => ({ title: trans("dashboard.meta.title") }));
 
 const activeTab = ref<DashboardTab>("bookings");
 </script>

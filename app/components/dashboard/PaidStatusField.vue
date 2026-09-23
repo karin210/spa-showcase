@@ -1,22 +1,24 @@
 <script setup lang="ts">
 import { useId } from "vue";
+import { useI18n } from "vue-i18n";
 
 const paid = defineModel<boolean>({ required: true });
 defineProps<{ disabled?: boolean }>();
 
+const { t: trans } = useI18n();
 const name = useId();
 </script>
 
 <template>
   <fieldset class="paid-field" :disabled="disabled">
-    <legend class="paid-field__legend">Pago</legend>
+    <legend class="paid-field__legend">{{ trans("dashboard.paid.legend") }}</legend>
     <label class="paid-field__option">
       <input v-model="paid" type="radio" :name="name" :value="true" />
-      Pagado
+      {{ trans("dashboard.paid.yes") }}
     </label>
     <label class="paid-field__option">
       <input v-model="paid" type="radio" :name="name" :value="false" />
-      No pagado
+      {{ trans("dashboard.paid.no") }}
     </label>
   </fieldset>
 </template>

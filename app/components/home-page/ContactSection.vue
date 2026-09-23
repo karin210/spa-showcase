@@ -1,17 +1,20 @@
 <script setup lang="ts">
+import { useI18n } from "vue-i18n";
 import { CONTACT, whatsappUrl } from "~/data/brand";
+
+const { t: trans } = useI18n();
 </script>
 
 <template>
   <section id="contact" class="contact" aria-labelledby="contact-title">
     <header class="contact__header">
-      <h2 id="contact-title" class="section-title">Contacto</h2>
-      <p class="section-subtitle">Te esperamos con una infusión caliente y música tranquila</p>
+      <h2 id="contact-title" class="section-title">{{ trans("home.contact.title") }}</h2>
+      <p class="section-subtitle">{{ trans("home.contact.subtitle") }}</p>
     </header>
 
     <div class="contact__content">
       <address class="contact__details">
-        <p class="contact__label">Dirección</p>
+        <p class="contact__label">{{ trans("home.contact.address") }}</p>
         <p class="contact__address">
           <template v-for="(line, index) in CONTACT.addressLines" :key="line">
             <br v-if="index > 0" />{{ line }}
@@ -19,10 +22,10 @@ import { CONTACT, whatsappUrl } from "~/data/brand";
         </p>
         <SecondaryBtn :href="CONTACT.mapLinkUrl" external class="contact__directions">
           <template #icon><AppIcon name="map-pin" /></template>
-          Cómo llegar
+          {{ trans("home.contact.directions") }}
         </SecondaryBtn>
 
-        <p class="contact__label">Teléfono</p>
+        <p class="contact__label">{{ trans("home.contact.phone") }}</p>
         <ul class="contact__phones" role="list">
           <li v-for="phone in CONTACT.phones" :key="phone.tel">
             <SecondaryBtn :href="`tel:${phone.tel}`">
@@ -32,14 +35,14 @@ import { CONTACT, whatsappUrl } from "~/data/brand";
           </li>
         </ul>
 
-        <p class="contact__label">Redes</p>
+        <p class="contact__label">{{ trans("home.contact.social") }}</p>
         <div class="contact__social">
           <a
-            :href="whatsappUrl(CONTACT.whatsappMessage)"
+            :href="whatsappUrl(trans('home.contact.whatsappMessage'))"
             class="contact__social-link"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Enviar un WhatsApp a Alma Serena"
+            :aria-label="trans('home.contact.whatsappLabel')"
           >
             <AppIcon name="whatsapp" />
           </a>
@@ -48,7 +51,7 @@ import { CONTACT, whatsappUrl } from "~/data/brand";
             class="contact__social-link"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Visitar Instagram"
+            :aria-label="trans('home.contact.instagramLabel')"
           >
             <AppIcon name="instagram" />
           </a>
@@ -59,7 +62,7 @@ import { CONTACT, whatsappUrl } from "~/data/brand";
         <iframe
           class="contact__map-frame"
           :src="CONTACT.mapEmbedUrl"
-          title="Mapa de la zona donde se ubica el spa"
+          :title="trans('home.contact.mapTitle')"
           loading="lazy"
           referrerpolicy="no-referrer-when-downgrade"
         />

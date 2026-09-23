@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 import { useBlacklist } from "~/composables/useBlacklist";
 import { availableSlots } from "~/utils/availability";
-import { formatTime } from "~/utils/format";
+import { useLocaleFormat } from "~/composables/useLocaleFormat";
 
 // Third step: pick a time. Offers only slots business hours and the disabled
 // schedule allow (see app/utils/availability.ts), already narrowed to the chosen
@@ -11,6 +12,8 @@ const props = defineProps<{ date: Date; services: string[]; initialTime: Date | 
 
 const emit = defineEmits<{ complete: [time: Date] }>();
 
+const { t: trans } = useI18n();
+const { formatTime } = useLocaleFormat();
 const { records } = useBlacklist();
 
 const slots = computed<Date[]>(() => availableSlots(props.date, props.services, records.value));
@@ -27,7 +30,7 @@ function select(slot: Date): void {
 <template>
   <div class="time-slots">
     <p v-if="slots.length === 0" class="time-slots__empty">
-      No hay horarios disponibles ese día para los tratamientos elegidos. Vuelve a la fecha y elige otro día.
+      {{ trans("booking.time.empty") }}
     </p>
     <div v-else class="time-slots__grid" role="list">
       <button

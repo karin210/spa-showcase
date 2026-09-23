@@ -1,0 +1,105 @@
+{
+  "meta": {
+    "description": "Alma Serena Spa & Bienestar: massages, facials, body rituals and hydrotherapy. A demo website for spas."
+  },
+  "formats": {
+    "dateAtTime": "{date} at {time}"
+  },
+  "language": {
+    "label": "Language",
+    "es": {
+      "short": "ES",
+      "name": "Español",
+      "switchTo": "Cambiar a español"
+    },
+    "en": {
+      "short": "EN",
+      "name": "English",
+      "switchTo": "Switch to English"
+    }
+  },
+  "languageBanner": {
+    "prompt": "Would you like to change the language?",
+    "close": "Dismiss language notice"
+  },
+  "nav": {
+    "primary": "Main navigation",
+    "mobile": "Mobile menu",
+    "homeLink": "Alma Serena — home page",
+    "home": "Home",
+    "services": "Services",
+    "contact": "Contact",
+    "about": "About us",
+    "careers": "Careers",
+    "book": "Book",
+    "profile": "My profile",
+    "dashboard": "Admin dashboard",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
+  },
+  "actions": {
+    "book": "Book an appointment",
+    "viewProfile": "View your profile",
+    "signOut": "Sign out",
+    "cancel": "Cancel",
+    "save": "Save",
+    "accept": "Accept",
+    "edit": "Edit",
+    "delete": "Delete",
+    "close": "Close",
+    "backToHome": "Back to home"
+  },
+  "signOutModal": {
+    "title": "Sign out",
+    "confirm": "Are you sure you want to sign out?",
+    "action": "Sign out",
+    "signingOut": "Signing out…",
+    "demoNotice": "Demo mode: your session stays active."
+  },
+  "states": {
+    "processing": "Processing…",
+    "saving": "Saving…"
+  },
+  "toast": {
+    "region": "Notifications",
+    "close": "Dismiss notice"
+  },
+  "calendar": {
+    "pickDate": "Select a date",
+    "previousMonth": "Previous month",
+    "nextMonth": "Next month"
+  },
+  "footer": {
+    "phone": "Phone:",
+    "hours": "Opening hours",
+    "schedule": {
+      "weekdays": {
+        "days": "Monday to Saturday",
+        "hours": "9:00 AM to 8:00 PM"
+      },
+      "sunday": {
+        "days": "Sunday",
+        "hours": "10:00 AM to 6:00 PM"
+      }
+    },
+    "copyright": "© {year} {brand}. A fictional brand for demonstration purposes."
+  },
+  "installPrompt": {
+    "title": "Install the app",
+    "text": "Add Alma Serena to your Home Screen to open it like an app and book in just a couple of taps.",
+    "step1": {
+      "before": "Tap the",
+      "control": "Share",
+      "after": "button in Safari's toolbar."
+    },
+    "step2": {
+      "before": "Choose",
+      "control": "“Add to Home Screen”"
+    },
+    "step3": {
+      "before": "Confirm by tapping",
+      "control": "“Add”"
+    },
+    "dismiss": "Got it"
+  }
+}

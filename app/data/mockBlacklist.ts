@@ -11,25 +11,25 @@ export function createMockBlacklist(now: Date = new Date()): BlacklistRecord[] {
       id: "bl-1",
       startTime: on(0, 14),
       endTime: on(0, 16),
-      services: ["Temazcal", "Circuito de spa"],
+      services: ["temazcal", "spa-circuit"],
     },
     {
       id: "bl-2",
       startTime: on(0, 18),
       endTime: on(0, 19, 30),
-      services: ["Masaje con piedras calientes"],
+      services: ["hot-stone-massage"],
     },
     {
       id: "bl-3",
       startTime: on(1, 9),
       endTime: on(1, 12),
-      services: ["Facial antiedad", "Peeling enzimático", "Limpieza facial profunda"],
+      services: ["anti-aging-facial", "enzyme-peel", "deep-cleansing-facial"],
     },
     {
       id: "bl-4",
       startTime: on(4, 0),
       endTime: on(4, 23, 59),
-      services: ["Baño de flotación"],
+      services: ["flotation-bath"],
     },
   ];
 }

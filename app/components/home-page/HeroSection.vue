@@ -1,5 +1,22 @@
 <script setup lang="ts">
+import { ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { stockImage } from "~/data/services";
+import { usePwaInstall } from "~/composables/usePwaInstall";
+
+const { t: trans } = useI18n();
+const localePath = useLocalePath();
+const { canInstall, install } = usePwaInstall();
+const isInstalling = ref(false);
+
+async function handleInstall(): Promise<void> {
+  isInstalling.value = true;
+  try {
+    await install();
+  } finally {
+    isInstalling.value = false;
+  }
+}
 
 function scrollToServices(): void {
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -16,7 +33,7 @@ function scrollToServices(): void {
         <img
           class="hero__image"
           :src="stockImage('1600334129128-685c5582fd35', 900)"
-          alt="Espacio de descanso del spa junto a una alberca rodeada de plantas"
+          :alt="trans('home.hero.imageAlt')"
           fetchpriority="high"
         />
       </picture>
@@ -28,11 +45,14 @@ function scrollToServices(): void {
       </div>
 
       <div class="hero__content">
-        <p class="hero__eyebrow">Masajes · Faciales · Rituales · Hidroterapia</p>
-        <h1 id="hero-title" class="hero__title">Tu refugio de calma, a un respiro de la ciudad</h1>
+        <p class="hero__eyebrow">{{ trans("home.hero.eyebrow") }}</p>
+        <h1 id="hero-title" class="hero__title">{{ trans("home.hero.title") }}</h1>
         <div class="hero__cta-wrapper">
-          <PrimaryBtn link="/agendar">Reservar tratamiento</PrimaryBtn>
-          <PrimaryBtn class="hero__cta-ghost" @click="scrollToServices">Ver servicios</PrimaryBtn>
+          <PrimaryBtn :link="localePath('booking')">{{ trans("home.hero.book") }}</PrimaryBtn>
+          <PrimaryBtn class="hero__cta-ghost" @click="scrollToServices">{{ trans("home.hero.viewServices") }}</PrimaryBtn>
+          <PrimaryBtn v-if="canInstall" class="hero__cta-ghost" :disabled="isInstalling" @click="handleInstall">
+            {{ isInstalling ? trans("home.hero.installing") : trans("home.hero.installApp") }}
+          </PrimaryBtn>
         </div>
       </div>
     </div>

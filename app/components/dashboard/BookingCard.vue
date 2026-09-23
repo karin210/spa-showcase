@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import { useI18n } from "vue-i18n";
 import type { BookingRecord } from "~/types/booking";
 import { whatsappUrl } from "~/data/brand";
-import { STATUS_LABELS } from "~/utils/timeSlots";
-import { formatCurrency, formatPhone, formatShortWeekday, formatTime } from "~/utils/format";
+import { useLocaleFormat } from "~/composables/useLocaleFormat";
+import { useServiceLabels } from "~/composables/useServiceLabels";
+import { formatPhone } from "~/utils/format";
 
 withDefaults(
   defineProps<{
@@ -11,12 +13,17 @@ withDefaults(
     showTime?: boolean;
     // Stacks the two halves, for narrow containers like the pending-payment rail.
     stacked?: boolean;
-    actionLabel?: string;
+    // Defaults to the localized "Edit".
+    actionLabel?: string | null;
   }>(),
-  { showTime: false, stacked: false, actionLabel: "Editar" },
+  { showTime: false, stacked: false, actionLabel: null },
 );
 
 defineEmits<{ action: [] }>();
+
+const { t: trans } = useI18n();
+const { formatCurrency, formatShortWeekday, formatTime } = useLocaleFormat();
+const { serviceList } = useServiceLabels();
 </script>
 
 <template>
@@ -25,25 +32,29 @@ defineEmits<{ action: [] }>();
       <div class="booking-card__customer-row">
         <span class="booking-card__customer">{{ booking.customerName }}</span>
         <span class="booking-card__chip" :class="{ 'booking-card__chip--registered': booking.uid }">
-          {{ booking.uid ? "Registrado" : "No registrado" }}
+          {{ booking.uid ? trans("dashboard.bookingCard.registered") : trans("dashboard.bookingCard.guest") }}
         </span>
       </div>
       <span class="booking-card__date">
         <span class="booking-card__day">{{ formatShortWeekday(booking.appointmentAt) }}</span>
         <strong v-if="showTime">{{ formatTime(booking.appointmentAt) }}</strong>
       </span>
-      <span class="booking-card__services">{{ booking.services.join(", ") }}</span>
+      <span class="booking-card__services">{{ serviceList(booking.services) }}</span>
       <div v-if="booking.phone" class="booking-card__phone-row">
         <span class="booking-card__phone">{{ formatPhone(booking.phone) }}</span>
-        <a :href="`tel:${booking.phone}`" class="booking-card__contact" :aria-label="`Llamar a ${booking.customerName}`">
+        <a
+          :href="`tel:${booking.phone}`"
+          class="booking-card__contact"
+          :aria-label="trans('dashboard.bookingCard.call', { name: booking.customerName })"
+        >
           <AppIcon name="phone" />
         </a>
         <a
-          :href="whatsappUrl(`Hola ${booking.customerName}, te escribimos de Alma Serena Spa sobre tu cita.`, booking.phone)"
+          :href="whatsappUrl(trans('dashboard.bookingCard.whatsappMessage', { name: booking.customerName }), booking.phone)"
           class="booking-card__contact"
           target="_blank"
           rel="noopener noreferrer"
-          :aria-label="`Enviar WhatsApp a ${booking.customerName}`"
+          :aria-label="trans('dashboard.bookingCard.whatsapp', { name: booking.customerName })"
         >
           <AppIcon name="whatsapp" />
         </a>
@@ -53,18 +64,24 @@ defineEmits<{ action: [] }>();
     <div class="booking-card__side">
       <div class="booking-card__details">
         <span class="booking-card__status-line">
-          Estado:
-          <span class="booking-card__status">{{ STATUS_LABELS[booking.status] }}</span>
+          {{ trans("dashboard.bookingCard.statusLabel") }}
+          <span class="booking-card__status">{{ trans(`dashboard.status.${booking.status}`) }}</span>
         </span>
         <span v-if="booking.finalCost !== null" class="booking-card__amount">
-          {{ booking.paid ? "Monto cobrado" : "Monto por cobrar" }}: {{ formatCurrency(booking.finalCost) }}
+          {{
+            trans(booking.paid ? "dashboard.bookingCard.amountPaid" : "dashboard.bookingCard.amountDue", {
+              amount: formatCurrency(booking.finalCost),
+            })
+          }}
         </span>
         <p v-if="booking.rescheduleProposedAt" class="booking-card__note">
           <AppIcon name="info" class="booking-card__note-icon" />
-          Cita reagendada. Esperando confirmación.
+          {{ trans("dashboard.bookingCard.rescheduled") }}
         </p>
       </div>
-      <SecondaryBtn class="booking-card__action" @click="$emit('action')">{{ actionLabel }}</SecondaryBtn>
+      <SecondaryBtn class="booking-card__action" @click="$emit('action')">
+        {{ actionLabel ?? trans("actions.edit") }}
+      </SecondaryBtn>
     </div>
   </li>
 </template>

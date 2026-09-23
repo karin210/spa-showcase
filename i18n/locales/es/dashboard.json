@@ -1,0 +1,216 @@
+{
+  "dashboard": {
+    "meta": {
+      "title": "Panel"
+    },
+    "nav": {
+      "label": "Secciones del panel",
+      "expand": "Expandir menú",
+      "collapse": "Colapsar menú"
+    },
+    "tabs": {
+      "users": "Usuarios",
+      "bookings": "Citas",
+      "team": "Equipo",
+      "controls": "Controles",
+      "metrics": "Métricas"
+    },
+    "roles": {
+      "admin": "Admin",
+      "employee": "Empleado"
+    },
+    "status": {
+      "pending": "Pendiente",
+      "confirmed": "Confirmada",
+      "cancelled": "Cancelada",
+      "closed": "Cerrada"
+    },
+    "statusPlural": {
+      "pending": "Pendientes",
+      "confirmed": "Confirmadas",
+      "cancelled": "Canceladas",
+      "closed": "Cerradas"
+    },
+    "dayTabs": {
+      "label": "Filtrar por fecha:",
+      "today": "Hoy",
+      "tomorrow": "Mañana",
+      "fromToday": "Desde hoy",
+      "pickDate": "Elegir fecha"
+    },
+    "pagination": {
+      "label": "Paginación",
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "page": "Página {page} de {total}"
+    },
+    "person": {
+      "memberSince": "Miembro desde {date}"
+    },
+    "users": {
+      "total": "Total de usuarios: {count}",
+      "sort": "Ordenar:",
+      "newest": "Más recientes primero",
+      "oldest": "Más antiguos primero",
+      "empty": "No hay usuarios"
+    },
+    "team": {
+      "total": "Total de miembros: {count}",
+      "add": "Añadir miembro",
+      "empty": "No hay miembros del equipo",
+      "changeRole": "Cambiar rol",
+      "changeRoleOf": "Cambiar rol de {name}",
+      "ownRole": "No puedes cambiar tu propio rol",
+      "ownAccount": "No puedes quitar tu propia cuenta del equipo",
+      "remove": "Remover",
+      "roleChanged": "{name} ahora es {role}.",
+      "removed": "{name} ya no forma parte del equipo.",
+      "removeModal": {
+        "title": "Quitar del equipo",
+        "removing": "Quitando…",
+        "confirm": "¿Seguro que quieres remover a {name} del equipo? Perderá acceso al panel y volverá a ser una cuenta de cliente."
+      }
+    },
+    "addMember": {
+      "title": "Añadir un nuevo miembro al equipo",
+      "added": "¡{name} ahora es parte del equipo!",
+      "exit": "Salir",
+      "addAnother": "Añadir otro miembro",
+      "nameLabel": "Nombre del usuario",
+      "namePlaceholder": "Ej: Lucía",
+      "search": "Buscar",
+      "searching": "Buscando…",
+      "noResults": "No se encontró ningún cliente con ese nombre.",
+      "pick": "Selecciona a la persona",
+      "confirm": "¿Quieres añadir a {name} como miembro del equipo?",
+      "role": "Rol",
+      "adding": "Añadiendo…"
+    },
+    "bookings": {
+      "heading": {
+        "today": "Citas de hoy",
+        "tomorrow": "Citas de mañana",
+        "fromToday": "Citas desde hoy",
+        "date": "Citas del {date}"
+      },
+      "total": "Total de citas: {count}",
+      "statusFilter": "Estado:",
+      "allStatuses": "Todos los estados",
+      "empty": "No hay citas",
+      "count": "{n} cita | {n} citas",
+      "updated": "Cita actualizada.",
+      "closedPaid": "Cita cerrada y pagada.",
+      "costRecorded": "Costo registrado; queda pendiente de pago.",
+      "pendingPayment": {
+        "heading": "Pendientes de pago",
+        "hint": "Citas que ya pasaron y aún no tienen un pago registrado.",
+        "action": "Cerrar"
+      }
+    },
+    "bookingCard": {
+      "registered": "Registrado",
+      "guest": "No registrado",
+      "call": "Llamar a {name}",
+      "whatsapp": "Enviar WhatsApp a {name}",
+      "whatsappMessage": "Hola {name}, te escribimos de Alma Serena Spa sobre tu cita.",
+      "statusLabel": "Estado:",
+      "amountPaid": "Monto cobrado: {amount}",
+      "amountDue": "Monto por cobrar: {amount}",
+      "rescheduled": "Cita reagendada. Esperando confirmación."
+    },
+    "editBooking": {
+      "title": "Editar cita",
+      "reschedule": "Reagendar cita",
+      "day": "Día",
+      "time": "Hora",
+      "status": "Estado",
+      "finalCost": "Costo final (cita cerrada)"
+    },
+    "finalCost": {
+      "title": "Registrar costo",
+      "label": "Costo final",
+      "menuPrice": "Precio de menú: {price}"
+    },
+    "paid": {
+      "legend": "Pago",
+      "yes": "Pagado",
+      "no": "No pagado"
+    },
+    "createBooking": {
+      "trigger": "Crear cita",
+      "title": "Crear cita para un cliente",
+      "created": "Cita creada para {name}.",
+      "createdClosed": "Cita creada y cerrada para {name}.",
+      "another": "Crear otra cita",
+      "customer": "Cliente",
+      "customerPlaceholder": "Ej: Ana López",
+      "phone": "Teléfono (opcional)",
+      "phonePlaceholder": "Ej: +52 443 123 4567",
+      "date": "Fecha",
+      "time": "Hora",
+      "services": "Servicios",
+      "finalCost": "Costo final (opcional)",
+      "creating": "Creando…"
+    },
+    "controls": {
+      "headingDate": "Controles del {date}",
+      "total": "Total de horarios deshabilitados: {count}",
+      "empty": "No hay horarios deshabilitados",
+      "allDay": "Todo el día",
+      "serviceCount": "{n} servicio | {n} servicios",
+      "disabledServices": "Servicios deshabilitados en este horario:",
+      "enable": "Habilitar horario",
+      "enabled": "Horario habilitado de nuevo.",
+      "enableModal": {
+        "action": "Habilitar",
+        "enabling": "Habilitando…",
+        "confirm": "Los servicios deshabilitados {range} volverán a estar disponibles para reservar."
+      }
+    },
+    "blacklist": {
+      "title": "Deshabilitar horario",
+      "date": "Fecha",
+      "schedule": "Horario",
+      "pickRange": "Elegir horario",
+      "from": "Desde",
+      "to": "Hasta",
+      "rangeError": "La hora final debe ser posterior a la inicial.",
+      "services": "¿Qué servicios no estarán disponibles?",
+      "action": "Deshabilitar",
+      "saved": "Horario deshabilitado."
+    },
+    "metrics": {
+      "period": "Periodo:",
+      "periods": {
+        "day": "Hoy",
+        "week": "Esta semana",
+        "month": "Este mes"
+      },
+      "pickDay": "Elegir día:",
+      "weekOf": "Semana del {start} al {end}",
+      "revenue": {
+        "title": "Ingresos",
+        "total": "Ingresos totales",
+        "average": "Ingreso promedio por cita"
+      },
+      "agenda": {
+        "title": "Agenda",
+        "occupancy": "Tasa de ocupación",
+        "capacity": "Capacidad: {count} tratamientos por día",
+        "cancellations": "Tasa de cancelaciones"
+      },
+      "clients": {
+        "title": "Clientes",
+        "subtitle": "Histórico, independiente del periodo seleccionado.",
+        "retention": "Tasa de retención",
+        "retentionCaption": "Cuentas con visita en los últimos {days} días",
+        "new": "Clientes nuevos",
+        "newCaption": "Con cuenta y sin cuenta"
+      },
+      "topServices": {
+        "title": "Tratamientos más demandados",
+        "empty": "Sin tratamientos pagados en este periodo."
+      }
+    }
+  }
+}

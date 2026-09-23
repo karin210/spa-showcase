@@ -1,0 +1,156 @@
+{
+  "services": {
+    "categories": {
+      "massages": {
+        "title": "Massages",
+        "blurb": "Release the tension and find your calm again",
+        "imageAlt": "Therapist applying aromatic oil during a relaxing massage",
+        "description": "Our massages blend Swedish, deep-tissue and Eastern techniques with cold-pressed oils. We work in warm, quiet treatment rooms with heated tables and music chosen to match each rhythm.",
+        "idealFor": ["Neck and back tension", "Stress and trouble sleeping", "Post-workout recovery"]
+      },
+      "facials": {
+        "title": "Facials",
+        "blurb": "Glowing skin starts with a deep breath",
+        "imageAlt": "Client receiving a facial mask applied with a brush",
+        "description": "We assess your skin before every facial to choose the right actives. We use natural Mexican skincare, paraben-free and cruelty-free, and finish with a face and scalp massage.",
+        "idealFor": ["Dehydrated or dull skin", "First signs of aging", "Getting ready for an event"]
+      },
+      "body-rituals": {
+        "title": "Body Rituals",
+        "blurb": "Tradition, aromas and deep rest",
+        "imageAlt": "Body ritual with fruit, flowers and oils on a Talavera tile floor",
+        "description": "Rituals inspired by Mexican tradition: Colima salt, Tabasco cacao and local clay. We exfoliate, nourish and wrap the skin, then close with a warm shower and a seasonal herbal tea.",
+        "idealFor": ["Rough or dull skin", "Feeling heavy or bloated", "Gifting a special experience"]
+      },
+      "hydrotherapy": {
+        "title": "Hydrotherapy",
+        "blurb": "Heat, steam and water to renew body and mind",
+        "imageAlt": "Wooden sauna lit with warm light",
+        "description": "Contrasting heat, steam and water to boost circulation and let the body unwind. Our temazcal is led by a certified guide, and the circuit can be combined with any other treatment.",
+        "idealFor": ["Detoxing and boosting circulation", "Sore muscles", "A full day of rest"]
+      }
+    },
+    "items": {
+      "relaxing-massage": {
+        "name": "Relaxing massage",
+        "description": "Soft, flowing strokes that slow down the nervous system."
+      },
+      "deep-tissue-massage": {
+        "name": "Deep-tissue massage",
+        "description": "Slow, firm pressure on knots and chronic tension points."
+      },
+      "hot-stone-massage": {
+        "name": "Hot stone massage",
+        "description": "Warm volcanic stones that relax the muscle before it is worked."
+      },
+      "aromatherapy-massage": {
+        "name": "Aromatherapy massage",
+        "description": "An essential-oil blend chosen with you for how you want to feel."
+      },
+      "foot-reflexology": {
+        "name": "Foot reflexology",
+        "description": "Pressure on reflex points in the feet to rebalance the whole body."
+      },
+      "hydrating-facial": {
+        "name": "Hydrating facial",
+        "description": "Cleansing, a hyaluronic acid mask and serum for plump, dewy skin."
+      },
+      "deep-cleansing-facial": {
+        "name": "Deep-cleansing facial",
+        "description": "Steam, gentle extractions and a soothing mask for clear pores."
+      },
+      "anti-aging-facial": {
+        "name": "Anti-aging facial",
+        "description": "Firming actives, gentle radiofrequency and kobido massage."
+      },
+      "enzyme-peel": {
+        "name": "Enzyme peel",
+        "description": "Papaya and pineapple enzyme exfoliation that won't irritate the skin."
+      },
+      "sea-salt-scrub": {
+        "name": "Sea salt scrub",
+        "description": "Colima salt with coconut oil to renew the skin from head to toe."
+      },
+      "chocolate-wrap": {
+        "name": "Chocolate wrap",
+        "description": "Antioxidant cacao that nourishes the skin and awakens the senses."
+      },
+      "seaweed-wrap": {
+        "name": "Seaweed wrap",
+        "description": "Mineral-rich seaweed that tones and reduces puffiness."
+      },
+      "mud-detox-ritual": {
+        "name": "Mud detox ritual",
+        "description": "Volcanic mud, herbal steam and a light massage to finish."
+      },
+      "spa-circuit": {
+        "name": "Spa circuit",
+        "description": "Sauna, eucalyptus steam, contrast shower and a heated pool."
+      },
+      "temazcal": {
+        "name": "Temazcal",
+        "description": "A traditional herbal steam bath, guided step by step."
+      },
+      "flotation-bath": {
+        "name": "Flotation bath",
+        "description": "An Epsom salt tub in low light to float effortlessly."
+      }
+    },
+    "minutes": "{count} min",
+    "page": {
+      "meta": {
+        "title": "Services"
+      },
+      "banner": {
+        "eyebrow": "Treatments and amenities",
+        "title": "Everything that awaits you at Alma Serena",
+        "imageAlt": "Spa lounge area beside a pool surrounded by plants"
+      },
+      "intro": "Every visit starts with a short consultation to learn how you're feeling and what you need. From there we adjust the pressure, scents and timing of each treatment. All of them include access to our relaxation areas before and after your session.",
+      "introLabel": "Introduction",
+      "categoriesNav": "Service categories",
+      "idealFor": "Ideal for",
+      "amenities": {
+        "title": "Amenities",
+        "subtitle": "Included with any treatment",
+        "items": {
+          "pool": {
+            "title": "Heated pool",
+            "description": "Water at 32 °C surrounded by gardens, open to every guest of the day.",
+            "imageAlt": "Pool lit at dusk next to a terrace with umbrellas"
+          },
+          "sauna": {
+            "title": "Sauna and steam",
+            "description": "A cedarwood sauna and a steam room with eucalyptus and mint.",
+            "imageAlt": "Wooden sauna lit with warm light"
+          },
+          "lounge": {
+            "title": "Relaxation lounge",
+            "description": "Wide beds, blankets and quiet, for as long as you'd like to stay.",
+            "imageAlt": "Rest room with a large bed, wood finishes and afternoon light"
+          },
+          "tea-bar": {
+            "title": "Tea bar",
+            "description": "Local herbal teas, fruit water and healthy snacks at no cost.",
+            "imageAlt": "Cup of herbal tea beside dried flowers and a palm leaf"
+          },
+          "locker-rooms": {
+            "title": "Full locker rooms",
+            "description": "Lockers, robes, sandals, showers and natural bath products.",
+            "imageAlt": "Rolled towel, soap dispenser, candle and tulips"
+          },
+          "parking": {
+            "title": "Parking",
+            "description": "Free parking for guests, with step-free access.",
+            "imageAlt": "Aerial view of a parking lot with cars"
+          }
+        }
+      },
+      "cta": {
+        "title": "Ready for your moment of calm?",
+        "text": "Choose your treatments and book in under a minute.",
+        "action": "Book a treatment"
+      }
+    }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "booking": {
+    "meta": {
+      "title": "Agendar"
+    },
+    "title": "Agendar cita",
+    "steps": {
+      "services": {
+        "title": "¿Qué tratamientos quieres reservar?",
+        "label": "Tratamientos"
+      },
+      "date": {
+        "title": "¿Qué día te gustaría venir?",
+        "label": "Fecha"
+      },
+      "time": {
+        "title": "¿A qué hora?",
+        "label": "Hora"
+      },
+      "summary": {
+        "title": "Confirma tu reserva",
+        "label": "Resumen"
+      }
+    },
+    "progress": {
+      "label": "Progreso de la reserva",
+      "title": "Datos de tu reserva",
+      "editLabel": "Editar: {step}"
+    },
+    "services": {
+      "legend": "Elige uno o más tratamientos",
+      "continue": "Continuar ({count})"
+    },
+    "time": {
+      "empty": "No hay horarios disponibles ese día para los tratamientos elegidos. Vuelve a la fecha y elige otro día."
+    },
+    "summary": {
+      "customer": "Cliente",
+      "treatments": "Tratamientos",
+      "dateTime": "Fecha y hora",
+      "duration": "Duración",
+      "total": "Total estimado",
+      "confirm": "Confirmar reserva",
+      "confirming": "Confirmando…"
+    },
+    "success": {
+      "title": "¡Tu cita quedó confirmada!",
+      "text": "Te esperamos el {date} a las {time}. Puedes ver o cancelar tu cita desde tu perfil en cualquier momento.",
+      "profile": "Ir a mi perfil"
+    }
+  }
+}

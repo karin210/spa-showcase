@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { computed, reactive, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { useBlacklist } from "~/composables/useBlacklist";
 import { useToast } from "~/composables/useToast";
 import { combineDateAndTime, toDateKey } from "~/utils/date";
 import { simulateRequest } from "~/utils/mock";
 
 // Trigger + non-dismissible form to block some services during a time range.
+const { t: trans } = useI18n();
 const { addRecord } = useBlacklist();
 const toast = useToast();
 
@@ -45,56 +47,58 @@ async function submit(): Promise<void> {
   });
   saving.value = false;
   open.value = false;
-  toast.show("Horario deshabilitado.");
+  toast.show(trans("dashboard.blacklist.saved"));
 }
 </script>
 
 <template>
   <SecondaryBtn @click="start">
     <template #icon><AppIcon name="controls" /></template>
-    Deshabilitar horario
+    {{ trans("dashboard.blacklist.title") }}
   </SecondaryBtn>
 
   <ModalDialog :open="open" labelledby="blacklist-title" width="wide" @close="open = false">
     <form class="blacklist-form" @submit.prevent="submit">
-      <h2 id="blacklist-title" class="modal-title">Deshabilitar horario</h2>
+      <h2 id="blacklist-title" class="modal-title">{{ trans("dashboard.blacklist.title") }}</h2>
 
       <div class="blacklist-form__row">
         <label class="modal-field">
-          Fecha
+          {{ trans("dashboard.blacklist.date") }}
           <input v-model="form.date" type="date" class="modal-input" required />
         </label>
         <fieldset class="blacklist-form__scope">
-          <legend class="blacklist-form__legend">Horario</legend>
+          <legend class="blacklist-form__legend">{{ trans("dashboard.blacklist.schedule") }}</legend>
           <label class="blacklist-form__option">
             <input v-model="form.allDay" type="radio" name="blacklist-scope" :value="true" />
-            Todo el día
+            {{ trans("dashboard.controls.allDay") }}
           </label>
           <label class="blacklist-form__option">
             <input v-model="form.allDay" type="radio" name="blacklist-scope" :value="false" />
-            Elegir horario
+            {{ trans("dashboard.blacklist.pickRange") }}
           </label>
         </fieldset>
       </div>
 
       <div v-if="!form.allDay" class="blacklist-form__row">
         <label class="modal-field">
-          Desde
+          {{ trans("dashboard.blacklist.from") }}
           <input v-model="form.from" type="time" step="900" class="modal-input" required />
         </label>
         <label class="modal-field">
-          Hasta
+          {{ trans("dashboard.blacklist.to") }}
           <input v-model="form.to" type="time" step="900" class="modal-input" required />
         </label>
       </div>
-      <p v-if="!rangeValid" class="modal-error" role="alert">La hora final debe ser posterior a la inicial.</p>
+      <p v-if="!rangeValid" class="modal-error" role="alert">{{ trans("dashboard.blacklist.rangeError") }}</p>
 
-      <ServicePicker v-model="form.services" legend="¿Qué servicios no estarán disponibles?" />
+      <ServicePicker v-model="form.services" :legend="trans('dashboard.blacklist.services')" />
 
       <div class="modal-actions">
-        <button type="button" class="modal-btn modal-btn-cancel" :disabled="saving" @click="open = false">Cancelar</button>
+        <button type="button" class="modal-btn modal-btn-cancel" :disabled="saving" @click="open = false">
+          {{ trans("actions.cancel") }}
+        </button>
         <button type="submit" class="modal-btn modal-btn-primary" :disabled="saving || !isValid">
-          {{ saving ? "Guardando…" : "Deshabilitar" }}
+          {{ saving ? trans("states.saving") : trans("dashboard.blacklist.action") }}
         </button>
       </div>
     </form>

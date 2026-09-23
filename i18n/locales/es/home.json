@@ -1,0 +1,34 @@
+{
+  "home": {
+    "meta": {
+      "title": "Masajes, faciales y rituales en Morelia"
+    },
+    "hero": {
+      "imageAlt": "Espacio de descanso del spa junto a una alberca rodeada de plantas",
+      "eyebrow": "Masajes · Faciales · Rituales · Hidroterapia",
+      "title": "Tu refugio de calma, a un respiro de la ciudad",
+      "book": "Reservar tratamiento",
+      "viewServices": "Ver servicios",
+      "installApp": "Descargar app",
+      "installing": "Instalando…"
+    },
+    "services": {
+      "title": "Nuestros servicios",
+      "subtitle": "Tratamientos pensados para que salgas más ligera de lo que llegaste",
+      "viewTreatments": "Ver tratamientos",
+      "viewAll": "Ver todos los servicios"
+    },
+    "contact": {
+      "title": "Contacto",
+      "subtitle": "Te esperamos con una infusión caliente y música tranquila",
+      "address": "Dirección",
+      "directions": "Cómo llegar",
+      "phone": "Teléfono",
+      "social": "Redes",
+      "whatsappMessage": "¡Hola! Me gustaría reservar un tratamiento.",
+      "whatsappLabel": "Enviar un WhatsApp a Alma Serena",
+      "instagramLabel": "Visitar Instagram",
+      "mapTitle": "Mapa de la zona donde se ubica el spa"
+    }
+  }
+}

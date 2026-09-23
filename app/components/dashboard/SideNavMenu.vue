@@ -1,25 +1,27 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import { useI18n } from "vue-i18n";
 import type { DashboardTab } from "~/types/dashboard";
 import type { IconName } from "~/types/icon";
 
+// Each tab id is also its i18n key (dashboard.tabs.<id>).
 interface NavTab {
   id: DashboardTab;
-  label: string;
   icon: IconName;
 }
 
 const TABS: NavTab[] = [
-  { id: "users", label: "Usuarios", icon: "users" },
-  { id: "bookings", label: "Citas", icon: "bookings" },
-  { id: "team", label: "Equipo", icon: "team" },
-  { id: "controls", label: "Controles", icon: "controls" },
-  { id: "metrics", label: "Métricas", icon: "metrics" },
+  { id: "users", icon: "users" },
+  { id: "bookings", icon: "bookings" },
+  { id: "team", icon: "team" },
+  { id: "controls", icon: "controls" },
+  { id: "metrics", icon: "metrics" },
 ];
 
 defineProps<{ activeTab: DashboardTab }>();
 const emit = defineEmits<{ "update:tab": [tab: DashboardTab] }>();
 
+const { t: trans } = useI18n();
 const collapsed = ref(false);
 </script>
 
@@ -32,24 +34,24 @@ const collapsed = ref(false);
         class="side-nav__toggle"
         :aria-expanded="!collapsed"
         aria-controls="dashboard-nav-tabs"
-        :aria-label="collapsed ? 'Expandir menú' : 'Colapsar menú'"
+        :aria-label="collapsed ? trans('dashboard.nav.expand') : trans('dashboard.nav.collapse')"
         @click="collapsed = !collapsed"
       >
         <AppIcon name="collapse" class="side-nav__toggle-icon" />
       </button>
 
-      <nav id="dashboard-nav-tabs" class="side-nav__tabs" aria-label="Secciones del panel">
+      <nav id="dashboard-nav-tabs" class="side-nav__tabs" :aria-label="trans('dashboard.nav.label')">
         <button
           v-for="tab in TABS"
           :key="tab.id"
           type="button"
           class="side-nav__tab"
           :aria-current="activeTab === tab.id ? 'page' : undefined"
-          :aria-label="collapsed ? tab.label : undefined"
+          :aria-label="collapsed ? trans(`dashboard.tabs.${tab.id}`) : undefined"
           @click="emit('update:tab', tab.id)"
         >
           <AppIcon :name="tab.icon" class="side-nav__tab-icon" />
-          <span class="side-nav__tab-label">{{ tab.label }}</span>
+          <span class="side-nav__tab-label">{{ trans(`dashboard.tabs.${tab.id}`) }}</span>
         </button>
       </nav>
     </div>

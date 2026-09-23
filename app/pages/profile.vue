@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import type { BookingRecord } from "~/types/booking";
 import type { ProfileUpdateInput } from "~/types/user";
 import { useSession } from "~/composables/useSession";
@@ -7,11 +8,16 @@ import { useUsers } from "~/composables/useUsers";
 import { useBookings } from "~/composables/useBookings";
 import { useToast } from "~/composables/useToast";
 import { categoryForService, stockImage } from "~/data/services";
-import { formatDateAtTime, formatLongDate, formatPhone } from "~/utils/format";
+import { useLocaleFormat } from "~/composables/useLocaleFormat";
+import { useServiceLabels } from "~/composables/useServiceLabels";
+import { formatPhone } from "~/utils/format";
 import { simulateRequest } from "~/utils/mock";
 
-definePageMeta({ path: "/perfil" });
-useHead({ title: "Perfil" });
+const { t: trans } = useI18n();
+const { formatDateAtTime, formatLongDate } = useLocaleFormat();
+const { serviceList } = useServiceLabels();
+
+useHead(() => ({ title: trans("profile.meta.title") }));
 
 const { user, displayName } = useSession();
 const { updateUser } = useUsers();
@@ -56,10 +62,10 @@ const history = computed<HistoryEntry[]>(() =>
       const category = categoryForService(booking.services[0] ?? "");
       return {
         id: booking.id,
-        name: booking.services.join(", "),
+        name: serviceList(booking.services),
         date: booking.appointmentAt,
         photoId: category?.photoId ?? FALLBACK_PHOTO_ID,
-        imageAlt: category?.imageAlt ?? "Productos de spa",
+        imageAlt: category ? trans(`services.categories.${category.id}.imageAlt`) : trans("profile.history.fallbackAlt"),
       };
     }),
 );
@@ -81,7 +87,7 @@ const editInitial = computed<ProfileUpdateInput>(() => ({
 function saveProfile(input: ProfileUpdateInput & { photoURL: string | null }): void {
   updateUser(user.value.id, input);
   editOpen.value = false;
-  toast.show("Tus datos se actualizaron.");
+  toast.show(trans("profile.edit.saved"));
 }
 
 // ── Cancel a booking ──
@@ -107,7 +113,7 @@ async function confirmSignOut(): Promise<void> {
   await simulateRequest();
   signingOut.value = false;
   signOutOpen.value = false;
-  toast.show("Modo demostración: la sesión permanece activa.");
+  toast.show(trans("signOutModal.demoNotice"));
 }
 
 // ── Image lightbox ──
@@ -120,7 +126,7 @@ const lightboxEntry = ref<HistoryEntry | null>(null);
     <div class="profile-container">
       <section class="profile-card" aria-labelledby="profile-name">
         <div class="profile-card__avatar">
-          <img v-if="user.photoURL" :src="user.photoURL" :alt="`Foto de perfil de ${displayName}`" class="profile-card__photo" />
+          <img v-if="user.photoURL" :src="user.photoURL" :alt="trans('profile.card.photoAlt', { name: displayName })" class="profile-card__photo" />
           <AppIcon v-else name="user" />
         </div>
         <div class="profile-card__info">
@@ -132,45 +138,53 @@ const lightboxEntry = ref<HistoryEntry | null>(null);
         </div>
         <button type="button" class="profile-card__edit" @click="editOpen = true">
           <AppIcon name="edit" />
-          Editar
+          {{ trans("actions.edit") }}
         </button>
       </section>
 
       <section class="profile-group" aria-labelledby="services-group-heading">
-        <h2 id="services-group-heading" class="profile-group__heading">Sobre tus tratamientos</h2>
+        <h2 id="services-group-heading" class="profile-group__heading">{{ trans("profile.treatments.title") }}</h2>
 
         <section class="profile-section" aria-labelledby="upcoming-heading">
-          <h3 id="upcoming-heading" class="profile-section__heading">Próximas citas</h3>
+          <h3 id="upcoming-heading" class="profile-section__heading">{{ trans("profile.upcoming.title") }}</h3>
           <p v-if="upcomingBookings.length === 0" class="profile-empty">
-            No tienes citas agendadas. ¡Regálate tu próximo momento de calma!
+            {{ trans("profile.upcoming.empty") }}
           </p>
           <ul v-else class="booking-list" role="list">
             <li v-for="booking in upcomingBookings" :key="booking.id" class="booking booking--confirmed">
-              <span class="booking__service">{{ booking.services.join(", ") }}</span>
+              <span class="booking__service">{{ serviceList(booking.services) }}</span>
               <time class="booking__line" :datetime="isoDate(booking.appointmentAt)">{{ formatDateAtTime(booking.appointmentAt) }}</time>
               <p class="booking__status">
-                Estado: <span class="booking__status-value">{{ booking.status === "closed" ? "Pagada" : "Confirmada" }}</span>
+                {{ trans("profile.status.label") }}
+                <span class="booking__status-value">
+                  {{ booking.status === "closed" ? trans("profile.status.paid") : trans("profile.status.confirmed") }}
+                </span>
               </p>
               <div v-if="booking.status !== 'closed'" class="booking__actions">
-                <button type="button" class="booking__cancel" @click="bookingToCancel = booking">Cancelar</button>
+                <button type="button" class="booking__cancel" @click="bookingToCancel = booking">
+                  {{ trans("actions.cancel") }}
+                </button>
               </div>
             </li>
           </ul>
         </section>
 
         <section v-if="cancelledBookings.length > 0" class="profile-section" aria-labelledby="cancelled-heading">
-          <h3 id="cancelled-heading" class="profile-section__heading">Citas canceladas</h3>
+          <h3 id="cancelled-heading" class="profile-section__heading">{{ trans("profile.cancelled.title") }}</h3>
           <ul class="booking-list" role="list">
             <li v-for="booking in cancelledBookings" :key="booking.id" class="booking booking--cancelled">
-              <span class="booking__service">{{ booking.services.join(", ") }}</span>
+              <span class="booking__service">{{ serviceList(booking.services) }}</span>
               <time class="booking__line" :datetime="isoDate(booking.appointmentAt)">{{ formatDateAtTime(booking.appointmentAt) }}</time>
-              <p class="booking__status">Estado: <span class="booking__status-value">Cancelada</span></p>
+              <p class="booking__status">
+                {{ trans("profile.status.label") }}
+                <span class="booking__status-value">{{ trans("profile.status.cancelled") }}</span>
+              </p>
             </li>
           </ul>
         </section>
 
         <section v-if="lastService" class="profile-section" aria-labelledby="last-service-heading">
-          <h3 id="last-service-heading" class="profile-section__heading">Último tratamiento</h3>
+          <h3 id="last-service-heading" class="profile-section__heading">{{ trans("profile.lastService.title") }}</h3>
           <article class="last-service">
             <span class="last-service__name">{{ lastService.name }}</span>
             <time class="last-service__date" :datetime="isoDate(lastService.date)">{{ formatLongDate(lastService.date) }}</time>
@@ -178,13 +192,15 @@ const lightboxEntry = ref<HistoryEntry | null>(null);
         </section>
 
         <section v-if="history.length > 0" class="profile-section" aria-labelledby="history-heading">
-          <h3 id="history-heading" class="profile-section__heading profile-section__heading--accent">Historial de tratamientos</h3>
+          <h3 id="history-heading" class="profile-section__heading profile-section__heading--accent">
+            {{ trans("profile.history.title") }}
+          </h3>
           <ol class="history-list">
             <li v-for="entry in history" :key="entry.id" class="history-list__item">
               <button
                 type="button"
                 class="history-list__image-btn"
-                :aria-label="`Ampliar imagen del tratamiento: ${entry.name}`"
+                :aria-label="trans('profile.history.enlarge', { name: entry.name })"
                 @click="lightboxEntry = entry"
               >
                 <img class="history-list__image" :src="stockImage(entry.photoId, 240)" :alt="entry.imageAlt" loading="lazy" />
@@ -199,12 +215,12 @@ const lightboxEntry = ref<HistoryEntry | null>(null);
       </section>
 
       <section class="profile-group" aria-labelledby="session-group-heading">
-        <h2 id="session-group-heading" class="profile-group__heading">Ajustes de sesión</h2>
+        <h2 id="session-group-heading" class="profile-group__heading">{{ trans("profile.session.title") }}</h2>
         <ProfileNotificationSettings />
         <ProfilePasskeyManager />
         <section class="profile-section profile-section--start" aria-labelledby="signout-heading">
-          <h3 id="signout-heading" class="profile-section__heading">Sesión</h3>
-          <button type="button" class="sign-out-btn" @click="signOutOpen = true">Cerrar sesión</button>
+          <h3 id="signout-heading" class="profile-section__heading">{{ trans("profile.session.heading") }}</h3>
+          <button type="button" class="sign-out-btn" @click="signOutOpen = true">{{ trans("actions.signOut") }}</button>
         </section>
       </section>
     </div>
@@ -221,29 +237,33 @@ const lightboxEntry = ref<HistoryEntry | null>(null);
 
   <ConfirmModal
     :open="!!bookingToCancel"
-    title="Cancelar cita"
-    confirm-label="Cancelar cita"
-    busy-label="Cancelando…"
+    :title="trans('profile.cancelModal.title')"
+    :confirm-label="trans('profile.cancelModal.title')"
+    :busy-label="trans('profile.cancelModal.cancelling')"
     :busy="cancelling"
     @close="bookingToCancel = null"
     @confirm="confirmCancel"
   >
-    ¿Seguro que quieres cancelar tu cita de
-    <strong v-if="bookingToCancel">
-      {{ bookingToCancel.services.join(", ") }} — {{ formatDateAtTime(bookingToCancel.appointmentAt) }}
-    </strong>?
+    <!-- The booking is emphasised mid-sentence, and word order differs per language. -->
+    <i18n-t v-if="bookingToCancel" keypath="profile.cancelModal.confirm" tag="span" scope="global">
+      <template #booking>
+        <strong>
+          {{ serviceList(bookingToCancel.services) }} — {{ formatDateAtTime(bookingToCancel.appointmentAt) }}
+        </strong>
+      </template>
+    </i18n-t>
   </ConfirmModal>
 
   <ConfirmModal
     :open="signOutOpen"
-    title="Cerrar sesión"
-    confirm-label="Cerrar sesión"
-    busy-label="Cerrando sesión…"
+    :title="trans('signOutModal.title')"
+    :confirm-label="trans('signOutModal.action')"
+    :busy-label="trans('signOutModal.signingOut')"
     :busy="signingOut"
     @close="signOutOpen = false"
     @confirm="confirmSignOut"
   >
-    ¿Seguro que quieres cerrar sesión?
+    {{ trans("signOutModal.confirm") }}
   </ConfirmModal>
 
   <ModalDialog :open="!!lightboxEntry" labelledby="lightbox-caption" dismissible width="wide" @close="lightboxEntry = null">

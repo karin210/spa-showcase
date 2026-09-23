@@ -1,16 +1,18 @@
 <script setup lang="ts">
+import { useI18n } from "vue-i18n";
 import { useToast } from "~/composables/useToast";
 
+const { t: trans } = useI18n();
 const { toasts, dismiss } = useToast();
 </script>
 
 <template>
-  <section class="toast-region" aria-label="Notificaciones" aria-live="polite">
+  <section class="toast-region" :aria-label="trans('toast.region')" aria-live="polite">
     <TransitionGroup name="toast" tag="ul" class="toast-list">
       <li v-for="toast in toasts" :key="toast.id" class="toast" role="status">
         <AppIcon name="info" />
         <span class="toast__message">{{ toast.message }}</span>
-        <button type="button" class="toast__close" aria-label="Cerrar aviso" @click="dismiss(toast.id)">
+        <button type="button" class="toast__close" :aria-label="trans('toast.close')" @click="dismiss(toast.id)">
           <AppIcon name="close" />
         </button>
       </li>

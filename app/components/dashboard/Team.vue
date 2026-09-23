@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import type { UserRecord, UserRole } from "~/types/user";
 import { useUsers } from "~/composables/useUsers";
 import { useSession } from "~/composables/useSession";
 import { useToast } from "~/composables/useToast";
 import { simulateRequest } from "~/utils/mock";
 
-const ROLES: { value: UserRole; label: string }[] = [
-  { value: "admin", label: "Admin" },
-  { value: "employee", label: "Empleado" },
-];
+// Each role is also its i18n key (dashboard.roles.<role>).
+const ROLES: UserRole[] = ["admin", "employee"];
 
+const { t: trans } = useI18n();
 const { users, setRole } = useUsers();
 const { user: sessionUser } = useSession();
 const toast = useToast();
@@ -20,13 +20,14 @@ const members = computed<UserRecord[]>(() =>
 );
 
 function roleLabel(role: UserRole | undefined): string {
-  return ROLES.find((entry) => entry.value === role)?.label ?? "";
+  return role ? trans(`dashboard.roles.${role}`) : "";
 }
 
 function changeRole(member: UserRecord, event: Event): void {
   const select = event.target as HTMLSelectElement;
-  setRole(member.id, select.value as UserRole);
-  toast.show(`${member.firstName} ahora es ${roleLabel(select.value as UserRole).toLowerCase()}.`);
+  const role = select.value as UserRole;
+  setRole(member.id, role);
+  toast.show(trans("dashboard.team.roleChanged", { name: member.firstName, role: roleLabel(role).toLowerCase() }));
   select.value = "";
 }
 
@@ -44,25 +45,25 @@ async function confirmRemove(): Promise<void> {
   setRole(member.id, undefined);
   removing.value = false;
   memberToRemove.value = null;
-  toast.show(`${member.firstName} ya no forma parte del equipo.`);
+  toast.show(trans("dashboard.team.removed", { name: member.firstName }));
 }
 </script>
 
 <template>
   <section class="panel" aria-labelledby="team-heading">
     <header class="panel-header">
-      <h2 id="team-heading" class="panel-heading">Equipo</h2>
-      <p class="panel-count">Total de miembros: {{ members.length }}</p>
+      <h2 id="team-heading" class="panel-heading">{{ trans("dashboard.tabs.team") }}</h2>
+      <p class="panel-count">{{ trans("dashboard.team.total", { count: members.length }) }}</p>
     </header>
 
     <div class="panel-toolbar">
       <SecondaryBtn @click="addOpen = true">
         <template #icon><AppIcon name="team" /></template>
-        Añadir miembro
+        {{ trans("dashboard.team.add") }}
       </SecondaryBtn>
     </div>
 
-    <p v-if="members.length === 0" class="panel-state">No hay miembros del equipo</p>
+    <p v-if="members.length === 0" class="panel-state">{{ trans("dashboard.team.empty") }}</p>
     <ul v-else class="person-list" role="list">
       <DashboardPersonCard v-for="member in members" :key="member.id" :user="member">
         <template #actions>
@@ -70,21 +71,21 @@ async function confirmRemove(): Promise<void> {
           <select
             class="panel-select"
             :disabled="member.id === sessionUser.id"
-            :title="member.id === sessionUser.id ? 'No puedes cambiar tu propio rol' : undefined"
-            :aria-label="`Cambiar rol de ${member.firstName}`"
+            :title="member.id === sessionUser.id ? trans('dashboard.team.ownRole') : undefined"
+            :aria-label="trans('dashboard.team.changeRoleOf', { name: member.firstName })"
             @change="changeRole(member, $event)"
           >
-            <option value="" disabled selected hidden>Cambiar rol</option>
-            <option v-for="role in ROLES" :key="role.value" :value="role.value">{{ role.label }}</option>
+            <option value="" disabled selected hidden>{{ trans("dashboard.team.changeRole") }}</option>
+            <option v-for="role in ROLES" :key="role" :value="role">{{ roleLabel(role) }}</option>
           </select>
           <button
             type="button"
             class="remove-btn"
             :disabled="member.id === sessionUser.id"
-            :title="member.id === sessionUser.id ? 'No puedes quitar tu propia cuenta del equipo' : undefined"
+            :title="member.id === sessionUser.id ? trans('dashboard.team.ownAccount') : undefined"
             @click="memberToRemove = member"
           >
-            Remover
+            {{ trans("dashboard.team.remove") }}
           </button>
         </template>
       </DashboardPersonCard>
@@ -94,16 +95,18 @@ async function confirmRemove(): Promise<void> {
 
     <ConfirmModal
       :open="!!memberToRemove"
-      title="Quitar del equipo"
-      confirm-label="Quitar del equipo"
-      busy-label="Quitando…"
+      :title="trans('dashboard.team.removeModal.title')"
+      :confirm-label="trans('dashboard.team.removeModal.title')"
+      :busy-label="trans('dashboard.team.removeModal.removing')"
       :busy="removing"
       @close="memberToRemove = null"
       @confirm="confirmRemove"
     >
-      ¿Seguro que quieres remover a
-      <strong>{{ memberToRemove?.firstName }} {{ memberToRemove?.lastName }}</strong>
-      del equipo? Perderá acceso al panel y volverá a ser una cuenta de cliente.
+      <i18n-t v-if="memberToRemove" keypath="dashboard.team.removeModal.confirm" tag="span" scope="global">
+        <template #name>
+          <strong>{{ memberToRemove.firstName }} {{ memberToRemove.lastName }}</strong>
+        </template>
+      </i18n-t>
     </ConfirmModal>
   </section>
 </template>

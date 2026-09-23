@@ -1,23 +1,29 @@
 <script setup lang="ts">
+import { useI18n } from "vue-i18n";
 import { serviceCategories } from "~/data/services";
-import { formatCurrency } from "~/utils/format";
+import { useLocaleFormat } from "~/composables/useLocaleFormat";
 
 // Checkbox list of every treatment, grouped by category. Shared by the dashboard's
-// "Crear cita"/"Deshabilitar horario" forms and the public /agendar booking flow.
+// "Crear cita"/"Deshabilitar horario" forms. The model holds service ids.
 const selected = defineModel<string[]>({ required: true });
 defineProps<{ legend: string }>();
+
+const { t: trans } = useI18n();
+const { formatCurrency } = useLocaleFormat();
 </script>
 
 <template>
   <fieldset class="service-picker">
     <legend class="service-picker__legend">{{ legend }}</legend>
     <fieldset v-for="category in serviceCategories" :key="category.id" class="service-picker__group">
-      <legend class="service-picker__category">{{ category.title }}</legend>
-      <label v-for="service in category.services" :key="service.name" class="service-picker__option">
-        <input v-model="selected" type="checkbox" :value="service.name" class="service-picker__checkbox" />
+      <legend class="service-picker__category">{{ trans(`services.categories.${category.id}.title`) }}</legend>
+      <label v-for="service in category.services" :key="service.id" class="service-picker__option">
+        <input v-model="selected" type="checkbox" :value="service.id" class="service-picker__checkbox" />
         <span class="service-picker__option-text">
-          <span class="service-picker__option-name">{{ service.name }}</span>
-          <span class="service-picker__option-meta">{{ service.durationMinutes }} min · {{ formatCurrency(service.price) }}</span>
+          <span class="service-picker__option-name">{{ trans(`services.items.${service.id}.name`) }}</span>
+          <span class="service-picker__option-meta">
+            {{ trans("services.minutes", { count: service.durationMinutes }) }} · {{ formatCurrency(service.price) }}
+          </span>
         </span>
       </label>
     </fieldset>

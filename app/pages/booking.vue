@@ -1,15 +1,21 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { useSession } from "~/composables/useSession";
 import { useBookings } from "~/composables/useBookings";
 import { useBlacklist } from "~/composables/useBlacklist";
 import { isDateFullyBooked } from "~/utils/availability";
-import { formatTime, formatWeekdayDate } from "~/utils/format";
+import { useLocaleFormat } from "~/composables/useLocaleFormat";
+import { useServiceLabels } from "~/composables/useServiceLabels";
 import { toDateKey } from "~/utils/date";
 import { simulateRequest } from "~/utils/mock";
 
-definePageMeta({ path: "/agendar" });
-useHead({ title: "Agendar" });
+const { t: trans } = useI18n();
+const localePath = useLocalePath();
+const { formatTime, formatWeekdayDate } = useLocaleFormat();
+const { serviceList } = useServiceLabels();
+
+useHead(() => ({ title: trans("booking.meta.title") }));
 
 const { user, displayName } = useSession();
 const { addBooking } = useBookings();
@@ -17,16 +23,16 @@ const { records: blacklist } = useBlacklist();
 
 type StepId = "services" | "date" | "time" | "summary";
 
+// Each step id is also its i18n key (booking.steps.<id>.*).
 interface StepDef {
   id: StepId;
-  title: string;
 }
 
 const STEPS: StepDef[] = [
-  { id: "services", title: "¿Qué tratamientos quieres reservar?" },
-  { id: "date", title: "¿Qué día te gustaría venir?" },
-  { id: "time", title: "¿A qué hora?" },
-  { id: "summary", title: "Confirma tu reserva" },
+  { id: "services" },
+  { id: "date" },
+  { id: "time" },
+  { id: "summary" },
 ];
 
 // ── Collected selections ──
@@ -105,11 +111,11 @@ const progressSteps = computed(() =>
 function progressLabel(id: StepId): string {
   switch (id) {
     case "services":
-      return "Tratamientos";
+      return trans("booking.steps.services.label");
     case "date":
-      return "Fecha";
+      return trans("booking.steps.date.label");
     case "time":
-      return "Hora";
+      return trans("booking.steps.time.label");
     case "summary":
       return "";
   }
@@ -118,7 +124,7 @@ function progressLabel(id: StepId): string {
 function progressValue(id: StepId): string {
   switch (id) {
     case "services":
-      return services.value.join(", ");
+      return serviceList(services.value);
     case "date":
       return dateLabel.value;
     case "time":
@@ -170,23 +176,22 @@ async function onConfirm(): Promise<void> {
   <main class="booking-page">
     <div class="booking-container">
       <header class="booking-header">
-        <h1 class="booking-header__title">Agendar cita</h1>
+        <h1 class="booking-header__title">{{ trans("booking.title") }}</h1>
       </header>
 
       <section v-if="booked" class="booking-success" aria-live="polite">
         <span class="booking-success__icon" aria-hidden="true">✓</span>
-        <h2 class="booking-success__title">¡Tu cita quedó confirmada!</h2>
-        <p class="booking-success__text">
-          Te esperamos el {{ dateLabel }} a las {{ timeLabel }}. Puedes ver o cancelar tu cita desde tu perfil en
-          cualquier momento.
-        </p>
-        <NuxtLink to="/perfil" class="booking-success__link">Ir a mi perfil</NuxtLink>
-        <NuxtLink to="/" class="booking-success__link booking-success__link--ghost">Volver al inicio</NuxtLink>
+        <h2 class="booking-success__title">{{ trans("booking.success.title") }}</h2>
+        <p class="booking-success__text">{{ trans("booking.success.text", { date: dateLabel, time: timeLabel }) }}</p>
+        <NuxtLink :to="localePath('profile')" class="booking-success__link">{{ trans("booking.success.profile") }}</NuxtLink>
+        <NuxtLink :to="localePath('index')" class="booking-success__link booking-success__link--ghost">
+          {{ trans("actions.backToHome") }}
+        </NuxtLink>
       </section>
 
       <template v-else>
-        <nav v-if="progressSteps.length > 0" class="booking-progress" aria-label="Progreso de la reserva">
-          <p class="booking-progress__subtitle">Datos de tu reserva</p>
+        <nav v-if="progressSteps.length > 0" class="booking-progress" :aria-label="trans('booking.progress.label')">
+          <p class="booking-progress__subtitle">{{ trans("booking.progress.title") }}</p>
           <TransitionGroup tag="ul" name="row" class="booking-progress__list" role="list">
             <li
               v-for="{ step, index } in progressSteps"
@@ -207,10 +212,10 @@ async function onConfirm(): Promise<void> {
                 type="button"
                 class="booking-progress__edit"
                 :disabled="!canEdit(index) || index === activeIndex"
-                :aria-label="`Editar: ${progressLabel(step.id)}`"
+                :aria-label="trans('booking.progress.editLabel', { step: progressLabel(step.id) })"
                 @click="editStep(index)"
               >
-                Editar
+                {{ trans("actions.edit") }}
               </button>
             </li>
           </TransitionGroup>
@@ -220,7 +225,9 @@ async function onConfirm(): Promise<void> {
           <Transition :name="transitionName" mode="out-in">
             <section :key="activeStep.id" class="booking-panel" :aria-labelledby="`panel-title-${activeStep.id}`">
               <header class="booking-panel__head">
-                <h2 :id="`panel-title-${activeStep.id}`" class="booking-panel__title">{{ activeStep.title }}</h2>
+                <h2 :id="`panel-title-${activeStep.id}`" class="booking-panel__title">
+                  {{ trans(`booking.steps.${activeStep.id}.title`) }}
+                </h2>
               </header>
 
               <div class="booking-panel__body">
@@ -228,7 +235,7 @@ async function onConfirm(): Promise<void> {
                   <BookingServicesMenu v-model="services" />
                   <Transition name="continue-reveal">
                     <SecondaryBtn v-if="services.length > 0" class="booking-panel__continue" @click="advance">
-                      Continuar ({{ services.length }})
+                      {{ trans("booking.services.continue", { count: services.length }) }}
                     </SecondaryBtn>
                   </Transition>
                 </template>

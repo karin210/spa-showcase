@@ -1,0 +1,156 @@
+{
+  "services": {
+    "categories": {
+      "massages": {
+        "title": "Masajes",
+        "blurb": "Libera la tensión y recupera tu calma",
+        "imageAlt": "Terapeuta aplicando aceite aromático durante un masaje relajante",
+        "description": "Nuestros masajes combinan técnicas suecas, de tejido profundo y terapias orientales con aceites prensados en frío. Trabajamos en cabinas cálidas y silenciosas, con camillas térmicas y música elegida para cada ritmo.",
+        "idealFor": ["Tensión en cuello y espalda", "Estrés y problemas de sueño", "Recuperación después del ejercicio"]
+      },
+      "facials": {
+        "title": "Faciales",
+        "blurb": "Una piel luminosa empieza con un respiro",
+        "imageAlt": "Clienta recibiendo una mascarilla facial con pincel",
+        "description": "Diagnosticamos tu piel antes de cada facial para elegir los activos adecuados. Usamos cosmética natural mexicana, libre de parabenos y sin pruebas en animales, y terminamos con un masaje facial y de cuero cabelludo.",
+        "idealFor": ["Piel deshidratada o apagada", "Primeros signos de la edad", "Preparación para un evento"]
+      },
+      "body-rituals": {
+        "title": "Rituales corporales",
+        "blurb": "Tradición, aromas y descanso profundo",
+        "imageAlt": "Ritual corporal con frutas, flores y aceites sobre piso de talavera",
+        "description": "Rituales inspirados en la tradición mexicana: sal de Colima, cacao de Tabasco y barro de la región. Exfoliamos, nutrimos y envolvemos la piel, y cerramos con una ducha tibia y una infusión de temporada.",
+        "idealFor": ["Piel áspera o sin brillo", "Sensación de pesadez", "Regalar una experiencia especial"]
+      },
+      "hydrotherapy": {
+        "title": "Hidroterapia",
+        "blurb": "Calor, vapor y agua para renovar cuerpo y mente",
+        "imageAlt": "Sauna de madera iluminada con luz cálida",
+        "description": "Calor, vapor y agua en contraste para activar la circulación y soltar el cuerpo. Nuestro temazcal está guiado por una temazcalera certificada y el circuito puede combinarse con cualquier otro tratamiento.",
+        "idealFor": ["Desintoxicar y activar la circulación", "Dolor muscular", "Un día completo de descanso"]
+      }
+    },
+    "items": {
+      "relaxing-massage": {
+        "name": "Masaje relajante",
+        "description": "Movimientos suaves y envolventes que bajan el ritmo del sistema nervioso."
+      },
+      "deep-tissue-massage": {
+        "name": "Masaje de tejido profundo",
+        "description": "Presión firme y lenta sobre contracturas y puntos de tensión crónica."
+      },
+      "hot-stone-massage": {
+        "name": "Masaje con piedras calientes",
+        "description": "Piedras volcánicas templadas que relajan el músculo antes de trabajarlo."
+      },
+      "aromatherapy-massage": {
+        "name": "Masaje de aromaterapia",
+        "description": "Mezcla de aceites esenciales elegida contigo según cómo quieras sentirte."
+      },
+      "foot-reflexology": {
+        "name": "Reflexología podal",
+        "description": "Presión en puntos reflejos de los pies para equilibrar todo el cuerpo."
+      },
+      "hydrating-facial": {
+        "name": "Facial hidratante",
+        "description": "Limpieza, mascarilla de ácido hialurónico y sérum para una piel jugosa."
+      },
+      "deep-cleansing-facial": {
+        "name": "Limpieza facial profunda",
+        "description": "Vapor, extracción cuidadosa y mascarilla calmante para poros limpios."
+      },
+      "anti-aging-facial": {
+        "name": "Facial antiedad",
+        "description": "Activos reafirmantes, radiofrecuencia suave y masaje kobido."
+      },
+      "enzyme-peel": {
+        "name": "Peeling enzimático",
+        "description": "Exfoliación con enzimas de papaya y piña, sin irritar la piel."
+      },
+      "sea-salt-scrub": {
+        "name": "Exfoliación de sal marina",
+        "description": "Sal de Colima con aceite de coco para renovar la piel de todo el cuerpo."
+      },
+      "chocolate-wrap": {
+        "name": "Envoltura de chocolate",
+        "description": "Cacao antioxidante que nutre la piel y despierta los sentidos."
+      },
+      "seaweed-wrap": {
+        "name": "Envoltura de algas marinas",
+        "description": "Algas ricas en minerales que tonifican y desinflaman."
+      },
+      "mud-detox-ritual": {
+        "name": "Ritual detox de barro",
+        "description": "Barro volcánico, vapor de hierbas y un masaje ligero para cerrar."
+      },
+      "spa-circuit": {
+        "name": "Circuito de spa",
+        "description": "Sauna, vapor de eucalipto, regadera de contraste y alberca templada."
+      },
+      "temazcal": {
+        "name": "Temazcal",
+        "description": "Baño de vapor ancestral con hierbas medicinales, guiado paso a paso."
+      },
+      "flotation-bath": {
+        "name": "Baño de flotación",
+        "description": "Tina con sales de Epsom en penumbra para flotar sin esfuerzo."
+      }
+    },
+    "minutes": "{count} min",
+    "page": {
+      "meta": {
+        "title": "Servicios"
+      },
+      "banner": {
+        "eyebrow": "Tratamientos y amenidades",
+        "title": "Todo lo que te espera en Alma Serena",
+        "imageAlt": "Espacio de descanso del spa junto a una alberca rodeada de plantas"
+      },
+      "intro": "Cada visita empieza con una breve consulta para conocer cómo llegas y qué necesitas. A partir de ahí ajustamos la presión, los aromas y los tiempos de cada tratamiento. Todos incluyen acceso a nuestras áreas de descanso antes y después de tu sesión.",
+      "introLabel": "Introducción",
+      "categoriesNav": "Categorías de servicios",
+      "idealFor": "Ideal para",
+      "amenities": {
+        "title": "Amenidades",
+        "subtitle": "Incluidas con cualquier tratamiento",
+        "items": {
+          "pool": {
+            "title": "Alberca templada",
+            "description": "Agua a 32 °C rodeada de jardín, abierta a todos los huéspedes del día.",
+            "imageAlt": "Alberca iluminada al atardecer junto a una terraza con sombrillas"
+          },
+          "sauna": {
+            "title": "Sauna y vapor",
+            "description": "Sauna de madera de cedro y cabina de vapor con eucalipto y menta.",
+            "imageAlt": "Sauna de madera iluminada con luz cálida"
+          },
+          "lounge": {
+            "title": "Sala de descanso",
+            "description": "Camas amplias, mantas y silencio para quedarte todo el tiempo que quieras.",
+            "imageAlt": "Habitación de descanso con cama amplia, madera y luz de tarde"
+          },
+          "tea-bar": {
+            "title": "Barra de infusiones",
+            "description": "Tés de hierbas locales, agua de frutas y snacks saludables sin costo.",
+            "imageAlt": "Taza de té de hierbas junto a flores secas y una hoja de palma"
+          },
+          "locker-rooms": {
+            "title": "Vestidores completos",
+            "description": "Lockers, batas, sandalias, regaderas y productos de baño naturales.",
+            "imageAlt": "Toalla enrollada, dispensador de jabón, vela y tulipanes"
+          },
+          "parking": {
+            "title": "Estacionamiento",
+            "description": "Estacionamiento gratuito para clientes, con acceso sin escalones.",
+            "imageAlt": "Vista aérea de un estacionamiento con autos"
+          }
+        }
+      },
+      "cta": {
+        "title": "¿Lista para tu momento de calma?",
+        "text": "Elige tus tratamientos y reserva en menos de un minuto.",
+        "action": "Reservar tratamiento"
+      }
+    }
+  }
+}
