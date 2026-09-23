@@ -17,11 +17,6 @@ async function handleInstall(): Promise<void> {
     isInstalling.value = false;
   }
 }
-
-function scrollToServices(): void {
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  document.querySelector("#services")?.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" });
-}
 </script>
 
 <template>
@@ -48,8 +43,7 @@ function scrollToServices(): void {
         <p class="hero__eyebrow">{{ trans("home.hero.eyebrow") }}</p>
         <h1 id="hero-title" class="hero__title">{{ trans("home.hero.title") }}</h1>
         <div class="hero__cta-wrapper">
-          <PrimaryBtn :link="localePath('booking')">{{ trans("home.hero.book") }}</PrimaryBtn>
-          <PrimaryBtn class="hero__cta-ghost" @click="scrollToServices">{{ trans("home.hero.viewServices") }}</PrimaryBtn>
+          <PrimaryBtn id="booking-cta" :link="localePath('booking')">{{ trans("home.hero.book") }}</PrimaryBtn>
           <PrimaryBtn v-if="canInstall" class="hero__cta-ghost" :disabled="isInstalling" @click="handleInstall">
             {{ isInstalling ? trans("home.hero.installing") : trans("home.hero.installApp") }}
           </PrimaryBtn>
