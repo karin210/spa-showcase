@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref } from "vue";
+import { computed, nextTick, ref } from "vue";
 import { useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { useSession } from "~/composables/useSession";
@@ -20,19 +20,14 @@ const { user, isStaff } = useSession();
 
 const mobileMenuOpen = ref(false);
 
-// Offers both languages up front, below the header. It starts hidden and slides in
-// on mount; dismissing it (or picking a language) is kept in shared state so it
-// stays hidden on the other routes' headers too. Not persisted: a full page load
-// shows it again.
+// Offers both languages up front, below the header. It is server-rendered, so it is
+// in place from the first paint instead of popping in after hydration and pushing the
+// page down; only dismissing it animates. Dismissing it (or picking a language) is
+// kept in shared state so it stays hidden on the other routes' headers too. Not
+// persisted: a full page load shows it again.
 const languageBannerDismissed = useState<boolean>("language-banner-dismissed", () => false);
-const languageBannerVisible = ref(false);
-
-onMounted(() => {
-  if (!languageBannerDismissed.value) languageBannerVisible.value = true;
-});
 
 function dismissLanguageBanner(): void {
-  languageBannerVisible.value = false;
   languageBannerDismissed.value = true;
 }
 
@@ -91,6 +86,9 @@ async function onSectionClick(link: SectionLink): Promise<void> {
       </nav>
 
       <div class="site-header__actions">
+        <!-- Desktop only: below 48em the same toggle lives in the mobile drawer. -->
+        <LanguageToggle class="site-header__language" />
+
         <NuxtLink :to="localePath('booking')" class="site-header__icon-btn" :aria-label="trans('actions.book')">
           <AppIcon name="calendar" />
         </NuxtLink>
@@ -121,7 +119,7 @@ async function onSectionClick(link: SectionLink): Promise<void> {
   </header>
 
   <Transition name="language-banner-slide">
-    <section v-if="languageBannerVisible" class="language-banner" :aria-label="trans('languageBanner.prompt')">
+    <section v-if="!languageBannerDismissed" class="language-banner" :aria-label="trans('languageBanner.prompt')">
       <div></div>
       <p class="language-banner__text">{{ trans("languageBanner.prompt") }}</p>
 
@@ -298,6 +296,12 @@ async function onSectionClick(link: SectionLink): Promise<void> {
   gap: 0.5rem;
 }
 
+/* Scoped under the actions row to outrank LanguageToggle's own equal-specificity
+   display rule. Shown from 48em up, alongside the desktop nav. */
+.site-header__actions .site-header__language {
+  display: none;
+}
+
 .site-header__icon-btn {
   display: flex;
   align-items: center;
@@ -443,14 +447,13 @@ async function onSectionClick(link: SectionLink): Promise<void> {
   outline: 2px solid var(--color-focus);
 }
 
-.language-banner-slide-enter-active,
+/* Only the exit animates: the banner is server-rendered, so there is no enter. */
 .language-banner-slide-leave-active {
   transition:
     opacity 0.3s ease,
     transform 0.3s ease;
 }
 
-.language-banner-slide-enter-from,
 .language-banner-slide-leave-to {
   opacity: 0;
   transform: translateY(-100%);
@@ -562,6 +565,11 @@ async function onSectionClick(link: SectionLink): Promise<void> {
     margin-right: auto;
   }
 
+  .site-header__actions .site-header__language {
+    display: flex;
+    margin-right: 0.25rem;
+  }
+
   .site-header__nav {
     display: block;
   }
@@ -580,12 +588,10 @@ async function onSectionClick(link: SectionLink): Promise<void> {
   }
 
   /* Keep only the fade for the language banner. */
-  .language-banner-slide-enter-active,
   .language-banner-slide-leave-active {
     transition: opacity 0.3s ease;
   }
 
-  .language-banner-slide-enter-from,
   .language-banner-slide-leave-to {
     transform: none;
   }
