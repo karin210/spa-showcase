@@ -26,8 +26,6 @@ function byDateAsc(a: BookingRecord, b: BookingRecord): number {
 
 const now = Date.now();
 
-const pendingBookings = computed(() => myBookings.value.filter((b) => b.status === "pending").sort(byDateAsc));
-
 // A closed booking is normally one already attended, but staff can register a prepaid
 // visit ahead of time; until it happens it still counts as upcoming.
 const upcomingBookings = computed(() =>
@@ -86,17 +84,6 @@ function saveProfile(input: ProfileUpdateInput & { photoURL: string | null }): v
   toast.show("Tus datos se actualizaron.");
 }
 
-// ── Accept a rescheduled time ──
-const acceptingId = ref<string | null>(null);
-
-async function acceptReschedule(booking: BookingRecord): Promise<void> {
-  acceptingId.value = booking.id;
-  await simulateRequest();
-  updateBooking(booking.id, { status: "confirmed", rescheduleProposedAt: null, previousAppointmentAt: null });
-  acceptingId.value = null;
-  toast.show("Aceptaste la nueva fecha. ¡Te esperamos!");
-}
-
 // ── Cancel a booking ──
 const bookingToCancel = ref<BookingRecord | null>(null);
 const cancelling = ref(false);
@@ -151,40 +138,6 @@ const lightboxEntry = ref<HistoryEntry | null>(null);
 
       <section class="profile-group" aria-labelledby="services-group-heading">
         <h2 id="services-group-heading" class="profile-group__heading">Sobre tus tratamientos</h2>
-
-        <section v-if="pendingBookings.length > 0" class="profile-section" aria-labelledby="pending-heading">
-          <h3 id="pending-heading" class="profile-section__heading">Citas pendientes de confirmación</h3>
-          <ul class="booking-list" role="list">
-            <li v-for="booking in pendingBookings" :key="booking.id" class="booking booking--pending">
-              <span class="booking__service">{{ booking.services.join(", ") }}</span>
-              <template v-if="booking.rescheduleProposedAt">
-                <p class="booking__rescheduled">El spa movió tu cita</p>
-                <p class="booking__line booking__line--strong">
-                  Fecha sugerida:
-                  <time :datetime="isoDate(booking.rescheduleProposedAt)">{{ formatDateAtTime(booking.rescheduleProposedAt) }}</time>
-                </p>
-                <p v-if="booking.previousAppointmentAt" class="booking__line">
-                  Fecha anterior:
-                  <del><time :datetime="isoDate(booking.previousAppointmentAt)">{{ formatDateAtTime(booking.previousAppointmentAt) }}</time></del>
-                </p>
-              </template>
-              <time v-else class="booking__line" :datetime="isoDate(booking.appointmentAt)">
-                {{ formatDateAtTime(booking.appointmentAt) }}
-              </time>
-              <p class="booking__status">Estado: <span class="booking__status-value">Pendiente</span></p>
-              <div class="booking__actions">
-                <SecondaryBtn
-                  v-if="booking.rescheduleProposedAt"
-                  :disabled="acceptingId === booking.id"
-                  @click="acceptReschedule(booking)"
-                >
-                  {{ acceptingId === booking.id ? "Aceptando…" : "Aceptar nueva fecha" }}
-                </SecondaryBtn>
-                <button type="button" class="booking__cancel" @click="bookingToCancel = booking">Cancelar</button>
-              </div>
-            </li>
-          </ul>
-        </section>
 
         <section class="profile-section" aria-labelledby="upcoming-heading">
           <h3 id="upcoming-heading" class="profile-section__heading">Próximas citas</h3>
