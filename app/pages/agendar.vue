@@ -225,7 +225,7 @@ async function onConfirm(): Promise<void> {
 
               <div class="booking-panel__body">
                 <template v-if="activeStep.id === 'services'">
-                  <ServicePicker v-model="services" legend="Elige uno o más tratamientos" />
+                  <BookingServicesMenu v-model="services" />
                   <Transition name="continue-reveal">
                     <SecondaryBtn v-if="services.length > 0" class="booking-panel__continue" @click="advance">
                       Continuar ({{ services.length }})
