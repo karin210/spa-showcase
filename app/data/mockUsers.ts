@@ -3,8 +3,10 @@ import { addDays } from "~/utils/date";
 
 export const SESSION_USER_ID = "u-valeria";
 
-function portrait(photoId: string): string {
-  return `https://images.unsplash.com/photo-${photoId}?w=240&h=240&q=75&auto=format&fit=crop&crop=faces`;
+// Accepts an Unsplash photo id or a root-relative path to a file under /public.
+function portrait(photo: string): string {
+  if (photo.startsWith("/")) return photo;
+  return `https://images.unsplash.com/photo-${photo}?w=240&h=240&q=75&auto=format&fit=crop&crop=faces`;
 }
 
 interface UserSeed {
@@ -18,7 +20,7 @@ interface UserSeed {
 }
 
 const SEEDS: UserSeed[] = [
-  { id: SESSION_USER_ID, firstName: "Valeria", lastName: "Ortiz Mendoza", photo: "1531746020798-e6953c6e8e04", role: "admin", daysAgo: 540 },
+  { id: SESSION_USER_ID, firstName: "Valeria", lastName: "Ortiz Mendoza", photo: "/profile-photo-woman.jpg", role: "admin", daysAgo: 540 },
   { id: "u-daniela", firstName: "Daniela", lastName: "Cruz Rivas", photo: "1494790108377-be9c29b29330", role: "employee", daysAgo: 420 },
   { id: "u-marco", firstName: "Marco", lastName: "Salinas Pérez", photo: "1507003211169-0a1dd7228f2d", role: "employee", daysAgo: 390 },
   { id: "u-lucia", firstName: "Lucía", lastName: "Hernández Soto", photo: "1438761681033-6461ffad8d80", daysAgo: 310 },
