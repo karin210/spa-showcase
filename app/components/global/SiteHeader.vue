@@ -68,6 +68,7 @@ async function confirmSignOut(): Promise<void> {
             </button>
           </li>
           <li><NuxtLink to="/about-us" class="site-header__nav-link">Nosotros</NuxtLink></li>
+          <li><NuxtLink to="/work-with-us" class="site-header__nav-link">Vacantes</NuxtLink></li>
           <li v-if="isStaff">
             <NuxtLink to="/panel-administrativo" class="site-header__nav-link">Panel administrativo</NuxtLink>
           </li>
@@ -135,6 +136,7 @@ async function confirmSignOut(): Promise<void> {
       <li><NuxtLink to="/agendar" class="mobile-nav__link" @click="closeMenu">Agendar</NuxtLink></li>
       <li><NuxtLink to="/about-us" class="mobile-nav__link" @click="closeMenu">Nosotros</NuxtLink></li>
       <li><NuxtLink to="/services" class="mobile-nav__link" @click="closeMenu">Servicios</NuxtLink></li>
+      <li><NuxtLink to="/work-with-us" class="mobile-nav__link" @click="closeMenu">Vacantes</NuxtLink></li>
       <li v-for="link in sectionLinks" :key="link.target">
         <button type="button" class="mobile-nav__link" @click="onSectionClick(link)">{{ link.label }}</button>
       </li>

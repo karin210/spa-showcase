@@ -1,0 +1,84 @@
+import type { Vacancy, WorkBenefit } from "~/types/vacancy";
+
+// Placeholder copy for the /work-with-us page. Every vacancy below is fictional.
+
+export const WORK_BANNER = {
+  photoId: "1519823551278-64ac92734fb1",
+  imageAlt: "Manos de una terapeuta dando un masaje en la espalda",
+} as const;
+
+export const WORK_INTRO =
+  "Buscamos personas que disfruten cuidar a otras. En Alma Serena encontrarás un equipo cálido, horarios respetuosos y espacio para seguir aprendiendo.";
+
+export const WORK_BENEFITS: WorkBenefit[] = [
+  { title: "Prestaciones de ley y más", description: "IMSS desde el primer día, aguinaldo de 30 días y vales de despensa." },
+  { title: "Formación continua", description: "Dos cursos de especialización pagados al año y certificaciones internas." },
+  { title: "Tratamientos para ti", description: "Un tratamiento al mes sin costo y 40 % de descuento para tu familia." },
+  { title: "Horarios humanos", description: "Turnos fijos publicados con un mes de anticipación y dos días de descanso." },
+];
+
+export const VACANCIES: Vacancy[] = [
+  {
+    id: "massage-therapist",
+    title: "Terapeuta de masaje",
+    employmentType: "Tiempo completo",
+    schedule: "Martes a sábado, 11:00 a 20:00",
+    salary: "$14,000 – $18,000 MXN + comisiones",
+    summary:
+      "Realizarás masajes relajantes, de tejido profundo y con piedras calientes, adaptando cada sesión a lo que la persona necesita ese día.",
+    responsibilities: [
+      "Realizar la consulta breve de bienvenida antes de cada sesión",
+      "Aplicar masajes del menú con técnica y presión adecuadas",
+      "Preparar y dejar lista la cabina entre sesiones",
+      "Registrar observaciones y recomendaciones en el expediente de cada cliente",
+    ],
+    requirements: [
+      "Certificación en masoterapia o carrera técnica afín",
+      "Al menos 2 años de experiencia en spa u hotel",
+      "Trato amable y discreto",
+      "Deseable: manejo de piedras calientes o reflexología",
+    ],
+  },
+  {
+    id: "cosmetologist",
+    title: "Cosmetóloga facial",
+    employmentType: "Medio tiempo",
+    schedule: "Jueves a domingo, 10:00 a 15:00",
+    salary: "$9,000 – $11,000 MXN + comisiones",
+    summary:
+      "Te encargarás de nuestros faciales, desde el diagnóstico de piel hasta la recomendación de cuidados en casa.",
+    responsibilities: [
+      "Diagnosticar el tipo y estado de la piel de cada cliente",
+      "Realizar faciales hidratantes, antiedad y de limpieza profunda",
+      "Recomendar rutinas de cuidado con nuestra línea de productos",
+      "Mantener el control de inventario de la cabina facial",
+    ],
+    requirements: [
+      "Licenciatura o carrera técnica en cosmetología",
+      "Al menos 1 año de experiencia en cabina",
+      "Conocimiento de activos cosméticos y aparatología básica",
+      "Disponibilidad para trabajar fines de semana",
+    ],
+  },
+  {
+    id: "front-desk",
+    title: "Recepcionista y atención a clientes",
+    employmentType: "Tiempo completo",
+    schedule: "Lunes a viernes, 9:00 a 17:00",
+    salary: "$11,000 – $12,500 MXN",
+    summary:
+      "Serás la primera cara de Alma Serena: recibirás a cada cliente, organizarás la agenda y cuidarás que la visita fluya sin prisas.",
+    responsibilities: [
+      "Recibir a los clientes y guiarlos a vestidores y áreas de descanso",
+      "Gestionar reservas por teléfono, WhatsApp y el sistema en línea",
+      "Cobrar servicios y hacer el corte de caja diario",
+      "Resolver dudas sobre tratamientos, paquetes y certificados de regalo",
+    ],
+    requirements: [
+      "Bachillerato terminado",
+      "Experiencia en atención a clientes o recepción",
+      "Manejo de computadora y agenda digital",
+      "Deseable: inglés conversacional",
+    ],
+  },
+];
