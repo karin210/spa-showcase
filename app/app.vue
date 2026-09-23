@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import { watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { BRAND, TITLE_SEPARATOR } from "~/data/brand";
-import { usePwaInstall } from "~/composables/usePwaInstall";
 
 const { t: trans } = useI18n();
 
@@ -25,16 +23,6 @@ useHead(() => ({
   // of the catalogue on purpose: vue-i18n reads a literal pipe as a plural separator.
   titleTemplate: (title?: string) => (title ? `${title}${TITLE_SEPARATOR}${BRAND}` : BRAND),
 }));
-
-const { canInstall, install } = usePwaInstall();
-
-// Spawns the browser's own native install popup as soon as it's available — canInstall
-// only ever flips false -> true once per session (see usePwaInstall), so this fires
-// at most once, and also hides the hero "Descargar app" button, since the one-shot
-// native prompt is already spent at that point.
-watch(canInstall, (installable) => {
-  if (installable) void install();
-});
 </script>
 
 <template>

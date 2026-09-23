@@ -73,8 +73,8 @@ export default defineNuxtConfig({
     // the next navigation or while the tab is hidden, so the reload goes unnoticed.
     registerType: "prompt",
     // Enables $pwa.showInstallPrompt/install() (via the auto-imported usePWA()
-    // composable, wrapped by usePwaInstall()), which auto-fires the browser's native
-    // install popup on load and also drives the hero "Descargar app" button.
+    // composable, wrapped by usePwaInstall()), which drives the hero "Descargar app"
+    // button. The native popup can only open from that click, never on page load.
     client: { installPrompt: true },
     manifest: {
       name: "Alma Serena Spa & Bienestar",
