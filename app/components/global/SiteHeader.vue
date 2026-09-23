@@ -3,8 +3,6 @@ import { computed, nextTick, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { useSession } from "~/composables/useSession";
-import { useToast } from "~/composables/useToast";
-import { simulateRequest } from "~/utils/mock";
 
 interface SectionLink {
   // i18n key for the link text.
@@ -19,7 +17,6 @@ const { t: trans, locale } = useI18n();
 const localePath = useLocalePath();
 const switchLocalePath = useSwitchLocalePath();
 const { user, isStaff } = useSession();
-const toast = useToast();
 
 const mobileMenuOpen = ref(false);
 
@@ -44,9 +41,6 @@ function dismissLanguageBanner(): void {
 const esPath = computed<string>(() => switchLocalePath("es") || localePath("index", "es"));
 const enPath = computed<string>(() => switchLocalePath("en") || localePath("index", "en"));
 
-const signOutOpen = ref(false);
-const isSigningOut = ref(false);
-
 function closeMenu(): void {
   mobileMenuOpen.value = false;
 }
@@ -64,15 +58,6 @@ async function onSectionClick(link: SectionLink): Promise<void> {
     await nextTick();
   }
   scrollToSection(link.target);
-}
-
-async function confirmSignOut(): Promise<void> {
-  isSigningOut.value = true;
-  await simulateRequest();
-  isSigningOut.value = false;
-  signOutOpen.value = false;
-  closeMenu();
-  toast.show(trans("signOutModal.demoNotice"));
 }
 </script>
 
@@ -231,23 +216,7 @@ async function confirmSignOut(): Promise<void> {
         <LanguageToggle aria-describedby="mobile-language-label" @navigate="closeMenu" />
       </li>
     </ul>
-
-    <button type="button" class="mobile-nav__link mobile-nav__link--signout" @click="signOutOpen = true">
-      {{ trans("actions.signOut") }}
-    </button>
   </nav>
-
-  <ConfirmModal
-    :open="signOutOpen"
-    :title="trans('signOutModal.title')"
-    :confirm-label="trans('signOutModal.action')"
-    :busy-label="trans('signOutModal.signingOut')"
-    :busy="isSigningOut"
-    @close="signOutOpen = false"
-    @confirm="confirmSignOut"
-  >
-    {{ trans("signOutModal.confirm") }}
-  </ConfirmModal>
 </template>
 
 <style scoped>
@@ -585,14 +554,6 @@ async function confirmSignOut(): Promise<void> {
   font-size: clamp(1rem, 3vw, 1.1rem);
   font-weight: 500;
   color: var(--color-ink);
-}
-
-.mobile-nav__link--signout {
-  justify-content: center;
-  border-bottom: none;
-  color: var(--color-error);
-  font-weight: 600;
-  margin-bottom: env(safe-area-inset-bottom);
 }
 
 @media (min-width: 48em) {
