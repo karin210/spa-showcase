@@ -1,8 +1,5 @@
 <script setup lang="ts">
 import { stockImage } from "~/data/services";
-import { DEMO_BOOKING_NOTICE, useToast } from "~/composables/useToast";
-
-const toast = useToast();
 
 function scrollToServices(): void {
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -34,7 +31,7 @@ function scrollToServices(): void {
         <p class="hero__eyebrow">Masajes · Faciales · Rituales · Hidroterapia</p>
         <h1 id="hero-title" class="hero__title">Tu refugio de calma, a un respiro de la ciudad</h1>
         <div class="hero__cta-wrapper">
-          <PrimaryBtn @click="toast.show(DEMO_BOOKING_NOTICE)">Reservar tratamiento</PrimaryBtn>
+          <PrimaryBtn link="/agendar">Reservar tratamiento</PrimaryBtn>
           <PrimaryBtn class="hero__cta-ghost" @click="scrollToServices">Ver servicios</PrimaryBtn>
         </div>
       </div>

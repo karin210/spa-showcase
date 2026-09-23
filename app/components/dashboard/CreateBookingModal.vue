@@ -110,7 +110,7 @@ async function submit(): Promise<void> {
         </label>
       </div>
 
-      <DashboardServicePicker v-model="form.services" legend="Servicios" />
+      <ServicePicker v-model="form.services" legend="Servicios" />
 
       <div class="create-booking__row">
         <label class="modal-field">

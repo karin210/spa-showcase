@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { computed, ref, useId, watch } from "vue";
+import { computed, ref } from "vue";
 import { formatLongDate, formatMonthName } from "~/utils/format";
 
-// Dismissible month-grid date picker. Monday-first, as is usual in Mexico.
-const props = defineProps<{ open: boolean; selected?: Date | null }>();
+// Second step: pick an appointment date. Inline (not a dialog) so it sits directly
+// in the step panel; visually related to global/CalendarModal but with its own
+// per-day disabled check instead of a precomputed date-string list.
+const props = defineProps<{ initialDate: Date | null; isDateDisabled: (date: Date) => boolean }>();
 
-const emit = defineEmits<{ close: []; select: [date: Date] }>();
-
-const titleId = useId();
+const emit = defineEmits<{ complete: [date: Date] }>();
 
 const WEEKDAYS: { initial: string; name: string }[] = [
   { initial: "L", name: "lunes" },
@@ -19,17 +19,11 @@ const WEEKDAYS: { initial: string; name: string }[] = [
   { initial: "D", name: "domingo" },
 ];
 
-const viewMonth = ref<Date>(new Date());
+const today = new Date();
+today.setHours(0, 0, 0, 0);
 
-// Reopening starts from the selected day's month (or the current one).
-watch(
-  () => props.open,
-  (open) => {
-    if (!open) return;
-    const base = props.selected ?? new Date();
-    viewMonth.value = new Date(base.getFullYear(), base.getMonth(), 1);
-  },
-);
+const viewMonth = ref<Date>(new Date((props.initialDate ?? today).getFullYear(), (props.initialDate ?? today).getMonth(), 1));
+const selectedDate = ref<Date | null>(props.initialDate);
 
 const weeks = computed<(number | null)[][]>(() => {
   const year = viewMonth.value.getFullYear();
@@ -46,33 +40,45 @@ const weeks = computed<(number | null)[][]>(() => {
   return rows;
 });
 
+// Paging earlier than the current real-world month is pointless: every one of its
+// days is already in the past.
+const isPrevMonthDisabled = computed<boolean>(
+  () => viewMonth.value.getFullYear() === today.getFullYear() && viewMonth.value.getMonth() <= today.getMonth(),
+);
+
 function dateFor(day: number): Date {
   return new Date(viewMonth.value.getFullYear(), viewMonth.value.getMonth(), day);
 }
 
-function isSelected(day: number): boolean {
-  return !!props.selected && dateFor(day).toDateString() === props.selected.toDateString();
+function isPast(day: number): boolean {
+  return dateFor(day) < today;
 }
 
-function isToday(day: number): boolean {
-  return dateFor(day).toDateString() === new Date().toDateString();
+function isDisabled(day: number | null): boolean {
+  return day === null || isPast(day) || props.isDateDisabled(dateFor(day));
+}
+
+function isSelected(day: number | null): boolean {
+  return day !== null && !!selectedDate.value && dateFor(day).toDateString() === selectedDate.value.toDateString();
 }
 
 function changeMonth(step: number): void {
+  if (step < 0 && isPrevMonthDisabled.value) return;
   viewMonth.value = new Date(viewMonth.value.getFullYear(), viewMonth.value.getMonth() + step, 1);
 }
 
-function selectDay(day: number): void {
-  emit("select", dateFor(day));
-  emit("close");
+function selectDay(day: number | null): void {
+  if (isDisabled(day)) return;
+  const date = dateFor(day as number);
+  selectedDate.value = date;
+  emit("complete", date);
 }
 </script>
 
 <template>
-  <ModalDialog :open="open" :labelledby="titleId" dismissible width="narrow" @close="emit('close')">
-    <h2 :id="titleId" class="modal-title">Selecciona una fecha</h2>
+  <div class="booking-calendar">
     <div class="calendar__caption">
-      <button type="button" class="calendar__nav" aria-label="Mes anterior" @click="changeMonth(-1)">‹</button>
+      <button type="button" class="calendar__nav" :disabled="isPrevMonthDisabled" aria-label="Mes anterior" @click="changeMonth(-1)">‹</button>
       <span>{{ formatMonthName(viewMonth) }} {{ viewMonth.getFullYear() }}</span>
       <button type="button" class="calendar__nav" aria-label="Mes siguiente" @click="changeMonth(1)">›</button>
     </div>
@@ -91,7 +97,7 @@ function selectDay(day: number): void {
               v-if="day !== null"
               type="button"
               class="calendar__day"
-              :class="{ 'calendar__day--today': isToday(day) }"
+              :disabled="isDisabled(day)"
               :aria-pressed="isSelected(day)"
               :aria-label="formatLongDate(dateFor(day))"
               @click="selectDay(day)"
@@ -102,10 +108,15 @@ function selectDay(day: number): void {
         </tr>
       </tbody>
     </table>
-  </ModalDialog>
+  </div>
 </template>
 
 <style scoped>
+.booking-calendar {
+  width: min(100%, 24rem);
+  margin-inline: auto;
+}
+
 .calendar {
   width: 100%;
   border-collapse: collapse;
@@ -118,7 +129,7 @@ function selectDay(day: number): void {
   justify-content: space-between;
   padding-bottom: 0.75rem;
   font-family: var(--font-serif);
-  font-size: clamp(1.1rem, 2.6vw, 1.3rem);
+  font-size: clamp(1.05rem, 2.5vw, 1.25rem);
   font-weight: 700;
 }
 
@@ -134,8 +145,13 @@ function selectDay(day: number): void {
   cursor: pointer;
 }
 
-.calendar__nav:hover {
+.calendar__nav:hover:not(:disabled) {
   background-color: var(--color-primary-soft);
+}
+
+.calendar__nav:disabled {
+  color: var(--color-border);
+  cursor: not-allowed;
 }
 
 .calendar__nav:focus-visible,
@@ -171,14 +187,13 @@ function selectDay(day: number): void {
   transition: background-color 0.15s ease;
 }
 
-.calendar__day:hover {
+.calendar__day:hover:not(:disabled) {
   background-color: var(--color-primary-soft);
 }
 
-.calendar__day--today {
-  font-weight: 700;
-  color: var(--color-primary);
-  box-shadow: inset 0 0 0 1px var(--color-primary);
+.calendar__day:disabled {
+  color: var(--color-border);
+  cursor: not-allowed;
 }
 
 .calendar__day[aria-pressed="true"] {

@@ -2,7 +2,7 @@
 import { nextTick, ref } from "vue";
 import { useRoute } from "vue-router";
 import { useSession } from "~/composables/useSession";
-import { DEMO_BOOKING_NOTICE, useToast } from "~/composables/useToast";
+import { useToast } from "~/composables/useToast";
 import { simulateRequest } from "~/utils/mock";
 
 interface SectionLink {
@@ -43,11 +43,6 @@ async function onSectionClick(link: SectionLink): Promise<void> {
   scrollToSection(link.target);
 }
 
-function onBookClick(): void {
-  closeMenu();
-  toast.show(DEMO_BOOKING_NOTICE);
-}
-
 async function confirmSignOut(): Promise<void> {
   isSigningOut.value = true;
   await simulateRequest();
@@ -79,9 +74,9 @@ async function confirmSignOut(): Promise<void> {
       </nav>
 
       <div class="site-header__actions">
-        <button type="button" class="site-header__icon-btn" aria-label="Agendar cita" @click="onBookClick">
+        <NuxtLink to="/agendar" class="site-header__icon-btn" aria-label="Agendar cita">
           <AppIcon name="calendar" />
-        </button>
+        </NuxtLink>
 
         <NuxtLink to="/perfil" class="site-header__icon-btn site-header__profile" aria-label="Ver perfil de usuario">
           <img v-if="user.photoURL" :src="user.photoURL" alt="" class="site-header__profile-photo" />
@@ -136,7 +131,7 @@ async function confirmSignOut(): Promise<void> {
     <ul class="mobile-nav__list" role="list">
       <li><NuxtLink to="/" class="mobile-nav__link" @click="closeMenu">Inicio</NuxtLink></li>
       <li><NuxtLink to="/perfil" class="mobile-nav__link" @click="closeMenu">Mi perfil</NuxtLink></li>
-      <li><button type="button" class="mobile-nav__link" @click="onBookClick">Agendar</button></li>
+      <li><NuxtLink to="/agendar" class="mobile-nav__link" @click="closeMenu">Agendar</NuxtLink></li>
       <li v-for="link in sectionLinks" :key="link.target">
         <button type="button" class="mobile-nav__link" @click="onSectionClick(link)">{{ link.label }}</button>
       </li>

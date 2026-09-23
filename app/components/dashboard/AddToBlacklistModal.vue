@@ -89,7 +89,7 @@ async function submit(): Promise<void> {
       </div>
       <p v-if="!rangeValid" class="modal-error" role="alert">La hora final debe ser posterior a la inicial.</p>
 
-      <DashboardServicePicker v-model="form.services" legend="¿Qué servicios no estarán disponibles?" />
+      <ServicePicker v-model="form.services" legend="¿Qué servicios no estarán disponibles?" />
 
       <div class="modal-actions">
         <button type="button" class="modal-btn modal-btn-cancel" :disabled="saving" @click="open = false">Cancelar</button>

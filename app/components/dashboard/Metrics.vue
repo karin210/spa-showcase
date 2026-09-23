@@ -164,7 +164,7 @@ const topServices = computed<ServiceDemand[]>(() => {
           :value="retentionValue"
           :caption="`Cuentas con visita en los últimos ${ACTIVE_WINDOW_DAYS} días`"
         />
-        <DashboardMetricTile label="Clientes atendidos" :value="clientsValue" caption="Con cuenta y sin cuenta" />
+        <DashboardMetricTile label="Clientes nuevos" :value="clientsValue" caption="Con cuenta y sin cuenta" />
       </div>
     </section>
 

@@ -29,6 +29,3 @@ export function useToast(): ToastApi {
 
   return { toasts, show, dismiss };
 }
-
-export const DEMO_BOOKING_NOTICE =
-  "Demostración: la reserva en línea no forma parte de este showcase.";
