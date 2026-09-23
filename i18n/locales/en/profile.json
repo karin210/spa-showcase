@@ -68,19 +68,6 @@
       "hint": "Get appointment reminders and a heads-up when the spa confirms your booking.",
       "enable": "Turn on notifications",
       "enabling": "Turning on…"
-    },
-    "passkeys": {
-      "title": "Your passkeys",
-      "note": "Sign in without a password, using your device's fingerprint, face or PIN.",
-      "added": "Added {date}",
-      "removeLabel": "Remove the passkey {name}",
-      "empty": "You don't have any passkeys yet.",
-      "nameLabel": "Passkey name",
-      "namePlaceholder": "E.g. my iPhone passkey",
-      "defaultName": "New passkey",
-      "create": "Create passkey",
-      "creating": "Creating…",
-      "add": "Add a passkey"
     }
   }
 }

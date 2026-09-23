@@ -122,6 +122,7 @@ async function onSectionClick(link: SectionLink): Promise<void> {
 
   <Transition name="language-banner-slide">
     <section v-if="languageBannerVisible" class="language-banner" :aria-label="trans('languageBanner.prompt')">
+      <div></div>
       <p class="language-banner__text">{{ trans("languageBanner.prompt") }}</p>
 
       <div class="language-banner__options">
@@ -373,7 +374,7 @@ async function onSectionClick(link: SectionLink): Promise<void> {
    content down rather than overlaying it. */
 .language-banner {
   display: flex;
-  flex-wrap: wrap;
+  justify-content: space-between;
   align-items: center;
   gap: 0.4rem var(--space-sm);
   padding: clamp(0.25rem, 0.8vw, 0.4rem) var(--space-md);

@@ -68,19 +68,6 @@
       "hint": "Recibe recordatorios de tus citas y avisos cuando el spa confirme tu reserva.",
       "enable": "Activar notificaciones",
       "enabling": "Activando…"
-    },
-    "passkeys": {
-      "title": "Tus llaves de acceso",
-      "note": "Inicia sesión sin contraseña, con la huella, el rostro o el PIN de tus dispositivos.",
-      "added": "Añadida el {date}",
-      "removeLabel": "Eliminar la llave de acceso {name}",
-      "empty": "Aún no tienes llaves de acceso.",
-      "nameLabel": "Nombre de la llave de acceso",
-      "namePlaceholder": "Ej. llave de mi iPhone",
-      "defaultName": "Nueva llave de acceso",
-      "create": "Crear llave de acceso",
-      "creating": "Creando…",
-      "add": "Añadir llave de acceso"
     }
   }
 }

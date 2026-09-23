@@ -217,7 +217,6 @@ const lightboxEntry = ref<HistoryEntry | null>(null);
       <section class="profile-group" aria-labelledby="session-group-heading">
         <h2 id="session-group-heading" class="profile-group__heading">{{ trans("profile.session.title") }}</h2>
         <ProfileNotificationSettings />
-        <ProfilePasskeyManager />
         <section class="profile-section profile-section--start" aria-labelledby="signout-heading">
           <h3 id="signout-heading" class="profile-section__heading">{{ trans("profile.session.heading") }}</h3>
           <button type="button" class="sign-out-btn" @click="signOutOpen = true">{{ trans("actions.signOut") }}</button>
