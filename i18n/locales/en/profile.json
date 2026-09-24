@@ -60,14 +60,6 @@
           "helper": "Enter a valid phone number (10 digits)"
         }
       }
-    },
-    "notifications": {
-      "title": "Notifications",
-      "enabled": "On",
-      "enabledHint": "We'll let you know when we confirm or move your appointments. To turn them off, change this site's permissions in your browser.",
-      "hint": "Get appointment reminders and a heads-up when the spa confirms your booking.",
-      "enable": "Turn on notifications",
-      "enabling": "Turning on…"
     }
   }
 }

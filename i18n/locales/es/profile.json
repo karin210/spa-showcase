@@ -60,14 +60,6 @@
           "helper": "Introduce un teléfono válido (10 dígitos)"
         }
       }
-    },
-    "notifications": {
-      "title": "Notificaciones",
-      "enabled": "Activadas",
-      "enabledHint": "Te avisaremos cuando confirmemos o movamos tus citas. Para desactivarlas, cambia los permisos del sitio en tu navegador.",
-      "hint": "Recibe recordatorios de tus citas y avisos cuando el spa confirme tu reserva.",
-      "enable": "Activar notificaciones",
-      "enabling": "Activando…"
     }
   }
 }
